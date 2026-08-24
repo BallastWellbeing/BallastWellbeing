@@ -1,0 +1,117 @@
+/* ==========================================================================
+   Ballast Wellbeing — design tokens
+   Palette per Build Guide Part 1. Semantic tokens are the ones to use in
+   components; raw palette values exist only to define them.
+
+   Contrast is enforced by construction: Brass is deliberately NOT exposed as
+   a general text colour, because it fails WCAG AA for body text (3.02:1 on
+   Paper, 2.53:1 on Fog). It is available as --rule-accent and, on Paper only,
+   as --text-accent-lg for type at 24px+ / 19px+ bold.
+   ========================================================================== */
+
+:root {
+  /* The site is light-only. Declaring it stops the browser rendering form
+     controls, select dropdowns, and checkboxes in dark-mode UA colours against
+     our Paper backgrounds when the visitor's OS is set to dark. */
+  color-scheme: light;
+
+  /* ---- Raw palette ---- */
+  --slate-ink: #17242E;
+  --deep-sea: #2E6B5E;
+  --deep-sea-light: #45A08D; /* added: reversed contexts. 5.02:1 on Slate Ink */
+  --brass: #B98A3E;
+  --harbour-grey: #40525F;
+  --fog: #E4E9E8;
+  --paper: #FBFCFC;
+
+  /* ---- Semantic: light surfaces (default) ---- */
+  --bg: var(--paper);
+  --bg-alt: var(--fog);
+  --text: var(--slate-ink);          /* 15.38:1 on Paper */
+  --text-secondary: var(--harbour-grey); /* 7.89:1 on Paper, 6.61:1 on Fog */
+  --link: var(--deep-sea);           /* 6.04:1 on Paper, 5.06:1 on Fog */
+  --link-hover: var(--slate-ink);
+  --border: var(--fog);
+  --border-strong: #C7D0CE;
+  --rule-accent: var(--brass);       /* decorative rules and seals only */
+  --text-accent-lg: var(--brass);    /* 24px+ or 19px+ bold, on Paper only */
+
+  --btn-bg: var(--deep-sea);
+  --btn-text: var(--paper);          /* 6.04:1 */
+  --btn-bg-hover: #255449;
+  --btn-secondary-text: var(--slate-ink);
+  --btn-secondary-border: var(--border-strong);
+
+  --focus-ring: var(--slate-ink);
+  --focus-ring-offset: var(--paper);
+
+  /* ---- Typography ---- */
+  --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-body: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Fluid scale, 320px to 1240px viewport. Body never below 17px. */
+  --fs-hero:    clamp(2.50rem, 1.60rem + 4.50vw, 4.75rem);
+  --fs-h1:      clamp(2.00rem, 1.45rem + 2.75vw, 3.25rem);
+  --fs-h2:      clamp(1.55rem, 1.25rem + 1.50vw, 2.25rem);
+  --fs-h3:      clamp(1.25rem, 1.10rem + 0.75vw, 1.55rem);
+  --fs-lead:    clamp(1.15rem, 1.05rem + 0.50vw, 1.35rem);
+  --fs-body:    1.0625rem;  /* 17px */
+  --fs-small:   0.9375rem;  /* 15px */
+  --fs-caption: 0.875rem;   /* 14px — secondary colour only, never Brass */
+
+  --lh-tight: 1.12;
+  --lh-heading: 1.20;
+  --lh-body: 1.65;
+
+  /* ---- Spacing, 4px base ---- */
+  --sp-1: 0.25rem;  --sp-2: 0.5rem;   --sp-3: 0.75rem;  --sp-4: 1rem;
+  --sp-5: 1.5rem;   --sp-6: 2rem;     --sp-7: 3rem;     --sp-8: 4rem;
+  --sp-9: 6rem;     --sp-10: 8rem;
+
+  /* ---- Layout ---- */
+  --measure: 68ch;        /* body copy */
+  --measure-narrow: 54ch; /* the "narrow column" sections */
+  --container: 74rem;
+  --container-tight: 46rem;
+  --radius: 3px;
+
+  --transition: 160ms ease;
+}
+
+/* ---- Dark surfaces: footer, reversed bands. Opt in with .on-dark ----
+   NOTE: `color` is inherited as a computed value, so redefining --text alone
+   does NOT recolour descendants. These blocks must re-declare color and
+   background themselves. Caught by the contrast audit; do not remove. */
+.on-dark {
+  background: var(--bg);
+  color: var(--text);
+  --bg: var(--slate-ink);
+  --text: var(--paper);                  /* 15.38:1 */
+  --text-secondary: var(--fog);          /* 12.89:1 */
+  --link: var(--deep-sea-light);         /* 5.02:1 — plain Deep Sea is 2.55:1 here */
+  --link-hover: var(--paper);
+  --border: #2C3B47;
+  --border-strong: #3D4E5A;
+  --text-accent-lg: var(--brass);        /* 5.10:1 on Slate Ink — safe at any size */
+  --focus-ring: var(--paper);
+  --focus-ring-offset: var(--slate-ink);
+  --btn-bg: var(--paper);
+  --btn-text: var(--slate-ink);
+}
+
+/* ---- Fog sections ---- */
+.on-fog {
+  background: var(--bg);
+  color: var(--text);
+  --bg: var(--fog);
+  --border: #CFD8D6;
+  --border-strong: #B3C0BD;
+  --focus-ring-offset: var(--fog);
+  /* --text-accent-lg intentionally unset here: Brass on Fog is 2.53:1 and
+     fails at every size. Use --text or --link for emphasis on Fog. */
+  --text-accent-lg: var(--slate-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --transition: 0ms; }
+}

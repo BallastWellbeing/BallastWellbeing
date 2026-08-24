@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set page_title = "Parent evening sessions for Ontario independent schools" %}
+{% set page_description = "Evening sessions that give families something practical to do at home. Often funded by the parent association rather than the school budget." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow"><a href="/schools">For Schools</a> <span aria-hidden="true">/</span> Parent sessions</p>
+    <h1 class="hero-title">Give parents something to do on Monday morning.</h1>
+    <p class="lead">Parent evenings usually deliver reassurance and general awareness. These deliver specifics: what to say when a child won't get out of the car, why accommodating anxiety makes it worse, and how to tell the difference between a hard week and something that needs professional help.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="visually-hidden">Parent programs</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3><a href="/programs/supporting-an-anxious-child">Supporting an Anxious Child</a></h3>
+        <p>90 minutes, evening.</p>
+        <p class="price-note">$550 on-site &middot; $400 virtual</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section on-fog">
+  <div class="container-tight">
+    <h2>Note for schools</h2>
+    <p>Parent associations frequently fund these directly, which means the session doesn't compete with your PD budget. Bundled with a same-day student session: <strong class="tnum">$750</strong>.</p>
+    <p><a class="btn btn-primary" href="/contact?audience=school" aria-label="Request a proposal for your school">Request a proposal</a></p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,10 @@
+{
+  "name": "ballast-wellbeing",
+  "private": true,
+  "type": "module",
+  "description": "Dependencies for the Netlify Functions only. The site itself is built by build.py and has no JavaScript build step.",
+  "engines": { "node": ">=20" },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0"
+  }
+}

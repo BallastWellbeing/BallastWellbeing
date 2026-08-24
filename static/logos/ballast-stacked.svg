@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 190" width="260" height="190" role="img" aria-label="Ballast Wellbeing">
+  <title>Ballast Wellbeing</title>
+  <g transform="translate(80,0)">
+    <g transform="rotate(-12 50 50)">
+      <path d="M 18,50 V 28 A 10,10 0 0 1 28,18 H 72 A 10,10 0 0 1 82,28 V 50 A 32,32 0 0 1 18,50 Z"
+            fill="none" stroke="#17242E" stroke-width="7" stroke-linejoin="round" stroke-linecap="round"/>
+    </g>
+    <rect x="35" y="59.5" width="30" height="13.5" rx="6.75" fill="#2E6B5E"/>
+  </g>
+  <text x="130" y="145" text-anchor="middle" font-family="'Inter Tight','Archivo',system-ui,sans-serif" font-size="38" font-weight="650" letter-spacing="-0.8" fill="#17242E">Ballast</text>
+  <text x="130" y="172" text-anchor="middle" font-family="'Inter Tight','Archivo',system-ui,sans-serif" font-size="17" font-weight="400" letter-spacing="4.5" fill="#40525F">WELLBEING</text>
+</svg>

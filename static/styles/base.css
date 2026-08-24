@@ -1,0 +1,727 @@
+/* ==========================================================================
+   Ballast Wellbeing — base styles and accessible primitives
+   Target: WCAG 2.1 AA (superset of the stated 2.0 AA target).
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-synthesis-weight: none;
+  text-rendering: optimizeLegibility;
+}
+
+/* --------------------------------------------------------------------------
+   Focus. Visible on every interactive element, on light and dark surfaces.
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+.skip-link {
+  position: absolute;
+  left: var(--sp-4);
+  top: calc(-1 * var(--sp-9));
+  z-index: 100;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--slate-ink);
+  color: var(--paper);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius);
+  transition: top var(--transition);
+}
+.skip-link:focus { top: var(--sp-4); }
+
+/* --------------------------------------------------------------------------
+   Typography
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  margin: 0 0 var(--sp-4);
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+h1 { font-size: var(--fs-h1); }
+h2 { font-size: var(--fs-h2); margin-top: var(--sp-8); }
+h3 { font-size: var(--fs-h3); margin-top: var(--sp-6); }
+/* A heading opening a section must not stack its own top margin on top of the
+   section's padding. */
+h1:first-child, h2:first-child, h3:first-child,
+.section > * > h2:first-child, .section-lg > * > h2:first-child { margin-top: 0; }
+
+.hero-title {
+  font-size: var(--fs-hero);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.025em;
+  margin-bottom: var(--sp-5);
+}
+
+p, ul, ol { margin: 0 0 var(--sp-4); max-width: var(--measure); }
+.lead {
+  font-size: var(--fs-lead);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 60ch; /* Build Guide: max 60 characters per line */
+}
+.caption, small { font-size: var(--fs-caption); color: var(--text-secondary); }
+
+a { color: var(--link); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { color: var(--link-hover); text-decoration-thickness: 2px; }
+
+/* Brass type. Guarded: only ever at large-text sizes, and .on-fog remaps the
+   token to Slate Ink so this cannot silently fail there. */
+.accent-lg {
+  color: var(--text-accent-lg);
+  font-size: max(1.5rem, var(--fs-h3)); /* >= 24px */
+  font-family: var(--font-display);
+}
+
+.rule-accent {
+  border: 0;
+  border-top: 2px solid var(--rule-accent);
+  width: 3rem;
+  margin: var(--sp-5) 0;
+}
+
+/* Tabular numerals for the stat band and price tables */
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+/* --------------------------------------------------------------------------
+   Layout
+   -------------------------------------------------------------------------- */
+.container { width: min(100% - 2.5rem, var(--container)); margin-inline: auto; }
+.container-tight { width: min(100% - 2.5rem, var(--container-tight)); margin-inline: auto; }
+.section { padding-block: var(--sp-8); }
+.section-lg { padding-block: var(--sp-9); }
+.surface-fog { background: var(--fog); }
+.surface-ink { background: var(--slate-ink); }
+.stack > * + * { margin-top: var(--sp-4); }
+.narrow { max-width: var(--measure-narrow); }
+.center { margin-inline: auto; text-align: center; }
+
+/* --------------------------------------------------------------------------
+   Buttons. Minimum target 44x44 per WCAG 2.1 AA (2.5.5 / 2.5.8).
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: var(--sp-3) var(--sp-5);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  border-radius: var(--radius);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: background-color var(--transition), border-color var(--transition);
+}
+.btn-primary { background: var(--btn-bg); color: var(--btn-text); }
+.btn-primary:hover { background: var(--btn-bg-hover); color: var(--btn-text); }
+.btn-secondary {
+  background: transparent;
+  color: var(--btn-secondary-text);
+  border-color: var(--btn-secondary-border);
+}
+.btn-secondary:hover { border-color: var(--text); color: var(--text); }
+
+/* The split-path route buttons. Equal weight, per Build Guide 3.1. */
+.route-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  gap: var(--sp-4);
+  max-width: 34rem;
+  margin-top: var(--sp-6);
+}
+.route-buttons .btn { min-height: 56px; font-size: var(--fs-lead); }
+
+/* --------------------------------------------------------------------------
+   Cards
+   -------------------------------------------------------------------------- */
+.card-grid {
+  display: grid;
+  gap: var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(17rem, 100%), 1fr));
+  max-width: none;
+}
+.card {
+  padding: var(--sp-5);
+  /* Paper, not var(--bg). Inside an .on-fog section --bg is Fog, so a card
+     rendered Fog-on-Fog and only the 1px border separated it from the section
+     behind it. Cards are meant to lift off the surface. */
+  background: var(--paper);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+}
+.card h3 { margin-top: 0; }
+.card p { max-width: none; }
+/* A card title is the card's main control, not inline prose, so it needs a
+   real target. Bare inline it measured 22px tall on mobile, under the 24px
+   minimum. */
+.card h3 a, .track-card h3 a, .article-list h2 a {
+  display: inline-block;
+  padding-block: 0.2rem;
+}
+
+/* Card link that makes the whole card clickable without trapping text
+   selection or hiding the link from a screen reader. */
+.card-linked { position: relative; }
+.card-linked a::after { content: ""; position: absolute; inset: 0; }
+
+/* --------------------------------------------------------------------------
+   Stat band (/workplaces). Numerals in Deep Sea, not Brass — Brass numerals
+   would sit at 3.02:1 on Paper. Brass is used for the dividing rules only.
+   -------------------------------------------------------------------------- */
+.stat-band { display: grid; gap: 0; grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); }
+/* A rule above every figure, at every width.
+   Earlier versions put the rule on the left when side by side and on top when
+   stacked, switched by a media query. That breaks: the band is an auto-fit
+   grid, so it wraps at whatever width the tracks stop fitting, which does not
+   coincide with any breakpoint. At ~700px the grid was still three across
+   while the CSS had already switched to stacked styling, so the dividers
+   appeared as stray horizontal fragments above side-by-side figures.
+   A top rule on each stat is wrap-agnostic and reads as deliberate in every
+   configuration. */
+.stat {
+  padding: var(--sp-4) var(--sp-5) var(--sp-5) 0;
+  border-top: 2px solid var(--rule-accent);
+}
+/* Uniform right padding on every stat, so each brass rule is the same length.
+   Exempting the last one made its rule visibly longer than its neighbours. */
+.stat-figure {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(2.25rem, 1.5rem + 3vw, 3.5rem);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--link);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: var(--sp-3);
+}
+.stat p { font-size: var(--fs-small); color: var(--text-secondary); max-width: 28ch; margin: 0; }
+
+/* --------------------------------------------------------------------------
+   Forms. Labels always visible and associated; errors described in text,
+   never by colour alone.
+   -------------------------------------------------------------------------- */
+.field { margin-bottom: var(--sp-5); max-width: 34rem; }
+.field label { display: block; font-weight: 600; margin-bottom: var(--sp-2); }
+.field .hint { display: block; font-size: var(--fs-small); color: var(--text-secondary); margin-bottom: var(--sp-2); }
+.field input, .field select, .field textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: var(--sp-3);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  color: var(--text);
+  background: var(--paper);
+  border: 1px solid var(--harbour-grey); /* 7.89:1 — passes 1.4.11 non-text contrast */
+  border-radius: var(--radius);
+}
+.field textarea { min-height: 8rem; resize: vertical; }
+.field [aria-invalid="true"] { border-width: 2px; border-color: #9B2C1F; }
+.field-error {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: baseline;
+  margin-top: var(--sp-2);
+  font-size: var(--fs-small);
+  font-weight: 600;
+  color: #9B2C1F; /* 6.24:1 on Paper */
+}
+.field-error::before { content: "Error:"; } /* text, not colour alone */
+.required-marker { font-weight: 400; color: var(--text-secondary); }
+
+fieldset { border: 1px solid var(--border-strong); border-radius: var(--radius); padding: var(--sp-4); margin: 0 0 var(--sp-5); max-width: 34rem; }
+legend { font-weight: 600; padding-inline: var(--sp-2); }
+.check { display: flex; gap: var(--sp-3); align-items: flex-start; min-height: 44px; padding-block: var(--sp-2); }
+/* 24px minimum, per WCAG 2.5.8. The wrapper was already 44px tall but the box
+   itself was 18px, and the box is what a pointer has to hit. */
+.check input { width: 1.5rem; height: 1.5rem; margin-top: 0.15rem; flex: none; accent-color: var(--deep-sea); }
+.check label { font-weight: 400; margin-bottom: 0; align-self: center; }
+
+/* --------------------------------------------------------------------------
+   Tables (price tables)
+   -------------------------------------------------------------------------- */
+table { width: 100%; border-collapse: collapse; margin-bottom: var(--sp-5); font-size: var(--fs-small); }
+caption { text-align: left; font-weight: 600; margin-bottom: var(--sp-3); font-size: var(--fs-body); }
+th, td { text-align: left; padding: var(--sp-3); border-bottom: 1px solid var(--border-strong); vertical-align: top; }
+th { font-weight: 600; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+
+/* --------------------------------------------------------------------------
+   Utilities
+   -------------------------------------------------------------------------- */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+img, svg { max-width: 100%; height: auto; }
+
+/* Defensive wrapping. A single long token — a hyphenated CSS property name in
+   a <code>, a long compound word in a 40px headline — can push a 320px layout
+   into horizontal scroll on its own. */
+h1, h2, h3, h4, .hero-title, .stat-figure { overflow-wrap: break-word; }
+code, samp, kbd { overflow-wrap: anywhere; font-size: 0.9375em; }
+a { overflow-wrap: break-word; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   Site composition — header, nav, footer, and page-level patterns
+   ========================================================================== */
+
+/* ---- Header ---- */
+.site-header { border-bottom: 1px solid var(--border-strong); background: var(--paper); }
+/* Measured: with the fallback font stack the horizontal nav wants ~1262px,
+   but .container caps at 74rem (1184px), so the header overflowed at every
+   width between the breakpoint and ~1400px. The header gets its own wider
+   container, and the nav below is tightened. Regression-tested across widths. */
+.site-header .container {
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding-block: var(--sp-4);
+  width: min(100% - 2.5rem, 82rem);
+}
+.site-header .logo { flex: none; display: block; }
+.site-header .logo img { height: 40px; width: auto; display: block; }
+
+.nav { margin-left: auto; }
+.nav ul {
+  display: flex; align-items: center; gap: var(--sp-4);
+  list-style: none; margin: 0; padding: 0; max-width: none;
+}
+/* :not(.btn) — a bare `.nav a` out-specifies .btn-primary and would drop the
+   nav button to Slate Ink on Deep Sea (2.55:1). Verified by the audit. */
+.nav a:not(.btn) {
+  color: var(--text); text-decoration: none; font-weight: 500;
+  font-size: var(--fs-small);
+  display: inline-flex; align-items: center; min-height: 44px;
+  white-space: nowrap;
+}
+.nav .btn { white-space: nowrap; }
+.nav a:not(.btn):hover { color: var(--link); text-decoration: underline; }
+.nav a[aria-current="page"]:not(.btn) { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
+.nav .nav-divider { width: 1px; align-self: stretch; background: var(--border-strong); margin-inline: var(--sp-2); }
+.nav .nav-counselling a { color: var(--text-secondary); font-weight: 400; }
+
+/* Toggle is hidden until the narrow breakpoint, and only exists when JS ran. */
+.nav-toggle { display: none; }
+.js .nav-toggle {
+  margin-left: auto;
+  align-items: center; gap: var(--sp-2);
+  min-height: 44px; padding: var(--sp-2) var(--sp-4);
+  font: inherit; font-weight: 600;
+  color: var(--text); background: transparent;
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  cursor: pointer;
+}
+.nav-toggle-bars, .nav-toggle-bars::before, .nav-toggle-bars::after {
+  display: block; width: 18px; height: 2px; background: currentColor; content: "";
+}
+.nav-toggle-bars { position: relative; }
+.nav-toggle-bars::before { position: absolute; top: -6px; }
+.nav-toggle-bars::after  { position: absolute; top: 6px; }
+
+@media (max-width: 74.999rem) {
+  .site-header .container { flex-wrap: wrap; }
+  .js .nav-toggle { display: inline-flex; }
+  .js .nav { display: none; width: 100%; margin-left: 0; }
+  .js .nav.is-open { display: block; }
+  .nav ul { flex-direction: column; align-items: stretch; gap: 0; padding-bottom: var(--sp-4); }
+  .nav li + li { border-top: 1px solid var(--border); }
+  .nav a:not(.btn) { padding-block: var(--sp-2); width: 100%; font-size: var(--fs-body); }
+  .nav .nav-divider { display: none; }
+  .nav .btn { margin-top: var(--sp-4); width: 100%; }
+}
+
+/* ---- Counselling separation band. Persistent, every /counselling/* page. ---- */
+.counselling-band { border-bottom: 1px solid var(--border-strong); }
+.counselling-band p { margin: 0; padding-block: var(--sp-3); font-size: var(--fs-small); font-weight: 500; max-width: none; }
+
+/* ---- Page patterns ---- */
+.hero { padding-block: var(--sp-9) var(--sp-8); }
+.hero .lead { margin-bottom: 0; }
+.eyebrow { font-size: var(--fs-small); color: var(--text-secondary); margin-bottom: var(--sp-4); }
+.button-row { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-top: var(--sp-6); }
+
+.idea { text-align: center; }
+.idea img { margin: 0 auto var(--sp-5); display: block; }
+.idea .narrow { margin-inline: auto; text-align: left; }
+
+.credibility { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr)); }
+.credibility h3 { font-family: var(--font-body); font-size: var(--fs-body); margin: 0 0 var(--sp-2); }
+.credibility p { font-size: var(--fs-small); color: var(--text-secondary); margin: 0; max-width: 32ch; }
+
+.track-cards { display: grid; gap: var(--sp-5); grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr)); }
+.track-card { padding: var(--sp-6); border: 1px solid var(--border-strong); border-radius: var(--radius); background: var(--paper); }
+.track-card p { max-width: none; }
+
+.price-note { font-weight: 600; font-variant-numeric: tabular-nums; margin-bottom: 0; }
+.source-line { margin-top: var(--sp-5); }
+
+.reasons { margin: 0; }
+.reasons dt { font-weight: 700; margin-top: var(--sp-5); }
+.reasons dd { margin: var(--sp-2) 0 0; max-width: var(--measure); }
+
+.steps { padding-left: 1.3em; }
+.steps li { margin-bottom: var(--sp-4); max-width: var(--measure); }
+
+/* ---- Footer ---- */
+.site-footer { padding-block: var(--sp-8) var(--sp-6); }
+.site-footer > .container > img { height: 38px; width: auto; }
+.footer-cols { display: grid; gap: var(--sp-6); grid-template-columns: repeat(auto-fit, minmax(min(13rem, 100%), 1fr)); margin-block: var(--sp-6); }
+.footer-cols ul { list-style: none; margin: 0; padding: 0; }
+.footer-cols li + li { margin-top: var(--sp-2); }
+.footer-cols h2 {
+  font-family: var(--font-body); font-size: var(--fs-small);
+  text-transform: uppercase; letter-spacing: 0.08em;
+  margin: 0 0 var(--sp-3); color: var(--text-secondary);
+}
+.footer-disclaimer { border-top: 1px solid var(--border); padding-top: var(--sp-5); }
+.footer-disclaimer p { max-width: var(--measure); }
+
+/* ---- Pricing ---- */
+.rowgroup { padding-top: var(--sp-5); font-size: var(--fs-body); border-bottom: 2px solid var(--slate-ink); }
+ul.plain { list-style: none; padding: 0; }
+ul.plain li { padding-block: var(--sp-2); border-bottom: 1px solid var(--border-strong); max-width: var(--measure); }
+
+.package { display: flex; flex-direction: column; }
+.package ul { padding-left: 1.15em; font-size: var(--fs-small); }
+.package li { margin-bottom: var(--sp-2); }
+.package-price { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; margin-bottom: var(--sp-3); }
+/* Recommended package is marked by a text badge AND a heavier border, never by
+   colour alone (WCAG 1.4.1). */
+.package-recommended { border-width: 2px; border-color: var(--deep-sea); }
+.badge {
+  display: inline-block; align-self: flex-start;
+  margin: 0 0 var(--sp-3);
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-caption); font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--paper); background: var(--deep-sea); /* 6.04:1 */
+  border-radius: var(--radius);
+}
+
+/* ---- Breadcrumb ---- */
+.breadcrumb { padding-top: var(--sp-5); }
+.breadcrumb ol { display: flex; flex-wrap: wrap; gap: var(--sp-2); list-style: none; margin: 0; padding: 0; font-size: var(--fs-small); color: var(--text-secondary); max-width: none; }
+.breadcrumb li + li::before { content: "/"; margin-right: var(--sp-2); color: var(--border-strong); }
+.breadcrumb a { color: var(--text-secondary); }
+
+/* ---- Program page ---- */
+.program-hero { padding-top: var(--sp-6); }
+.quick-facts { border-block: 1px solid var(--border-strong); background: var(--paper); }
+.quick-facts dl {
+  display: grid; gap: var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr));
+  margin: 0; padding-block: var(--sp-5);
+}
+.quick-facts dt {
+  font-size: var(--fs-caption); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-secondary); margin-bottom: var(--sp-2);
+}
+.quick-facts dd { margin: 0; font-weight: 500; }
+
+.program-body { padding-block: var(--sp-8); }
+.program-body > section + section { margin-top: var(--sp-8); }
+.program-body h2 { margin-top: 0; }
+
+.outcomes { padding-left: 0; list-style: none; max-width: var(--measure); }
+.outcomes li {
+  position: relative; padding-left: 1.6rem; margin-bottom: var(--sp-3);
+}
+/* Marker is decorative; the list is still a list to assistive tech. */
+.outcomes li::before {
+  content: ""; position: absolute; left: 0; top: 0.6em;
+  width: 0.7rem; height: 2px; background: var(--rule-accent);
+}
+
+table.outline { max-width: var(--measure); }
+table.outline th[scope="row"] { white-space: nowrap; width: 8rem; font-weight: 500; color: var(--text-secondary); }
+
+.built-on { border-left: 2px solid var(--rule-accent); padding-left: var(--sp-5); }
+.built-on h2 { font-size: var(--fs-h3); }
+
+/* ---- About ---- */
+.about-layout { display: grid; gap: var(--sp-7); grid-template-columns: minmax(0,1fr); padding-bottom: var(--sp-8); }
+@media (min-width: 56rem) { .about-layout { grid-template-columns: 20rem minmax(0,1fr); gap: var(--sp-8); } }
+.about-portrait { max-width: 20rem; }
+.portrait-placeholder {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 4 / 5; background: var(--fog);
+  border: 1px dashed var(--border-strong); border-radius: var(--radius);
+  color: var(--text-secondary); font-size: var(--fs-small); text-align: center;
+}
+.portrait-placeholder svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.about-name { font-size: var(--fs-lead); margin-bottom: var(--sp-6); }
+.about-copy h2 { margin-top: var(--sp-7); }
+.credentials { padding-left: 0; list-style: none; }
+.credentials li { padding-left: 1.4rem; position: relative; margin-bottom: var(--sp-2); }
+.credentials li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 0.6rem; height: 2px; background: var(--rule-accent); }
+
+/* ---- Approach ---- */
+.approach-body { padding-block: var(--sp-7) var(--sp-8); }
+.approach-body > section + section { margin-top: var(--sp-8); }
+.approach-body h2 { margin-top: 0; }
+.source { border-left: 2px solid var(--rule-accent); padding-left: var(--sp-5); margin-bottom: var(--sp-6); }
+.source h3 { margin-top: 0; font-size: var(--fs-h3); }
+.source p { margin-bottom: 0; }
+
+/* ---- Track hub pages ---- */
+.hub-body { padding-block: var(--sp-6) var(--sp-8); }
+.hub-body > section + section { margin-top: var(--sp-7); }
+.hub-body h2 { margin-top: 0; }
+
+/* ---- Verify ---- */
+.verify-body { padding-block: var(--sp-6) var(--sp-8); }
+.verify-body form { margin-bottom: var(--sp-5); }
+#serial { font-variant-numeric: tabular-nums; letter-spacing: 0.04em; text-transform: uppercase; }
+
+.verify-result:empty { display: none; }
+.verify-result { margin-block: var(--sp-6); padding: var(--sp-5); border-radius: var(--radius); border: 1px solid var(--border-strong); }
+/* Outcome is carried by a border weight, a heading word, and an icon — never
+   by colour alone. */
+.verify-valid { border-left: 4px solid var(--deep-sea); background: var(--paper); }
+.verify-invalid { border-left: 4px solid #9B2C1F; background: var(--paper); }
+.verify-headline { font-family: var(--font-display); font-size: var(--fs-h3); font-weight: 600; margin-bottom: var(--sp-4); }
+.verify-tick { color: var(--deep-sea); }
+.verify-result dl { display: grid; gap: var(--sp-3); margin: 0 0 var(--sp-4); }
+.verify-result dl > div { display: grid; grid-template-columns: minmax(8rem, 12rem) 1fr; gap: var(--sp-3); }
+.verify-result dt { font-weight: 600; color: var(--text-secondary); }
+.verify-result dd { margin: 0; }
+@media (max-width: 30rem) { .verify-result dl > div { grid-template-columns: 1fr; gap: var(--sp-1); } }
+.verify-noscript { padding: var(--sp-4); border: 1px solid var(--border-strong); border-radius: var(--radius); }
+.verify-about { margin-top: var(--sp-8); padding-top: var(--sp-6); border-top: 1px solid var(--border-strong); }
+.verify-about h2 { margin-top: 0; }
+
+/* ---- Contact ---- */
+.contact-body { padding-block: var(--sp-6) var(--sp-8); }
+.program-banner {
+  padding: var(--sp-4); margin-bottom: var(--sp-6);
+  background: var(--fog); border-left: 3px solid var(--rule-accent);
+  border-radius: var(--radius); font-weight: 500;
+}
+.audience-toggle { margin-bottom: var(--sp-7); }
+.audience-toggle fieldset { border: 0; padding: 0; max-width: none; }
+.audience-toggle legend { padding: 0; margin-bottom: var(--sp-3); }
+.toggle-options { display: flex; flex-wrap: wrap; gap: var(--sp-5); }
+.toggle-options .check { min-height: 44px; align-items: center; }
+.sr-only-heading { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Toggle drives which form shows. CSS-only, so it works with JS disabled;
+   the two forms are separate elements, so the hidden one is never submitted. */
+#form-workplace { display: none; }
+.contact-body:has(#aud-work:checked) #form-school { display: none; }
+.contact-body:has(#aud-work:checked) #form-workplace { display: block; }
+
+.contact-alt { margin-top: var(--sp-8); padding-top: var(--sp-6); border-top: 1px solid var(--border-strong); }
+.contact-alt h2 { margin-top: 0; }
+
+/* Honeypot. Hidden from everyone including screen readers (the wrapper is
+   aria-hidden and the input is removed from the tab order), so a human never
+   meets it and a bot fills it. */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* ==========================================================================
+   Counselling section
+   Same brand, quieter register. Fog rather than Paper as the page ground, so
+   the visitor registers they have moved between two different services.
+   ========================================================================== */
+.section-counselling { background: var(--fog); }
+.section-counselling .hero,
+.section-counselling .clinical-body { background: transparent; }
+
+.counselling-band { border-bottom: 1px solid #CFD8D6; }
+.counselling-band p { margin: 0; padding-block: var(--sp-3); font-size: var(--fs-small); color: var(--harbour-grey); max-width: none; }
+
+.clinical-body { padding-block: var(--sp-6) var(--sp-8); }
+.clinical-body > section + section { margin-top: var(--sp-7); }
+.clinical-body h2 { margin-top: 0; }
+.clinical-body ul, .clinical-body ol { padding-left: 1.3rem; }
+.clinical-body li { margin-bottom: var(--sp-3); }
+
+/* Practitioner block. Carries most of the required disclosure — deliberately
+   plain, per the spec's instruction not to restyle it into something
+   decorative. */
+.practitioner {
+  background: var(--paper);
+  border-left: 3px solid var(--rule-accent);
+  border-radius: var(--radius);
+  padding: var(--sp-5);
+  margin-block: var(--sp-6);
+}
+.practitioner p { margin-bottom: var(--sp-3); }
+.practitioner p:last-child { margin-bottom: 0; }
+.practitioner-name { font-size: var(--fs-lead); line-height: 1.45; }
+
+dl.practical { display: grid; gap: var(--sp-4); margin: 0; }
+dl.practical > div { display: grid; grid-template-columns: minmax(9rem, 15rem) 1fr; gap: var(--sp-4); }
+dl.practical dt { font-weight: 600; color: var(--harbour-grey); }
+dl.practical dd { margin: 0; }
+@media (max-width: 34rem) { dl.practical > div { grid-template-columns: 1fr; gap: var(--sp-1); } }
+
+/* Rate cards. Identical treatment by design: Standard must not dominate and
+   Community must not look like charity. No struck-through prices anywhere. */
+/* Three across or one across. Never two.
+   The fee spec is explicit that the three tiers get the same card, the same
+   size, and the same treatment, so that Community never reads as charity. With
+   auto-fit and a 15rem minimum the three cards did not fit inside
+   .container-tight (3 x 240px + gaps > 736px), so every width above mobile
+   rendered two on the first row and left Community alone underneath at a
+   different height — exactly the singling-out the spec forbids. */
+.rate-cards { display: grid; gap: var(--sp-4); grid-template-columns: 1fr; }
+@media (min-width: 50rem) {
+  .rate-cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+.rate-card { background: var(--paper); border: 1px solid #CFD8D6; border-radius: var(--radius); padding: var(--sp-5); }
+.rate-card h3 { margin-top: 0; font-size: var(--fs-h3); }
+.rate-card .rate { font-family: var(--font-display); font-size: var(--fs-lead); font-weight: 600; line-height: 1.4; margin-bottom: var(--sp-4); }
+.rate-card p:last-child { margin-bottom: 0; font-size: var(--fs-small); }
+
+/* Crisis block. Set apart and findable by someone scanning in distress. */
+.crisis {
+  background: var(--paper);
+  border: 1px solid var(--rule-accent);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  padding: var(--sp-6);
+  margin-block: var(--sp-7);
+}
+.crisis h2 { margin-top: 0; font-size: var(--fs-h2); }
+.crisis p { font-size: var(--fs-lead); line-height: 1.55; }
+.crisis p:last-child { margin-bottom: 0; }
+
+.booking-path { background: var(--paper); border: 1px solid #CFD8D6; border-radius: var(--radius); padding: var(--sp-5); }
+.booking-path h3 { margin-top: 0; }
+.scheduler-embed iframe { width: 100%; border: 0; display: block; }
+.scheduler-fallback { padding: var(--sp-4); background: var(--fog); border-radius: var(--radius); margin-bottom: 0; }
+
+.steps { padding-left: 1.3rem; }
+.steps li { margin-bottom: var(--sp-4); }
+
+/* Placeholder marker. Loud on purpose: an unfilled value must be impossible to
+   miss in review. `python3 build.py --check` fails while any remain. */
+mark.placeholder {
+  background: #FFF3CD; color: #5C4409;
+  border: 1px dashed #B98A3E; border-radius: 2px;
+  padding: 0 0.3em; font-weight: 600; font-size: 0.95em;
+}
+
+/* Legal pages */
+.legal-body h2 { font-size: var(--fs-h3); }
+.legal-body section + section { margin-top: var(--sp-6); }
+
+.callout { background: var(--fog); border-left: 3px solid var(--deep-sea); border-radius: var(--radius); padding: var(--sp-4) var(--sp-5); margin-block: var(--sp-5); }
+.callout p:last-child { margin-bottom: 0; }
+.legal-body h3 { font-size: var(--fs-body); font-family: var(--font-body); font-weight: 700; margin-top: var(--sp-5); }
+
+/* ---- Insights ---- */
+.archive { padding-block: var(--sp-6) var(--sp-8); }
+.category-filter ul { display: flex; flex-wrap: wrap; gap: var(--sp-2); list-style: none; margin: 0 0 var(--sp-7); padding: 0; max-width: none; }
+.category-filter a {
+  display: inline-flex; align-items: center; min-height: 44px;
+  padding-inline: var(--sp-4); border: 1px solid var(--border-strong);
+  border-radius: 999px; text-decoration: none; color: var(--text);
+  font-size: var(--fs-small); font-weight: 500;
+}
+.category-filter a:hover { border-color: var(--text); }
+.category-filter a[aria-current] { background: var(--slate-ink); color: var(--paper); border-color: var(--slate-ink); }
+
+.article-list { list-style: none; padding: 0; max-width: none; }
+.article-list > li { padding-block: var(--sp-6); border-top: 1px solid var(--border-strong); }
+.article-list > li:last-child { border-bottom: 1px solid var(--border-strong); }
+.article-list h2 { margin-top: var(--sp-2); font-size: var(--fs-h2); }
+.article-list h2 a { color: var(--text); text-decoration: none; }
+.article-list h2 a:hover { color: var(--link); text-decoration: underline; }
+
+.article-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-3); font-size: var(--fs-caption); color: var(--text-secondary); margin-bottom: var(--sp-2); }
+.category-tag { font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--link); }
+
+.article-header { padding-block: var(--sp-5) var(--sp-6); }
+.article-body { padding-bottom: var(--sp-8); font-size: 1.125rem; }
+.article-body h2 { margin-top: var(--sp-7); }
+.article-body h3 { font-size: var(--fs-h3); }
+.article-body blockquote {
+  margin: var(--sp-6) 0; padding-left: var(--sp-5);
+  border-left: 3px solid var(--rule-accent);
+  font-family: var(--font-display); font-size: 1.375rem; line-height: 1.45;
+}
+.article-body blockquote p:last-child { margin-bottom: 0; }
+.article-body ul, .article-body ol { padding-left: 1.4rem; }
+.article-body li { margin-bottom: var(--sp-3); }
+
+.capture-status { padding: var(--sp-3) var(--sp-4); border-radius: var(--radius); font-weight: 600; border-left: 4px solid; background: var(--paper); }
+.capture-status[hidden] { display: none; }
+.capture-ok { border-color: var(--deep-sea); }
+.capture-bad { border-color: #9B2C1F; color: #9B2C1F; }
+.archive-count { font-size: var(--fs-small); color: var(--text-secondary); margin-bottom: var(--sp-4); }
+
+.email-capture { margin-block: var(--sp-8); padding: var(--sp-6); background: var(--fog); border-radius: var(--radius); }
+.email-capture h2 { margin-top: 0; font-size: var(--fs-h3); }
+.email-capture .field { margin-bottom: var(--sp-4); max-width: 26rem; }
+.email-capture p:last-child { margin-bottom: 0; }
+
+/* NOTE: every auto-fit grid above uses minmax(min(Nrem, 100%), 1fr) rather than
+   minmax(Nrem, 1fr). The plain form forces a track wider than the container on
+   narrow viewports and pushes the page into horizontal scroll — caught at 320px
+   on the homepage track cards. Keep the min() wrapper on any new grid. */
+
+/* --------------------------------------------------------------------------
+   Stacked table, for tables whose rows must stay readable on a phone.
+   Below 40rem each row becomes a labelled block. The header row is hidden
+   visually and each cell carries its own label via data-label, so the
+   information stays paired with its meaning.
+
+   role="presentation"-style CSS (display: block on table parts) removes the
+   implicit table semantics in some screen readers, which is the accepted
+   trade for this pattern: the labels replace the column headers, so nothing
+   is lost. The unstacked layout above 40rem keeps full table semantics.
+   -------------------------------------------------------------------------- */
+@media (max-width: 39.999rem) {
+  table.stacked, table.stacked tbody, table.stacked tr, table.stacked td { display: block; width: 100%; }
+  table.stacked thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  table.stacked tr { padding-block: var(--sp-4); border-bottom: 1px solid var(--border-strong); }
+  table.stacked td { border: 0; padding: var(--sp-1) 0; display: flex; gap: var(--sp-3); justify-content: space-between; }
+  table.stacked td[data-label]::before {
+    content: attr(data-label);
+    font-weight: 600; color: var(--text-secondary);
+    font-size: var(--fs-caption); flex: none;
+  }
+  table.stacked td.num { text-align: left; }
+  table.stacked .cell-program { font-weight: 600; padding-bottom: var(--sp-2); display: block; }
+  table.stacked th.rowgroup { display: block; width: 100%; }
+  /* The scroll wrapper has nothing to scroll once the table is stacked, and
+     the 22rem min-width it applies for scrollable tables would push a stacked
+     table wider than a 320px container and clip the price column. */
+  .table-scroll:has(table.stacked) { overflow-x: visible; }
+  .table-scroll > table.stacked { min-width: 0; }
+}
+
+/* Scrollable data-table region. See wrap_tables() in build.py. */
+.table-scroll { overflow-x: auto; margin-bottom: var(--sp-5); -webkit-overflow-scrolling: touch; }
+.table-scroll > table { margin-bottom: 0; min-width: 22rem; }
+.table-scroll:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }

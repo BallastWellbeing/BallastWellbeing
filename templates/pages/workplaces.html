@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set page_title = "Workplace mental health training in Ontario" %}
+{% set page_description = "Manager and leadership training aligned with CSA Z1003. Ontario employers carry a duty of care for psychological safety. Ballast trains the people who meet it." %}
+
+{% block content %}
+{# Different register entirely per spec 3.7. Direct, evidence-led, businesslike.
+   No warmth-forward language on this track. #}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow"><a href="/">Ballast Wellbeing</a> <span aria-hidden="true">/</span> For Workplaces</p>
+    <h1 class="hero-title">Your managers are your psychological health and safety programme.</h1>
+    <p class="lead">Policies don't prevent harm. The person having the conversation does. Ballast trains the people who determine whether your duty of care is actually met.</p>
+    <p><a class="btn btn-primary" href="/contact?audience=workplace" aria-label="Request a proposal for your organization">Request a proposal</a></p>
+  </div>
+</section>
+
+<section class="section-lg on-fog">
+  <div class="container">
+    <h2>The case</h2>
+    {# Four stats, all sourced. The source spec's fourth ("28% reduction in sick
+       leave") could not be traced to either cited source and is out; see Claims
+       Register B3. Its slot is taken by splitting the disability-claims figure
+       into the two numbers the source actually reports, which is both more
+       accurate than the blended "~30%" and avoids a compound figure like
+       "27% / 37%" overflowing its column at mid widths.
+       Figures are Deep Sea, not Brass: Brass numerals sit at 3.02:1 on Paper
+       and 2.53:1 on Fog. Brass is the dividing rule only. #}
+    <div class="stat-band">
+      <div class="stat">
+        <span class="stat-figure">27%</span>
+        <p>Share of short-term disability claims in Canada attributable to mental illness</p>
+      </div>
+      <div class="stat">
+        <span class="stat-figure">37%</span>
+        <p>Share of long-term disability claims in Canada attributable to mental illness</p>
+      </div>
+      <div class="stat">
+        <span class="stat-figure">39%</span>
+        <p>Employees who say their employer prepared them for the psychological demands of their job</p>
+      </div>
+      <div class="stat">
+        <span class="stat-figure">35%</span>
+        <p>Employees with access to programmes that prevent burnout</p>
+      </div>
+    </div>
+    <p class="caption source-line">Mental Health Research Canada; Workplace Strategies for Mental Health.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-tight">
+    <h2>What Ontario employers are carrying</h2>
+    <p>The Occupational Health and Safety Act requires workplace violence and harassment policies and programmes. CSA Z1003 &mdash; the National Standard on Psychological Health and Safety in the Workplace &mdash; sets the benchmark against which employer conduct is measured. And since 2018, chronic mental stress has been compensable under WSIB.</p>
+    <p>Written policy satisfies none of this on its own. Documented training of the people who apply it is what demonstrates reasonable care.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Programmes</h2>
+    {# Each card links to the program it names. The audience hub is a separate,
+       clearly labelled link — previously the heading named a program but the
+       link went to the hub, so the label did not match the destination. #}
+    <div class="card-grid">
+      <div class="card">
+        <h3><a href="/programs/psychologically-safe-leadership">Psychologically Safe Leadership</a></h3>
+        <p>For people managers and senior leaders. Full day or two half-days.</p>
+        <p class="caption"><a href="/workplaces/leaders">More on leadership training</a></p>
+      </div>
+      <div class="card">
+        <h3><a href="/programs/supportive-conversation">The Supportive Conversation</a></h3>
+        <p>For anyone who manages people. Half day.</p>
+        <p class="caption"><a href="/workplaces/managers">More on manager training</a></p>
+      </div>
+      <div class="card">
+        <h3><a href="/programs/difficult-conversations-repair">Difficult Conversations and Repair</a></h3>
+        <p>For managers and whole teams. Half day or full day with practice labs.</p>
+        <p class="caption"><a href="/workplaces/teams">More on team training</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section-lg on-fog">
+  <div class="container-tight">
+    <h2>Format</h2>
+    <p>On-site anywhere in the Greater Toronto Area and southern Ontario, or delivered virtually. Half day is three hours, full day is six. Groups capped at 25 for skills-based sessions so people actually practise rather than watch.</p>
+    <p><strong>Pricing.</strong> From $1,600 per half day and $2,600 per full day. Virtual delivery is priced lower. Multi-session and multi-site programmes are quoted individually.</p>
+    <p><a class="btn btn-primary" href="/contact?audience=workplace" aria-label="Request a proposal for your organization">Request a proposal</a></p>
+  </div>
+</section>
+{% endblock %}

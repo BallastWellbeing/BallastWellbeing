@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% set page_title = article.seo_title or article.title %}
+{% set page_description = article.seo_description or article.standfirst %}
+{% block og_type %}article{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": article.title,
+  "description": article.standfirst,
+  "datePublished": article.date | string,
+  "author": {"@type": "Person", "name": site.practitioner_name},
+  "publisher": {"@type": "Organization", "name": "Ballast Wellbeing"},
+  "mainEntityOfPage": site_url ~ "/insights/" ~ article.slug,
+  "inLanguage": "en-CA"
+} | tojson }}
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container"><ol>
+    <li><a href="/insights">Insights</a></li>
+    <li><span aria-current="page">{{ article.title }}</span></li>
+  </ol></div>
+</nav>
+
+<article>
+  <header class="hero article-header">
+    <div class="container-tight">
+      <p class="article-meta">
+        <span class="category-tag">{{ article.category }}</span>
+        <time datetime="{{ article.date }}">{{ article.date_display }}</time>
+        <span class="reading-time">{{ article.reading_time }} min read</span>
+      </p>
+      <h1 class="hero-title">{{ article.title }}</h1>
+      <p class="lead">{{ article.standfirst }}</p>
+    </div>
+  </header>
+
+  <div class="container-tight article-body">
+    {{ article.body }}
+  </div>
+</article>
+
+<div class="container-tight">
+  {% include "partials/email_capture.html" %}
+</div>
+
+<section class="section-lg on-fog">
+  <div class="container-tight">
+    <h2>Training on this</h2>
+    <p>{{ article.cta_text }}</p>
+    <p><a class="btn btn-primary" href="{{ article.cta_url }}">{{ article.cta_label }}</a></p>
+  </div>
+</section>
+{% endblock %}

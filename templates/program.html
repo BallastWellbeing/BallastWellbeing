@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set page_title = program.seo_title or program.title %}
+{% set page_description = program.seo_description or program.standfirst %}
+
+{% block head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": program.title,
+  "description": program.standfirst,
+  "url": site_url ~ "/programs/" ~ program.slug,
+  "provider": {"@type": "Organization", "name": "Ballast Wellbeing", "url": site_url},
+  "audience": {"@type": "Audience", "audienceType": program.audience},
+  "inLanguage": "en-CA",
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": program.schema_mode or "Blended",
+    "courseWorkload": program.duration,
+    "location": {"@type": "Place", "address": "Ontario, Canada"}
+  }
+} | tojson }}
+</script>
+{% endblock %}
+
+{% block content %}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <ol>
+      {% for crumb in program.breadcrumb %}
+      <li>{% if crumb.url %}<a href="{{ crumb.url }}">{{ crumb.label }}</a>{% else %}<span aria-current="page">{{ crumb.label }}</span>{% endif %}</li>
+      {% endfor %}
+    </ol>
+  </div>
+</nav>
+
+<section class="hero program-hero">
+  <div class="container">
+    <h1 class="hero-title">{{ program.title }}</h1>
+    <p class="lead">{{ program.standfirst }}</p>
+  </div>
+</section>
+
+<section class="quick-facts">
+  <div class="container">
+    <h2 class="visually-hidden">At a glance</h2>
+    <dl>
+      <div><dt>Audience</dt><dd>{{ program.audience }}</dd></div>
+      <div><dt>Duration</dt><dd>{{ program.duration }}</dd></div>
+      <div><dt>Format</dt><dd>{{ program.format }}</dd></div>
+      <div><dt>Group size</dt><dd>{{ program.group_size }}</dd></div>
+      <div><dt>Price</dt><dd class="tnum">{{ program.price }}</dd></div>
+    </dl>
+  </div>
+</section>
+
+<div class="container program-body">
+  <section>
+    <h2>What this covers</h2>
+    <p>{{ program.covers }}</p>
+  </section>
+
+  <section>
+    <h2>Learning outcomes</h2>
+    <p class="caption">By the end of this session, participants can:</p>
+    <ul class="outcomes">
+      {% for o in program.outcomes %}<li>{{ o }}</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>Session outline</h2>
+    <table class="outline">
+      <caption class="visually-hidden">Timed session outline</caption>
+      <thead><tr><th scope="col">Time</th><th scope="col">Segment</th></tr></thead>
+      <tbody>
+        {% for row in program.outline %}
+        <tr><th scope="row" class="tnum">{{ row.time }}</th><td>{{ row.item }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if program.outline_note %}<p class="caption">{{ program.outline_note }}</p>{% endif %}
+  </section>
+
+  <section>
+    <h2>What participants receive</h2>
+    <ul>
+      {% for r in program.receives %}<li>{{ r }}</li>{% endfor %}
+    </ul>
+  </section>
+
+  <section class="built-on">
+    <h2>What this is built on</h2>
+    <p>{{ program.built_on }}</p>
+  </section>
+</div>
+
+<section class="section-lg on-fog">
+  <div class="container-tight">
+    <h2>Request this program</h2>
+    <p>Tell us your {{ 'school' if program.track == 'schools' else 'organization' }} and roughly what you're working with. You'll get a reply within one business day.</p>
+    <p>
+      <a class="btn btn-primary" href="/contact?program={{ program.slug }}"
+         aria-label="Request {{ program.title }}">Request this program</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

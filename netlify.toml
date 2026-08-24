@@ -1,0 +1,36 @@
+[build]
+  command = "pip install -r requirements.txt && python3 build.py"
+  publish = "dist"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+
+# Security headers, site-wide.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+
+# The counselling section carries personal health information context.
+# No third-party origins are permitted here except the practice management
+# system that hosts the scheduler. Referrer is stripped entirely so the URL of
+# a psychotherapy page is never sent anywhere.
+[[headers]]
+  for = "/counselling/*"
+  [headers.values]
+    Referrer-Policy = "no-referrer"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; frame-src https://*.janeapp.com; connect-src 'self'; form-action 'self' https://*.janeapp.com; base-uri 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/counselling"
+  [headers.values]
+    Referrer-Policy = "no-referrer"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; frame-src https://*.janeapp.com; connect-src 'self'; form-action 'self' https://*.janeapp.com; base-uri 'self'; object-src 'none'"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

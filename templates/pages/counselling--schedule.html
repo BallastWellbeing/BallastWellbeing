@@ -1,0 +1,58 @@
+{% extends "counselling_base.html" %}
+{% set route = "/counselling/schedule" %}
+{% set page_title = "Booking a session" %}
+{% set page_description = "New clients start with a free 15-minute consultation. Existing clients can book a 50 or 30 minute session directly." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Booking a session</h1>
+    <p class="lead">New clients start with a free 15-minute consultation. If you're already working with me, book directly below.</p>
+  </div>
+</section>
+
+<div class="container-tight clinical-body">
+
+  <section>
+    <h2>New client</h2>
+    <div class="booking-path">
+      <h3>Book a free 15-minute consultation</h3>
+      <p>Phone call. We'll talk about what you're looking for and whether I'm the right fit. Fees get sorted after &mdash; no rate selection needed to book this.</p>
+      {% with booking_label = "Booking calendar for a free 15-minute consultation", booking_path = site.scheduler_consult_path | default('') %}
+        {% include "partials/scheduler.html" %}
+      {% endwith %}
+    </div>
+  </section>
+
+  <section>
+    <h2>Existing client</h2>
+    <div class="booking-path">
+      <h3>Book a session</h3>
+      <p>Choose 50 or 30 minutes. Your rate is already set, so it's just picking a time.</p>
+      {% with booking_label = "Booking calendar for an existing client session", booking_path = site.scheduler_session_path | default('') %}
+        {% include "partials/scheduler.html" %}
+      {% endwith %}
+    </div>
+  </section>
+
+  <section>
+    <h2>50 minutes or 30?</h2>
+    <p>50 minutes is standard, and what most sessions should be &mdash; particularly early on, and any time we're working with trauma or something difficult.</p>
+    <p>30 minutes works well for check-ins between longer sessions, following up on something specific, or maintenance once things are steadier. It isn't a cheaper version of a full session &mdash; it's a different thing, and it's not suitable for trauma work or a first appointment.</p>
+    <p>If you're not sure, book 50. We can always finish early.</p>
+  </section>
+
+  <section>
+    <h2>Practical</h2>
+    <dl class="practical">
+      <div><dt>Format</dt><dd>Telephone, secure video, or in person at {{ ph('practice_address', 'practice address') }}</dd></div>
+      <div><dt>Location</dt><dd>You need to be physically in Ontario during the session</dd></div>
+      <div><dt>Availability</dt><dd>{{ ph('availability', 'days and hours') }}</dd></div>
+      <div><dt>Rescheduling</dt><dd>Through the confirmation email, or reply to it, up to 24 hours before</dd></div>
+    </dl>
+  </section>
+
+  {% include "partials/crisis.html" %}
+
+</div>
+{% endblock %}

@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% set route = "/contact" %}
+{% set page_title = "Tell us what's going on" %}
+{% set page_description = "Most engagements start with a twenty-minute call. You'll get a reply within one business day." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Tell us what's going on.</h1>
+    <p class="lead">Most engagements start with a twenty-minute call. You'll get a reply within one business day.</p>
+  </div>
+</section>
+
+<div class="container-tight contact-body">
+
+  {# Populated by JS from /contact?program=[slug]. Server-rendered empty so the
+     page is valid without it. #}
+  <p id="program-banner" class="program-banner" hidden></p>
+
+  {# The toggle sits OUTSIDE both forms so it is never submitted with either.
+     Radios rather than ARIA tabs: this works with JavaScript disabled, which
+     matters more on a page whose entire purpose is submitting something. #}
+  <div class="audience-toggle">
+    <fieldset>
+      <legend>Which are you?</legend>
+      <div class="toggle-options">
+        <span class="check">
+          <input type="radio" name="audience" id="aud-school" value="school" checked>
+          <label for="aud-school">I'm with a school</label>
+        </span>
+        <span class="check">
+          <input type="radio" name="audience" id="aud-work" value="workplace">
+          <label for="aud-work">I'm with an organization</label>
+        </span>
+      </div>
+    </fieldset>
+  </div>
+
+  <!-- ================= Schools ================= -->
+  <form class="enquiry-form" id="form-school" method="post" action="/api/enquiry" novalidate>
+    <input type="hidden" name="form" value="school">
+    <input type="hidden" name="program_slug" id="school-program" value="">
+    <p class="sr-only-heading"><strong>School enquiry</strong></p>
+    <div class="hp" aria-hidden="true">
+      <label for="s-website">Leave this field empty</label>
+      <input type="text" id="s-website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label for="s-name">Name <span class="required-marker">(required)</span></label>
+      <input type="text" id="s-name" name="name" autocomplete="name" required>
+    </div>
+    <div class="field">
+      <label for="s-role">Your role <span class="required-marker">(required)</span></label>
+      <input type="text" id="s-role" name="role" autocomplete="organization-title" required>
+    </div>
+    <div class="field">
+      <label for="s-org">School name <span class="required-marker">(required)</span></label>
+      <input type="text" id="s-org" name="organization" autocomplete="organization" required>
+    </div>
+    <div class="field">
+      <label for="s-email">Email <span class="required-marker">(required)</span></label>
+      <input type="email" id="s-email" name="email" autocomplete="email" required>
+    </div>
+    <div class="field">
+      <label for="s-phone">Phone</label>
+      <input type="tel" id="s-phone" name="phone" autocomplete="tel">
+    </div>
+    <div class="field">
+      <label for="s-type">School type <span class="required-marker">(required)</span></label>
+      <select id="s-type" name="school_type" required>
+        <option value="">Choose one</option>
+        <option>Independent</option><option>Faith-based</option>
+        <option>Montessori</option><option>IB</option><option>Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="s-enrol">Approximate enrolment <span class="required-marker">(required)</span></label>
+      <select id="s-enrol" name="enrolment" required>
+        <option value="">Choose one</option>
+        <option>Under 200</option><option>200&ndash;400</option>
+        <option>400&ndash;800</option><option>800+</option>
+      </select>
+    </div>
+    <fieldset>
+      <legend>Interested in <span class="required-marker">(choose at least one)</span></legend>
+      {% for opt in ['Student sessions','Staff training','Parent evening','Annual package','Policy review','Not sure yet'] %}
+      <span class="check">
+        <input type="checkbox" id="s-int-{{ loop.index }}" name="interested_in" value="{{ opt }}">
+        <label for="s-int-{{ loop.index }}">{{ opt }}</label>
+      </span>
+      {% endfor %}
+    </fieldset>
+    <div class="field">
+      <label for="s-time">Preferred timeframe <span class="required-marker">(required)</span></label>
+      <select id="s-time" name="timeframe" required>
+        <option value="">Choose one</option>
+        <option>This term</option><option>Next term</option>
+        <option>Next school year</option><option>Exploring</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="s-notes">Anything we should know</label>
+      <textarea id="s-notes" name="notes" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send enquiry</button>
+  </form>
+
+  <!-- ================= Workplaces ================= -->
+  <form class="enquiry-form" id="form-workplace" method="post" action="/api/enquiry" novalidate>
+    <input type="hidden" name="form" value="workplace">
+    <input type="hidden" name="program_slug" id="work-program" value="">
+    <p class="sr-only-heading"><strong>Organization enquiry</strong></p>
+    <div class="hp" aria-hidden="true">
+      <label for="w-website">Leave this field empty</label>
+      <input type="text" id="w-website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <div class="field">
+      <label for="w-name">Name <span class="required-marker">(required)</span></label>
+      <input type="text" id="w-name" name="name" autocomplete="name" required>
+    </div>
+    <div class="field">
+      <label for="w-role">Your role <span class="required-marker">(required)</span></label>
+      <input type="text" id="w-role" name="role" autocomplete="organization-title" required>
+    </div>
+    <div class="field">
+      <label for="w-org">Organization <span class="required-marker">(required)</span></label>
+      <input type="text" id="w-org" name="organization" autocomplete="organization" required>
+    </div>
+    <div class="field">
+      <label for="w-email">Email <span class="required-marker">(required)</span></label>
+      <input type="email" id="w-email" name="email" autocomplete="email" required>
+    </div>
+    <div class="field">
+      <label for="w-phone">Phone</label>
+      <input type="tel" id="w-phone" name="phone" autocomplete="tel">
+    </div>
+    <div class="field">
+      <label for="w-sector">Sector <span class="required-marker">(required)</span></label>
+      <input type="text" id="w-sector" name="sector" required>
+    </div>
+    <div class="field">
+      <label for="w-head">Approximate headcount <span class="required-marker">(required)</span></label>
+      <select id="w-head" name="headcount" required>
+        <option value="">Choose one</option>
+        <option>Under 50</option><option>50&ndash;200</option>
+        <option>200&ndash;500</option><option>500+</option>
+      </select>
+    </div>
+    <fieldset>
+      <legend>Interested in <span class="required-marker">(choose at least one)</span></legend>
+      {% for opt in ['Leadership training','Manager training','Team training','Not sure yet'] %}
+      <span class="check">
+        <input type="checkbox" id="w-int-{{ loop.index }}" name="interested_in" value="{{ opt }}">
+        <label for="w-int-{{ loop.index }}">{{ opt }}</label>
+      </span>
+      {% endfor %}
+    </fieldset>
+    <div class="field">
+      <label for="w-delivery">Delivery <span class="required-marker">(required)</span></label>
+      <select id="w-delivery" name="delivery" required>
+        <option value="">Choose one</option>
+        <option>On-site</option><option>Virtual</option><option>Either</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="w-time">Preferred timeframe <span class="required-marker">(required)</span></label>
+      <select id="w-time" name="timeframe" required>
+        <option value="">Choose one</option>
+        <option>Within a month</option><option>1&ndash;3 months</option>
+        <option>3&ndash;6 months</option><option>Exploring</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="w-notes">Anything we should know</label>
+      <textarea id="w-notes" name="notes" rows="5"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send enquiry</button>
+  </form>
+
+  <section class="contact-alt">
+    <h2>Or just email</h2>
+    <p><a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+    {% if site.counselling_enabled %}
+    <p class="caption">Looking for individual counselling rather than training? That's a
+      <a href="/counselling">separate practice</a> with its own booking process.</p>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+
+  // Deep link: /contact?program=[slug] names the program above the form and
+  // rides along in the submission.
+  // /contact?audience=school|workplace — used by the CTA on the track pages,
+  // which previously passed this parameter to a page that ignored it.
+  var audience = params.get('audience');
+  if (audience === 'workplace') document.getElementById('aud-work').checked = true;
+  if (audience === 'school') document.getElementById('aud-school').checked = true;
+
+  var slug = params.get('program');
+  if (slug && /^[a-z0-9-]{1,64}$/.test(slug)) {
+    var titles = {{ program_titles | tojson }};
+    var title = titles[slug];
+    if (title) {
+      var banner = document.getElementById('program-banner');
+      banner.textContent = 'Enquiring about: ' + title;
+      banner.hidden = false;
+      document.getElementById('school-program').value = slug;
+      document.getElementById('work-program').value = slug;
+      // Route the visitor to the form matching the program's track.
+      if ({{ workplace_slugs | tojson }}.indexOf(slug) !== -1) {
+        document.getElementById('aud-work').checked = true;
+      }
+    }
+  }
+
+  // Inline validation. Errors are described in text and announced; the field
+  // gets aria-invalid and aria-describedby pointing at the message.
+  document.querySelectorAll('.enquiry-form').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      var firstBad = null;
+      form.querySelectorAll('[aria-invalid]').forEach(function (el) {
+        el.removeAttribute('aria-invalid');
+      });
+      form.querySelectorAll('.field-error').forEach(function (el) { el.remove(); });
+
+      form.querySelectorAll('[required]').forEach(function (el) {
+        if (!el.value.trim()) {
+          flag(el, 'This field is required.');
+          firstBad = firstBad || el;
+        } else if (el.type === 'email' && el.value.indexOf('@') === -1) {
+          flag(el, 'Enter a valid email address.');
+          firstBad = firstBad || el;
+        }
+      });
+
+      var boxes = form.querySelectorAll('input[type=checkbox][name=interested_in]');
+      if (boxes.length && ![].some.call(boxes, function (b) { return b.checked; })) {
+        var fs = boxes[0].closest('fieldset');
+        var msg = document.createElement('p');
+        msg.className = 'field-error';
+        msg.textContent = 'Choose at least one option.';
+        fs.appendChild(msg);
+        firstBad = firstBad || boxes[0];
+      }
+
+      if (firstBad) { e.preventDefault(); firstBad.focus(); }
+    });
+  });
+
+  function flag(el, text) {
+    el.setAttribute('aria-invalid', 'true');
+    var msg = document.createElement('p');
+    msg.className = 'field-error';
+    msg.id = el.id + '-error';
+    msg.textContent = text;
+    el.insertAdjacentElement('afterend', msg);
+    var described = (el.getAttribute('aria-describedby') || '').split(' ').filter(Boolean);
+    described.push(msg.id);
+    el.setAttribute('aria-describedby', described.join(' '));
+  }
+})();
+</script>
+{% endblock %}

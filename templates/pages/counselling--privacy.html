@@ -1,0 +1,86 @@
+{% extends "counselling_base.html" %}
+{% set route = "/counselling/privacy" %}
+{% set page_title = "Clinical privacy notice" %}
+{% set page_description = "How personal health information is collected, stored, retained, and disclosed in this psychotherapy practice, under Ontario's Personal Health Information Protection Act." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Clinical privacy notice</h1>
+    <p class="lead">This notice covers personal health information in the psychotherapy practice. It is separate from the <a href="/privacy">website privacy policy</a>, which covers enquiry forms and analytics on the training side of this site.</p>
+  </div>
+</section>
+
+<div class="container-tight clinical-body legal-body">
+
+  <section>
+    <h2>Who is responsible for your information</h2>
+    <p>{{ site.practitioner_name }}, Registered Psychotherapist (Qualifying), CRPO Registration No. {{ ph('crpo_number', 'CRPO registration number') }}, is a health information custodian under Ontario's <em>Personal Health Information Protection Act, 2004</em> (PHIPA). That means I am personally accountable for the personal health information in this practice.</p>
+    <p>For any question about your information, contact {{ ph('clinical_email', 'clinical email address') }}.</p>
+  </section>
+
+  <section>
+    <h2>What is collected, and why</h2>
+    <p>I collect only what is needed to provide care and to meet the College's record-keeping requirements:</p>
+    <ul>
+      <li>Your name, contact details, and preferred contact method</li>
+      <li>Confirmation that you are located in Ontario during sessions, which is a condition of practice</li>
+      <li>What brought you to the practice, and the clinical notes made during our work</li>
+      <li>Appointment dates, session lengths, fees charged, and payments received</li>
+      <li>Correspondence between us</li>
+    </ul>
+    <p>I do not collect information for marketing, and I do not sell, rent, or share information with advertisers under any circumstances.</p>
+  </section>
+
+  <section>
+    <h2>How it is stored</h2>
+    <p>Records are held in a practice management system built for Canadian healthcare, with data stored in Canada, encrypted in transit and at rest, and access protected by individual credentials. Paper notes, where any exist, are held in locked storage.</p>
+    <p>The pages of this website under <code>/counselling/</code> carry no analytics, no tracking scripts, and no third-party marketing pixels of any kind, including inside the booking tool. Fonts are served from this site rather than a third-party provider, so visiting these pages does not disclose your visit to anyone else.</p>
+  </section>
+
+  <section>
+    <h2>Who has access</h2>
+    <ul>
+      <li><strong>You.</strong> You can request access to your own record at any time.</li>
+      <li><strong>Me.</strong> As your treating practitioner.</li>
+      <li><strong>My clinical supervisor</strong>, {{ ph('supervisor', 'supervisor name and credentials') }}, in the course of supervision. As a qualifying registrant I am required to practise under supervision, which means my clinical work is discussed. Your identifying information is minimised in those discussions, but your care is discussed. You should know this before you disclose anything, not after.</li>
+      <li><strong>The practice management system's provider</strong>, as the processor holding the records under contract, bound to confidentiality and to Canadian data residency.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>How long it is kept</h2>
+    <p>Clinical records are retained for the period the College of Registered Psychotherapists of Ontario requires, which is at least ten years after our last contact, or for a client who was under 18, at least ten years after they turn 18. Records are securely destroyed at the end of that period.</p>
+  </section>
+
+  <section>
+    <h2>When information may be disclosed without your consent</h2>
+    <p>Ordinarily nothing leaves the practice without your written consent. The exceptions are the limits on confidentiality, which are the same list set out on the <a href="/counselling">main counselling page</a>:</p>
+    <ul>
+      <li>Discussion with my clinical supervisor, as described above</li>
+      <li>Where I believe there is a risk of serious harm to you or to someone else</li>
+      <li>Where I suspect a child under 16 is or may be in need of protection, which I am legally required to report</li>
+      <li>Where I am required to report the sexual abuse of a client by a health professional to the relevant College</li>
+      <li>Where a record is ordered by a court</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Access to and correction of your record</h2>
+    <p>Write to {{ ph('clinical_email', 'clinical email address') }} to request access to your record. I will respond within 30 days. In rare circumstances PHIPA permits access to be refused, in which case I will tell you why in writing and explain how to challenge that decision.</p>
+    <p>If you believe something in your record is inaccurate, you can ask for it to be corrected. Where a correction isn't appropriate, your statement of disagreement is attached to the record instead, so your position forms part of it.</p>
+  </section>
+
+  <section>
+    <h2>Raising a privacy concern</h2>
+    <p>Raise it with me first, at {{ ph('clinical_email', 'clinical email address') }}. I would rather hear about it directly and put it right.</p>
+    <p>You can also complain to the <a href="https://www.ipc.on.ca/" rel="noopener">Information and Privacy Commissioner of Ontario</a>, which oversees PHIPA, at any time and regardless of whether you have raised it with me. Concerns about my conduct as a registrant can be raised with the <a href="https://www.crpo.ca/complaints-reports/" rel="noopener">College of Registered Psychotherapists of Ontario</a>.</p>
+  </section>
+
+  <section>
+    <h2>Breach notification</h2>
+    <p>If personal health information in my custody is stolen, lost, or accessed by someone who shouldn't have it, I am required to tell you at the first reasonable opportunity, and to report it to the Information and Privacy Commissioner of Ontario. I will tell you what happened, what information was involved, and what I am doing about it.</p>
+  </section>
+
+</div>
+{% endblock %}

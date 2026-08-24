@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% set route = route or "/insights" %}
+{% set active = active_category | default(none) %}
+{% set page_title = "Insights" if not active else "Insights: " ~ active %}
+{% set page_description = "Practical writing on mental health in schools and workplaces. No listicles, no wellness content." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Insights</h1>
+    <p class="lead">Practical writing on mental health in schools and workplaces. No listicles, no wellness content.</p>
+  </div>
+</section>
+
+<div class="container-tight archive">
+  {# Real filtered pages, one per category, generated at build time. The
+     previous version linked to #anchors and only jumped down the same list,
+     which was not a filter and produced a duplicate id per shared category. #}
+  <nav class="category-filter" aria-label="Filter articles by category">
+    <ul>
+      {# aria-current="true", not "page": the main nav's Insights link already
+         carries aria-current="page" on these routes, and two "page" values on
+         one document is ambiguous. "true" is the correct token for the current
+         item within a set. #}
+      <li><a href="/insights"{% if not active %} aria-current="true"{% endif %}>All</a></li>
+      {% for cat in categories %}
+      <li><a href="/insights/category/{{ cat | lower }}"{% if active == cat %} aria-current="true"{% endif %}>{{ cat }}</a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+
+  {% set shown = insights if not active else insights | selectattr('category', 'equalto', active) | list %}
+
+  <p class="archive-count" role="status">
+    {{ shown | length }} article{{ '' if shown | length == 1 else 's' }}{% if active %} in {{ active }}{% endif %}
+  </p>
+
+  {% if shown %}
+  <ul class="article-list">
+    {% for a in shown %}
+    <li>
+      <article>
+        <p class="article-meta">
+          <span class="category-tag">{{ a.category }}</span>
+          <time datetime="{{ a.date }}">{{ a.date_display }}</time>
+          <span class="reading-time">{{ a.reading_time }} min read</span>
+        </p>
+        <h2><a href="/insights/{{ a.slug }}">{{ a.title }}</a></h2>
+        <p>{{ a.standfirst }}</p>
+      </article>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p>Nothing here yet. <a href="/insights">See all articles</a>.</p>
+  {% endif %}
+
+  {% include "partials/email_capture.html" %}
+</div>
+{% endblock %}

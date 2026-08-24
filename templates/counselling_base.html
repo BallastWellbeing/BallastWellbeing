@@ -1,0 +1,6 @@
+{# Every /counselling/* page extends this rather than base.html directly.
+   Setting `section` here means a new clinical page cannot be added without
+   inheriting the analytics exclusion, the persistent separation band, and the
+   clinical footer. #}
+{% extends "base.html" %}
+{% set section = "counselling" %}

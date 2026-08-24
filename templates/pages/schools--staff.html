@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set page_title = "Staff wellbeing PD for independent schools in Ontario" %}
+{% set page_description = "Trauma-informed practice, de-escalation, and burnout training for independent school staff. Half day, full day, and PD-slot formats." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow"><a href="/schools">For Schools</a> <span aria-hidden="true">/</span> Staff training</p>
+    <h1 class="hero-title">Your staff are the mental health system.</h1>
+    <p class="lead">Most students who need help go to a teacher first. That teacher usually has no training for it, and carries the weight of it home. These sessions address both halves of that problem.</p>
+  </div>
+</section>
+
+<section class="section-lg on-fog">
+  <div class="container-tight">
+    <h2>The retention case</h2>
+    {# The source spec opened this section with "Stress and mental illness
+       account for 39% of long-term disability claims among Ontario teachers —
+       more than double the next leading cause." That figure could not be traced
+       to any source and the spec attached no citation to it. Burhan confirmed 17 Aug 2026: leave it out.
+       See Claims Register B3. The paragraph below carries the argument
+       without it and needs no edit if the statistic is later sourced — it is
+       added back as a leading sentence. #}
+    <p>Mental health is a leading driver of long-term disability leave across Ontario's education workforce. Independent schools feel this harder: smaller teams, more non-teaching duties, no federation supports, and a single departure that costs a term of stability.</p>
+    <p>Staff training is the cheapest retention instrument available to a school this size. It costs less than one replacement hire and it reaches everyone at once.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Programs</h2>
+    <div class="card-grid">
+      <div class="card">
+        <h3><a href="/programs/trauma-informed-classroom">The Regulated Classroom: Trauma-Informed Practice</a></h3>
+        <p class="price-note">Half day $1,100 &middot; Full day $1,900 &middot; Virtual half day $800</p>
+      </div>
+      <div class="card">
+        <h3><a href="/programs/de-escalation-schools">Holding the Room: De-escalation and Dysregulated Students</a></h3>
+        <p class="price-note">Half day $1,200 (up to 30 staff) &middot; $1,600 (up to 60) &middot; Virtual $900</p>
+      </div>
+      <div class="card">
+        <h3><a href="/programs/staff-wellbeing-burnout">Staying in the Work: Burnout, Boundaries and Staff Wellbeing</a></h3>
+        <p class="price-note">90-minute PD slot $650 &middot; Half day $1,100 &middot; Virtual 90 min $450</p>
+      </div>
+    </div>
+    <p style="margin-top:var(--sp-6)"><a class="btn btn-primary" href="/contact?audience=school" aria-label="Request a proposal for your school">Request a proposal</a></p>
+  </div>
+</section>
+{% endblock %}

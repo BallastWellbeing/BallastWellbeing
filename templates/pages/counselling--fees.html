@@ -1,0 +1,90 @@
+{% extends "counselling_base.html" %}
+{% set route = "/counselling/fees" %}
+{% set page_title = "Fees" %}
+{% set page_description = "A three-tier fee structure. Standard $140, reduced $80, community $40 for a 50-minute session. You choose your rate." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Fees</h1>
+    <p class="lead">Therapy in Toronto typically runs $150 to $250 a session. That puts it out of reach for a lot of people who need it, and the people it prices out are usually the ones carrying the most.</p>
+    <p>This practice runs a three-tier fee structure. Clients paying the standard rate make it possible to hold a fixed number of low-cost spaces open at all times. That's how the access is funded &mdash; not by goodwill, by design.</p>
+  </div>
+</section>
+
+<div class="container-tight clinical-body">
+
+  <section>
+    <h2>The rates</h2>
+    {# Three identical cards. The spec is explicit: Standard must not be made
+       visually dominant and Community must not look like charity. No struck
+       -through prices, no "discount" framing, no scarcity messaging. #}
+    <div class="rate-cards">
+      <div class="rate-card">
+        <h3>Standard</h3>
+        <p class="rate tnum">$140 / 50 min<br>$85 / 30 min</p>
+        <p>The market rate for a Registered Psychotherapist in Ontario. Most extended health plans provide some coverage at this level. If you have benefits, this is likely your rate.</p>
+      </div>
+      <div class="rate-card">
+        <h3>Reduced</h3>
+        <p class="rate tnum">$80 / 50 min<br>$50 / 30 min</p>
+        <p>For people without benefits coverage, students, and anyone in precarious or transitional work. Available on request &mdash; a short conversation, not an application.</p>
+      </div>
+      <div class="rate-card">
+        <h3>Community</h3>
+        <p class="rate tnum">$40 / 50 min<br>$25 / 30 min</p>
+        <p>A fixed number of spaces held open for people who couldn't otherwise access therapy at all. Currently {{ ph('community_spaces', 'number of spaces') }} spaces. When they're full there's a waitlist, and I'll tell you honestly where you are on it.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Which rate is mine?</h2>
+    <p>You choose. I don't means-test, I don't ask for pay stubs, and I don't ask you to explain your finances in detail.</p>
+    <p>A useful way to think about it: pay the standard rate if you can do so without it changing what else you can afford. Ask about the reduced rate if therapy would mean cutting something that matters. Ask about a community space if the standard rate means you simply wouldn't come.</p>
+    <p>People consistently underestimate what they're entitled to ask for. If you're unsure, ask. It takes one sentence in an email and I won't make it awkward.</p>
+    <p>Rates can change as your situation does, in either direction. Tell me and we'll adjust.</p>
+  </section>
+
+  <section>
+    <h2>Free 15-minute consultation</h2>
+    <p>No charge, no obligation, no rate discussion required beforehand. A phone call to work out whether this is a fit and what you're looking for. We can sort out fees after, or during, whichever you prefer.</p>
+  </section>
+
+  <section>
+    <h2>Payment and receipts</h2>
+    <p>Payment is due at the time of session. {{ ph('payment_methods', 'accepted payment methods') }}</p>
+    <p>A receipt is issued for every session, showing my name, registration number, the date, session length, and the fee. This is what your insurer needs. Receipts show the fee you actually paid.</p>
+  </section>
+
+  <section>
+    <h2>Cancellation</h2>
+    <p>Please give 24 hours' notice to cancel or reschedule. Sessions cancelled with less notice, or missed, are charged at your rate.</p>
+    <p>Genuine emergencies happen and I'll be reasonable about them. Repeated late cancellations are something we'll talk about rather than something I'll silently bill for.</p>
+    <p>Missed community-rate sessions are not charged. Repeated no-shows mean the space is offered to someone on the waitlist.</p>
+  </section>
+
+  <section>
+    <h2>Insurance coverage</h2>
+    <p>Many extended health plans cover psychotherapy provided by a Registered Psychotherapist. Coverage varies a great deal between plans and I can't confirm what yours includes.</p>
+    <p>Before your first session, call your insurer and ask two things:</p>
+    <ol>
+      <li>Does my plan cover services from a Registered Psychotherapist in Ontario?</li>
+      <li>Does my plan cover a Registered Psychotherapist (Qualifying)?</li>
+    </ol>
+    <p>The second question matters. Some plans specify the registration category, and it's better to find out now than after four sessions.</p>
+    <p>I don't direct-bill. You pay at the session and submit your receipt.</p>
+  </section>
+
+  <section>
+    <h2>Other fees</h2>
+    <p>Letters, reports, and forms requested by you or a third party are charged at {{ ph('documentation_rate', 'documentation rate') }} per hour, quoted before any work begins. Court attendance and legal work are quoted separately.</p>
+    <p>Reduced and community rates apply to sessions; documentation is charged at the standard rate.</p>
+  </section>
+
+  <section>
+    <p><a class="btn btn-primary" href="/counselling/schedule">Book a consultation</a></p>
+  </section>
+
+</div>
+{% endblock %}

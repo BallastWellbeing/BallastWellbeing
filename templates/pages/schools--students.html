@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set page_title = "Student mental health sessions for Ontario schools" %}
+{% set page_description = "Assembly and classroom-scale sessions on anxiety, transitions, and conflict, written separately for each grade band." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow"><a href="/schools">For Schools</a> <span aria-hidden="true">/</span> Student programs</p>
+    <h1 class="hero-title">Sessions students actually use.</h1>
+    <p class="lead">Assembly and classroom-scale sessions, written separately for each grade band. Practical rather than awareness-raising &mdash; students leave with something to do, not just something to think about.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="visually-hidden">Student programs</h2>
+    <div class="card-grid">
+      {% for p in pricing.students %}
+      <div class="card">
+        <h3><a href="/programs/{{ p.slug }}">{{ p.program }}</a></h3>
+        <p>{{ p.detail }}</p>
+        <p class="price-note">{{ p.price }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section on-fog">
+  <div class="container-tight">
+    <h2>Multi-session pricing</h2>
+    <ul class="plain">
+      {% for m in pricing.student_multi %}
+      <li>{{ m.label }}: <strong class="tnum">{{ m.price }}</strong></li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-tight">
+    <h2>Before we come in</h2>
+    <p>We agree a written referral protocol with every school before the first session &mdash; who a student is handed to if something comes up, and what we do and don't document. This is settled in advance, not in the moment.</p>
+    <p><a class="btn btn-primary" href="/contact?audience=school" aria-label="Request a proposal for your school">Request a proposal</a></p>
+  </div>
+</section>
+{% endblock %}

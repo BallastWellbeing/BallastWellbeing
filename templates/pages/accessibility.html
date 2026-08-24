@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% set route = "/accessibility" %}
+{% set page_title = "Accessibility" %}
+{% set page_description = "Ballast Wellbeing's accessibility statement, conformance target, known limitations, and how to report a barrier." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Accessibility</h1>
+    <p class="lead">If any part of this site or our training is a barrier for you, tell us and we will fix it.</p>
+  </div>
+</section>
+
+<div class="container-tight legal-body">
+  <section>
+    <h2>Report a barrier</h2>
+    <p>Email <a href="mailto:{{ site.email }}">{{ site.email }}</a>. Describe what you were trying to do and what got in the way. You do not need to know the technical cause, and you do not need to use any particular terminology.</p>
+    <p>We aim to reply within two business days and to tell you what we are doing about it, including a timescale. If a fix will take time, we will offer another way to get what you needed in the meantime.</p>
+  </section>
+
+  <section>
+    <h2>Conformance target</h2>
+    <p>This site is built to meet <strong>WCAG 2.0 Level AA</strong>, which is the standard referenced by the Accessibility for Ontarians with Disabilities Act. In practice we build to WCAG 2.1 Level AA, which includes everything in 2.0 AA and adds requirements around reflow, orientation, and non-text contrast.</p>
+    <p>We consider the site to be conformant with WCAG 2.0 Level AA at the time of writing, with the exceptions listed below.</p>
+  </section>
+
+  <section>
+    <h2>What we have done</h2>
+    <ul>
+      <li>Every page is operable by keyboard alone, with a visible focus indicator on every interactive element and a skip link to the main content</li>
+      <li>Body text meets a contrast ratio of at least 4.5:1 against its background; every colour pairing used on the site has been measured rather than assumed</li>
+      <li>No information is conveyed by colour alone. Form errors and verification results are stated in words</li>
+      <li>Text can be resized to 200% without loss of content or function, and the layout reflows to a single column without horizontal scrolling</li>
+      <li>One <code>h1</code> per page and a heading hierarchy that does not skip levels</li>
+      <li>Every form field has a visible, programmatically associated label; errors are described in text and linked to the field they concern</li>
+      <li>Every image has alternative text, and decorative images are hidden from assistive technology</li>
+      <li>Motion respects the <code>prefers-reduced-motion</code> setting</li>
+      <li>Pages are tested automatically on every build for contrast, heading order, alternative text, link clarity, and target size, and are also checked by keyboard by hand</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Known limitations</h2>
+    <ul>
+      {% if site.counselling_enabled %}
+      <li><strong>The appointment booking tool</strong> in the counselling section is provided by a third party and embedded in the page. We have limited control over its accessibility. If it is a barrier, email or phone to book instead and we will arrange it directly &mdash; that route is always available and is never treated as a lesser option.</li>
+      {% endif %}
+      <li><strong>Documents.</strong> Program overviews and proposals are provided as PDFs. If you need one as plain text, a Word document, large print, or read aloud, ask and we will send it in that form.</li>
+      <li><strong>Certificate verification</strong> requires JavaScript. If you cannot use it, email the serial number and we will confirm it by reply.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Accessibility of the training itself</h2>
+    <p>Tell us what you need when you book and we will build it in rather than improvise on the day. That includes materials in advance, large print or electronic copies, captioning or a sign language interpreter for virtual sessions, room and seating requirements, breaks at a particular frequency, and content warnings where a session covers difficult material.</p>
+    <p>We do not ask participants to disclose a diagnosis in order to receive an accommodation.</p>
+  </section>
+
+  <section>
+    <h2>This statement</h2>
+    <p>Prepared {{ year }}. Reviewed whenever the site changes substantially, and at least annually.</p>
+  </section>
+</div>
+{% endblock %}

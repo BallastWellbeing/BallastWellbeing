@@ -1,0 +1,53 @@
+site:
+  name: Ballast Wellbeing
+  email: hello@ballastwellbeing.com
+  # PLACEHOLDER — confirmed as Rehman, kept as a variable so the clinical
+  # pages can be rebranded with one edit if the practice structure changes.
+  practitioner_name: Norman Rehman
+  # Set true once the two .woff2 files are in static/fonts/. Until then the
+  # preload hints are omitted so a font-less deploy doesn't 404 twice per page.
+  fonts_installed: false
+  # The counselling section is regulated advertising under CRPO Standard 6.2.
+  # While false, its 5 pages are not built at all and its nav and footer links
+  # are removed, so v1 can ship the training side without publishing a
+  # psychotherapy page full of visible [placeholders]. Flip to true only when
+  # every placeholder below is filled.
+  counselling_enabled: false
+  # Set to /static/og/default.png once that image exists. Omitted rather than
+  # pointing at a missing file, which social platforms cache as broken.
+  og_image:
+  # Set to the practice management system's booking URL to switch
+  # /counselling/schedule from the email fallback to the embed.
+  scheduler_url:
+  nav:
+    - {label: For Schools,    url: /schools}
+    - {label: For Workplaces, url: /workplaces}
+    - {label: About,          url: /about}
+    - {label: Approach,       url: /approach}
+    - {label: Insights,       url: /insights}
+  footer_columns:
+    - heading: Training
+      links:
+        - {label: For Schools,        url: /schools}
+        - {label: For Workplaces,     url: /workplaces}
+        - {label: Approach,           url: /approach}
+        - {label: Verify a certificate, url: /verify}
+    - heading: Practice
+      links:
+        - {label: About,    url: /about}
+        - {label: Insights, url: /insights}
+        - {label: Contact,  url: /contact}
+
+# Values only Norman can supply. Fill these in and the visible [markers]
+# across the counselling section disappear. `python3 build.py --check` fails
+# while any are still blank, so the section cannot ship half-finished.
+placeholders:
+  crpo_number:
+  supervisor:
+  practice_address:
+  accepting_new_clients:
+  clinical_email:
+  documentation_rate:
+  payment_methods:
+  availability:
+  community_spaces:

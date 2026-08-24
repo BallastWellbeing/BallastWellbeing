@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{{ page_title }} | Ballast Wellbeing{% endblock %}</title>
+<meta name="description" content="{{ page_description }}">
+<link rel="canonical" href="{{ site_url }}{{ route }}">
+<meta property="og:title" content="{{ page_title }}">
+<meta property="og:description" content="{{ page_description }}">
+<meta property="og:url" content="{{ site_url }}{{ route }}">
+<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+<meta property="og:site_name" content="Ballast Wellbeing">
+<meta property="og:locale" content="en_CA">
+{% if site.og_image %}
+<meta property="og:image" content="{{ site_url }}{{ site.og_image }}">
+<meta property="og:image:alt" content="Ballast Wellbeing">
+<meta name="twitter:card" content="summary_large_image">
+{% endif %}
+<link rel="icon" href="/static/logos/ballast-mark.svg" type="image/svg+xml">
+{# Sets the .js class synchronously, before the stylesheet paints. nav.js is
+   deferred, so relying on it to add this class made every mobile page render
+   the nav fully expanded and then collapse it — a visible jump on load. #}
+<script>document.documentElement.className += " js";</script>
+{# fonts.css and its preloads are omitted entirely until the two .woff2 files
+   exist. Linking them earlier meant every page fired two failed font requests
+   and logged two 404s; the site renders on the fallback stack either way. Flip
+   site.fonts_installed in content/data/site.yml once the files are in. #}
+{% if site.fonts_installed %}
+<link rel="preload" href="/static/fonts/inter-tight-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/source-serif-4-variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/static/styles/fonts.css">
+{% endif %}
+<link rel="stylesheet" href="/static/styles/tokens.css">
+<link rel="stylesheet" href="/static/styles/base.css">
+{% block head %}{% endblock %}
+{% if section != 'counselling' %}
+{# Analytics loads on the training site only. It is physically absent from
+   every /counselling/* page: that data is personal health information and
+   does not go through this pipeline. Do not move this into a shared partial. #}
+<script defer data-domain="ballastwellbeing.com" src="https://plausible.io/js/script.js"></script>
+{% endif %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Ballast Wellbeing",
+  "url": site_url,
+  "logo": site_url ~ "/static/logos/ballast-stacked.svg",
+  "email": site.email,
+  "areaServed": "Ontario, Canada",
+  "description": "Mental health training for Ontario schools and workplaces."
+} | tojson }}
+</script>
+</head>
+<body{% if section == 'counselling' %} class="section-counselling"{% endif %}>
+
+<a class="skip-link" href="#main">Skip to main content</a>
+
+<header class="site-header">
+  <div class="container">
+    <a class="logo" href="/" aria-label="Ballast Wellbeing, home">
+      <img src="/static/logos/ballast-horizontal.svg" alt="Ballast Wellbeing" width="470" height="100">
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">
+      <span class="nav-toggle-bars" aria-hidden="true"></span> Menu
+    </button>
+    <nav class="nav" id="primary-nav" aria-label="Main">
+      <ul>
+        {% for item in site.nav %}
+        <li><a href="{{ item.url }}"{% if route.startswith(item.url) %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
+        {% endfor %}
+        {% if site.counselling_enabled %}
+        <li class="nav-divider" aria-hidden="true"></li>
+        <li class="nav-counselling"><a href="/counselling"{% if section == 'counselling' %} aria-current="page"{% endif %}>Individual Counselling</a></li>
+        {% endif %}
+        <li>
+          {% if section == 'counselling' %}
+          <a class="btn btn-primary" href="/counselling/schedule">Book a consultation</a>
+          {% else %}
+          <a class="btn btn-primary" href="/contact">Request a proposal</a>
+          {% endif %}
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+{% if section == 'counselling' %}
+{# Required on every /counselling/* page. Persistent, not dismissible. #}
+<div class="counselling-band on-fog">
+  <div class="container">
+    <p>Psychotherapy services &mdash; separate from Ballast Wellbeing training and consulting.</p>
+  </div>
+</div>
+{% endif %}
+
+{# tabindex="-1" so the skip link actually moves focus. Without it several
+   browsers scroll to the target but leave focus in the header, and the next
+   Tab press goes back into the nav. #}
+<main id="main" tabindex="-1">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer on-dark">
+  <div class="container">
+    <img src="/static/logos/ballast-horizontal-reversed.svg" alt="Ballast Wellbeing" width="470" height="100">
+
+    <div class="footer-cols">
+      {% for col in site.footer_columns %}
+      <div>
+        <h2>{{ col.heading }}</h2>
+        <ul>
+          {# The counselling link is conditional, not a data entry, so it
+             disappears with the section rather than 404ing. #}
+          {% if site.counselling_enabled and col.heading == 'Practice' %}
+          <li><a href="/counselling">Individual Counselling</a></li>
+          {% endif %}
+          {% for link in col.links %}
+          <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+      <div>
+        <h2>Get in touch</h2>
+        <ul><li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li></ul>
+      </div>
+    </div>
+
+    <div class="footer-disclaimer">
+      {% if section == 'counselling' %}
+      {# The training disclaimer says "we do not provide counselling", which is
+         false on these pages. The counselling section carries the separation
+         notice from the Individual Counselling spec instead. #}
+      <p>Psychotherapy services are provided by {{ site.practitioner_name }}, Registered Psychotherapist (Qualifying), and are separate from the training, workshops, and consulting delivered under Ballast Wellbeing. Attending a Ballast Wellbeing workshop does not establish a therapeutic relationship.</p>
+      {% else %}
+      <p>Ballast Wellbeing delivers training and education. We do not provide counselling, assessment, or treatment.</p>
+      {% endif %}
+      <p class="caption">
+        <a href="/privacy">Privacy</a> &middot;
+        <a href="/terms">Terms</a> &middot;
+        <a href="/accessibility">Accessibility</a> &middot;
+        &copy; {{ year }} Ballast Wellbeing
+      </p>
+    </div>
+  </div>
+</footer>
+
+<script src="/static/nav.js" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

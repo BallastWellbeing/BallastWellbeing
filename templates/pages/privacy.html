@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% set route = "/privacy" %}
+{% set page_title = "Privacy policy" %}
+{% set page_description = "What Ballast Wellbeing collects through this website, why, how long it is kept, and how to request deletion. PIPEDA compliant." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Privacy policy</h1>
+    <p class="lead">This policy covers the training and education side of Ballast Wellbeing: enquiry forms, the certificate database, email, and analytics.</p>
+    {% if site.counselling_enabled %}
+    <div class="callout">
+      <p><strong>Looking for the counselling practice?</strong> Personal health information in the psychotherapy practice is governed differently, under Ontario's Personal Health Information Protection Act. That is covered by a <a href="/counselling/privacy">separate clinical privacy notice</a>.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<div class="container-tight legal-body">
+
+  <section>
+    <h2>Who we are</h2>
+    <p>Ballast Wellbeing delivers mental health training and education to schools and workplaces in Ontario. For any privacy question, contact <a href="mailto:{{ site.email }}">{{ site.email }}</a>.</p>
+    <p>We handle personal information in accordance with Canada's <em>Personal Information Protection and Electronic Documents Act</em> (PIPEDA).</p>
+  </section>
+
+  <section>
+    <h2>What we collect, and why</h2>
+
+    <h3>Enquiry forms</h3>
+    <p>When you submit an enquiry we collect your name, role, organization, email address, and optionally your phone number, along with the details you give us about your school or organization: type, size, sector, what you are interested in, your timeframe, and anything you add in the notes field.</p>
+    <p>We use it to reply to you, to prepare a proposal, and to keep a record of the enquiry. This is business contact information rather than personal information about your private life, and we treat it as such: it is not used for profiling and it is not enriched with data from anywhere else.</p>
+
+    <h3>Email capture</h3>
+    <p>If you subscribe to article updates we collect your email address and nothing else. Every message includes an unsubscribe link, and unsubscribing removes the address rather than flagging it.</p>
+
+    <h3>Certificate verification</h3>
+    <p>The database behind <a href="/verify">certificate verification</a> holds, for each certificate issued: the serial number, the participant's name, the program title, the contact hours, the completion date, and where applicable an expiry date.</p>
+    <p>It exists so that an employer or school can confirm a certificate is genuine. Anyone with a serial number can look up that record, which is the point of it, and the reason serial numbers include a random component rather than running in sequence. Lookups are rate limited and we do not store the IP addresses that make them.</p>
+    <p><strong>If you are a participant and you want your record removed</strong>, email <a href="mailto:{{ site.email }}">{{ site.email }}</a> and we will delete it. You do not need to give a reason. Your certificate will then no longer verify, so tell us if you may need it for professional development records first.</p>
+
+    <h3>Analytics</h3>
+    <p>We use Plausible Analytics on the training pages of this site. It is cookieless, collects no personal information, does not track you across sites, and does not build a profile of you. We see aggregate page views and referrers, not individuals.</p>
+    {% if site.counselling_enabled %}
+    <p><strong>No analytics or tracking of any kind runs on the counselling pages</strong> under <code>/counselling/</code>, including inside the booking tool.{% endif %} Fonts on this site are served from our own server rather than a third-party provider, so browsing does not disclose your visit to anyone else.</p>
+  </section>
+
+  <section>
+    <h2>What we never do</h2>
+    <ul>
+      <li>Sell, rent, or trade personal information</li>
+      <li>Run advertising pixels, retargeting, or third-party marketing trackers</li>
+      <li>Add you to a mailing list because you sent an enquiry. Those are separate consents</li>
+      <li>Route counselling information through any of the systems described on this page</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Where it is stored, and who processes it</h2>
+    <p>Enquiry and certificate data is held in a Supabase Postgres database hosted in Canada, in the Montreal (<code>ca-central-1</code>) region, encrypted in transit and at rest.</p>
+    <table>
+      <caption>Third parties that process data on our behalf</caption>
+      <thead><tr><th scope="col">Processor</th><th scope="col">Purpose</th><th scope="col">Data location</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Supabase</th><td>Enquiry and certificate database</td><td>Canada</td></tr>
+        <tr><th scope="row">Netlify</th><td>Website hosting and form processing</td><td>Global content delivery</td></tr>
+        <tr><th scope="row">Resend</th><td>Sending notification and autoresponder email</td><td>United States</td></tr>
+        <tr><th scope="row">Plausible Analytics</th><td>Aggregate, cookieless site statistics</td><td>European Union</td></tr>
+        <tr><th scope="row">Google Workspace</th><td>Our email inbox</td><td>Global</td></tr>
+      </tbody>
+    </table>
+    <p>Email inherently transits third-party infrastructure, some of it outside Canada, and is subject to the laws of the countries it passes through. If that is a concern for something you need to tell us, say so and we will arrange another way.</p>
+  </section>
+
+  <section>
+    <h2>How long we keep it</h2>
+    <table>
+      <caption>Retention periods</caption>
+      <thead><tr><th scope="col">What</th><th scope="col">How long</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Enquiries that did not lead to work</th><td>24 months, then deleted</td></tr>
+        <tr><th scope="row">Engagement records and contracts</th><td>7 years after the engagement ends, for tax and liability purposes</td></tr>
+        <tr><th scope="row">Certificate records</th><td>Indefinitely, so certificates remain verifiable, unless the participant asks for removal</td></tr>
+        <tr><th scope="row">Email subscribers</th><td>Until you unsubscribe</td></tr>
+        <tr><th scope="row">Verification rate-limit records</th><td>1 hour</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Your rights</h2>
+    <p>You can ask us to:</p>
+    <ul>
+      <li>Tell you what personal information we hold about you</li>
+      <li>Give you a copy of it</li>
+      <li>Correct anything inaccurate</li>
+      <li>Delete it, subject to records we are legally required to keep</li>
+      <li>Withdraw consent for anything you previously agreed to</li>
+    </ul>
+    <p>Email <a href="mailto:{{ site.email }}">{{ site.email }}</a>. We will respond within 30 days. There is no charge.</p>
+    <p>If you are not satisfied with how we have handled a privacy matter, you can complain to the <a href="https://www.priv.gc.ca/" rel="noopener">Office of the Privacy Commissioner of Canada</a>.</p>
+  </section>
+
+  <section>
+    <h2>Breaches</h2>
+    <p>If personal information in our control is lost or accessed without authorisation and there is a real risk of significant harm, we will notify the affected people and the Office of the Privacy Commissioner of Canada as PIPEDA requires, and we will tell you what happened and what we are doing about it.</p>
+  </section>
+
+  <section>
+    <h2>Changes</h2>
+    <p>Last updated {{ year }}. If we change this policy materially we will note the change here rather than quietly replacing the text.</p>
+  </section>
+
+</div>
+{% endblock %}

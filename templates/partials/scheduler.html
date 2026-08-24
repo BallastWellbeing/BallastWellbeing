@@ -1,0 +1,28 @@
+{# Booking embed slot.
+
+   The scheduler is the practice management system's, not ours: a booking record
+   naming a person is personal health information under PHIPA, and it belongs
+   with the vendor holding the record and the Canadian data residency
+   commitment. The CSP in netlify.toml allows exactly one third-party frame
+   origin on this section and nothing else.
+
+   Caller must pass `booking_label` (and may pass `booking_path`), because this
+   partial appears twice on /counselling/schedule and two iframes with an
+   identical accessible name are ambiguous to a screen reader.
+
+   To go live: set scheduler_url in content/data/site.yml. Until then the page
+   shows the email route, which is the fallback the copy already describes. #}
+{% if site.scheduler_url %}
+<div class="scheduler-embed">
+  <iframe src="{{ site.scheduler_url }}{{ booking_path | default('') }}"
+          title="{{ booking_label }}"
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          sandbox="allow-forms allow-scripts allow-same-origin allow-popups"
+          height="760"></iframe>
+</div>
+{% else %}
+<p class="scheduler-fallback">Online booking is being set up. In the meantime,
+  email {{ ph('clinical_email', 'clinical email address') }} with a couple of times
+  that suit you and I'll confirm one by reply.</p>
+{% endif %}

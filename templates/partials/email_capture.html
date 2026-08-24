@@ -1,0 +1,43 @@
+<section class="email-capture" aria-labelledby="capture-heading">
+  <h2 id="capture-heading">Get new articles by email</h2>
+  <p>Occasional, and only when there's something worth sending. Unsubscribe in one click.</p>
+
+  {# Outcome is read from the query string the function redirects back to, so
+     the message works without JavaScript. #}
+  <p id="capture-status" class="capture-status" role="status" hidden></p>
+
+  <form method="post" action="/api/subscribe" class="capture-form">
+    {# Return the visitor to the page they were reading rather than dumping
+       everyone on /insights. Validated server-side as a same-site path. #}
+    <input type="hidden" name="return_to" value="{{ route }}">
+    <div class="field">
+      <label for="capture-email">Email address</label>
+      <input type="email" id="capture-email" name="email" autocomplete="email" required>
+    </div>
+    <div class="hp" aria-hidden="true">
+      <label for="capture-website">Leave this field empty</label>
+      <input type="text" id="capture-website" name="website" tabindex="-1" autocomplete="off">
+    </div>
+    <button type="submit" class="btn btn-primary">Subscribe</button>
+  </form>
+  <p class="caption">We use your address for these updates and nothing else. See the <a href="/privacy">privacy policy</a>.</p>
+</section>
+
+<script>
+(function () {
+  var p = new URLSearchParams(location.search);
+  var el = document.getElementById('capture-status');
+  if (!el) return;
+  if (p.get('subscribed')) {
+    el.textContent = 'Thanks. You’re on the list.';
+    el.className = 'capture-status capture-ok';
+    el.hidden = false;
+  } else if (p.get('error')) {
+    el.textContent = p.get('error') === 'email'
+      ? 'That email address didn’t look right. Try again.'
+      : 'Something went wrong. Try again, or email ' + {{ site.email | tojson }} + '.';
+    el.className = 'capture-status capture-bad';
+    el.hidden = false;
+  }
+})();
+</script>

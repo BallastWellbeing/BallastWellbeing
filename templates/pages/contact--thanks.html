@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% set route = "/contact/thanks" %}
+{% set page_title = "Thanks, we've got it" %}
+{% set page_description = "Your enquiry has been received. You'll hear back within one business day." %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Thanks &mdash; we've got it.</h1>
+    <p class="lead">You'll hear back within one business day, usually sooner. A copy has gone to your inbox, with the program overview attached as a PDF in case you need to forward it to someone else.</p>
+    <p>If it's urgent, reply to that email directly, or write to <a href="mailto:{{ site.email }}">{{ site.email }}</a>.</p>
+    <p><a class="btn btn-secondary" href="/">Back to the homepage</a></p>
+  </div>
+</section>
+{% endblock %}

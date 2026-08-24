@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% set route = "/verify" %}
+{% set page_title = "Verify a certificate" %}
+{% set page_description = "Enter the serial number printed on a Ballast Wellbeing certificate of completion to confirm it." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Verify a certificate.</h1>
+    <p class="lead">Enter the serial number printed on a Ballast Wellbeing certificate of completion to confirm it.</p>
+  </div>
+</section>
+
+<div class="container-tight verify-body">
+  <form id="verify-form" novalidate>
+    <div class="field">
+      <label for="serial">Certificate serial number</label>
+      <span class="hint" id="serial-hint">Printed at the foot of the certificate. Format: BW-2026-0001-K4X7</span>
+      <input type="text" id="serial" name="serial" placeholder="BW-2026-0001-K4X7"
+             autocomplete="off" autocapitalize="characters" spellcheck="false"
+             inputmode="text" aria-describedby="serial-hint" required>
+    </div>
+    <button type="submit" class="btn btn-primary" id="verify-submit">Verify</button>
+  </form>
+
+  <!-- Results are announced, not just drawn. Someone using a screen reader gets
+       told the outcome rather than having to hunt for what changed. -->
+  <div id="verify-result" role="status" aria-live="polite" class="verify-result"></div>
+
+  <noscript>
+    <p class="verify-noscript">Certificate lookup needs JavaScript enabled. If you can't
+    enable it, email <a href="mailto:hello@ballastwellbeing.com">hello@ballastwellbeing.com</a>
+    with the serial number and we'll confirm it by reply.</p>
+  </noscript>
+
+  <section class="verify-about">
+    <h2>What this checks</h2>
+    <p>A Ballast Wellbeing certificate of completion records that a named participant attended a specific program and how many contact hours it ran to. It is not a professional designation, and it does not certify the holder in anything.</p>
+    <p>If a record needs correcting or removing, email <a href="mailto:hello@ballastwellbeing.com">hello@ballastwellbeing.com</a>. Our <a href="/privacy">privacy policy</a> explains what this database holds and how to request removal.</p>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var form = document.getElementById('verify-form');
+  var input = document.getElementById('serial');
+  var button = document.getElementById('verify-submit');
+  var result = document.getElementById('verify-result');
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return null;
+    var p = iso.split('-');
+    var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2]));
+    return d.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var serial = input.value.trim().toUpperCase();
+    if (!serial) {
+      // "Error:" is prepended in text by CSS, so this never depends on colour.
+      result.className = 'verify-result verify-invalid';
+      result.innerHTML = '<p>Enter a serial number to check.</p>';
+      input.setAttribute('aria-invalid', 'true');
+      input.focus();
+      return;
+    }
+    input.removeAttribute('aria-invalid');
+    button.disabled = true;
+    result.className = 'verify-result';
+    result.textContent = 'Checking…';
+
+    fetch('/api/verify', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ serial: serial })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        button.disabled = false;
+        if (data && data.found) {
+          var rows = '';
+          rows += '<div><dt>Participant</dt><dd>' + esc(data.participant_name) + '</dd></div>';
+          rows += '<div><dt>Program</dt><dd>' + esc(data.program_title) + '</dd></div>';
+          rows += '<div><dt>Contact hours</dt><dd>' + esc(data.contact_hours) + '</dd></div>';
+          rows += '<div><dt>Completed</dt><dd>' + esc(fmtDate(data.issue_date)) + '</dd></div>';
+          if (data.expiry_date) {
+            rows += '<div><dt>Valid until</dt><dd>' + esc(fmtDate(data.expiry_date)) + '</dd></div>';
+          }
+          result.className = 'verify-result verify-valid';
+          result.innerHTML =
+            '<p class="verify-headline"><span class="verify-tick" aria-hidden="true">✓</span> Verified</p>' +
+            '<dl>' + rows + '</dl>' +
+            '<p class="caption">Issued by Ballast Wellbeing</p>';
+        } else {
+          result.className = 'verify-result verify-invalid';
+          result.innerHTML = '<p>' + esc((data && data.message) ||
+            "No certificate found for that serial number.") + '</p>';
+        }
+      })
+      .catch(function () {
+        button.disabled = false;
+        result.className = 'verify-result verify-invalid';
+        result.innerHTML = '<p>Verification is temporarily unavailable. Email ' +
+          '<a href="mailto:hello@ballastwellbeing.com">hello@ballastwellbeing.com</a> and we’ll confirm it by reply.</p>';
+      });
+  });
+})();
+</script>
+{% endblock %}

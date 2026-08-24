@@ -1,0 +1,38 @@
+# Every published price on the training side lives here so /schools/pricing and
+# the individual pages can never drift apart. Edited through the CMS.
+pricing:
+  students:
+    - {program: "Steady: Understanding Anxiety and Building Coping Skills", slug: steady-anxiety-coping, detail: "Grades 4–6, 7–8, 9–12 · 60–75 min", price: "From $400"}
+    - {program: "The Jump: Preparing for Life After High School", slug: the-jump, detail: "Grades 11–12 · 75 min", price: "From $450"}
+    - {program: "Friendship, Conflict and Repair", slug: friendship-conflict-repair, detail: "Grades 6–9 · 75 min", price: "From $400"}
+  student_multi:
+    - {label: "Two sessions in one visit", price: "$650"}
+    - {label: "Three sessions in one visit", price: "$850"}
+  staff:
+    - {program: "The Regulated Classroom: Trauma-Informed Practice", slug: trauma-informed-classroom, detail: "Half day", price: "$1,100"}
+    - {program: "The Regulated Classroom: Trauma-Informed Practice", slug: trauma-informed-classroom, detail: "Full day", price: "$1,900"}
+    - {program: "The Regulated Classroom: Trauma-Informed Practice", slug: trauma-informed-classroom, detail: "Virtual half day", price: "$800"}
+    - {program: "Holding the Room: De-escalation and Dysregulated Students", slug: de-escalation-schools, detail: "Half day, up to 30 staff", price: "$1,200"}
+    - {program: "Holding the Room: De-escalation and Dysregulated Students", slug: de-escalation-schools, detail: "Half day, up to 60 staff", price: "$1,600"}
+    - {program: "Holding the Room: De-escalation and Dysregulated Students", slug: de-escalation-schools, detail: "Virtual", price: "$900"}
+    - {program: "Staying in the Work: Burnout, Boundaries and Staff Wellbeing", slug: staff-wellbeing-burnout, detail: "90-minute PD slot", price: "$650"}
+    - {program: "Staying in the Work: Burnout, Boundaries and Staff Wellbeing", slug: staff-wellbeing-burnout, detail: "Half day", price: "$1,100"}
+    - {program: "Staying in the Work: Burnout, Boundaries and Staff Wellbeing", slug: staff-wellbeing-burnout, detail: "Virtual 90 min", price: "$450"}
+  parents:
+    - {program: "Supporting an Anxious Child", slug: supporting-an-anxious-child, detail: "90 minutes, evening, on-site", price: "$550"}
+    - {program: "Supporting an Anxious Child", slug: supporting-an-anxious-child, detail: "Virtual", price: "$400"}
+    - {program: "Supporting an Anxious Child", slug: supporting-an-anxious-child, detail: "Bundled with a same-day student session", price: "$750"}
+  annual:
+    - name: Foundation
+      price: "$4,200/year"
+      recommended: false
+      includes: ["Two student sessions", "One 90-minute staff session", "One parent evening", "Email consultation through the school year"]
+    - name: Standard
+      price: "$7,400/year"
+      recommended: true
+      note: "most schools start here"
+      includes: ["Four student sessions across grade bands", "One half-day staff PD", "One 90-minute staff session", "Two parent evenings", "Student wellbeing policy review", "Email and phone consultation"]
+    - name: Comprehensive
+      price: "$11,500/year"
+      recommended: false
+      includes: ["Six student sessions", "Two half-day staff PD sessions", "Two parent evenings", "Policy review plus annual check-in", "One critical incident response day held on call", "Named wellbeing programming you can reference in admissions materials"]

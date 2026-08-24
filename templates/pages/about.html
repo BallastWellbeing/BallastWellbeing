@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% set route = "/about" %}
+{% set page_title = "Who delivers this" %}
+{% set page_description = "Norman Rehman, M.A., delivers every Ballast Wellbeing session. Two years teaching in Ontario schools before moving into counselling psychology." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <h1 class="hero-title">Who delivers this.</h1>
+  </div>
+</section>
+
+<div class="container about-layout">
+  <div class="about-portrait">
+    {# Placeholder. Norman's photograph replaces this: professional, warm,
+       natural light, not clinical (§3.9). Swap the <div> for an <img> with
+       alt="Norman Rehman" and the same aspect ratio — nothing else changes. #}
+    <div class="portrait-placeholder" role="img" aria-label="Photograph of Norman Rehman, to be added">
+      <svg viewBox="0 0 4 5" aria-hidden="true" focusable="false"><rect width="4" height="5" fill="none"/></svg>
+      <span>Photograph<br>to follow</span>
+    </div>
+  </div>
+
+  <div class="about-copy">
+    <p class="about-name"><strong>Norman Rehman, M.A.</strong><br>
+      <span class="caption">Member, Ontario Association of Mental Health Professionals</span></p>
+
+    <p>I spent two years teaching in Ontario schools before moving into counselling psychology. That order matters. I know what it's like to be handed a class of thirty and told that a child's home situation is now partly your problem, with no training for it and nowhere to put it.</p>
+
+    <p>Ballast exists because the training available to schools and employers usually comes from one of two places: consultants who have never done the work, or national vendors delivering the same slide deck in every province. Neither is much use at four o'clock on a Tuesday when a student is escalating or an employee has just told you something you weren't ready for. Everything here is built to be used that afternoon.</p>
+
+    <h2>Training and credentials</h2>
+    <ul class="credentials">
+      <li>M.A., Counselling Psychology &mdash; Yorkville University</li>
+      <li>B.A., Psychology and English &mdash; University of Toronto</li>
+      <li>Member, Ontario Association of Mental Health Professionals</li>
+      <li>Trauma-Focused Cognitive Behavioural Therapy (TF-CBT)</li>
+      <li>Gottman Method Couples Therapy, Levels 1 and 2</li>
+      <li>Mental Health First Aid &mdash; Mental Health Commission of Canada</li>
+      <li>Psychological Health and Safety: Building Team Success &mdash; MHCC / Opening Minds</li>
+    </ul>
+    {# Spec §3.9 also lists "Mental Health First Aid instructor certification
+       (in progress)" with the instruction to remove it until complete. Omitted
+       accordingly — and the word "certification" would trip the Part 5 rule. #}
+  </div>
+</div>
+
+<section class="section-lg on-fog">
+  <div class="container-tight">
+    <h2>One person, every time</h2>
+    <p>You get the same facilitator at every session. No rotating roster, no subcontractors, and no associate delivering material they didn't write.</p>
+    <p><a class="btn btn-primary" href="/contact">Request a proposal</a></p>
+  </div>
+</section>
+{% endblock %}

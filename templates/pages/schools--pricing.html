@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set page_title = "School pricing and annual packages" %}
+{% set page_description = "Published prices for student sessions, staff training, and parent evenings. Annual packages, multi-school rates, and a community rate for small schools." %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow"><a href="/schools">For Schools</a> <span aria-hidden="true">/</span> Pricing</p>
+    <h1 class="hero-title">Published prices. No procurement.</h1>
+    <p class="lead">Most training vendors quote on request, which usually means the price depends on how much they think you can pay. Ours are published. Retainer packages are billed quarterly or per term.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2>Individual sessions</h2>
+    {# class="stacked" plus data-label on each cell: below 40rem the rows
+       reflow into labelled blocks rather than three cramped columns where a
+       program name wraps to five lines. See the .stacked rules in base.css. #}
+    <table class="stacked">
+      <caption class="visually-hidden">All individual session prices</caption>
+      <thead>
+        <tr><th scope="col">Program</th><th scope="col">Format</th><th scope="col" class="num">Price</th></tr>
+      </thead>
+      {% for group in [{'rows': pricing.students, 'label': 'Students'}, {'rows': pricing.staff, 'label': 'Staff'}, {'rows': pricing.parents, 'label': 'Parents'}] %}
+      <tbody>
+        <tr><th scope="rowgroup" colspan="3" class="rowgroup">{{ group.label }}</th></tr>
+        {% for row in group.rows %}
+        <tr>
+          <td class="cell-program"><a href="/programs/{{ row.slug }}">{{ row.program }}</a></td>
+          <td data-label="Format">{{ row.detail }}</td>
+          <td data-label="Price" class="num tnum">{{ row.price }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+      {% endfor %}
+    </table>
+    <p class="caption">Multi-session: two sessions in one visit $650. Three sessions in one visit $850.</p>
+  </div>
+</section>
+
+<section class="section-lg on-fog">
+  <div class="container">
+    <h2>Annual packages</h2>
+    <div class="card-grid">
+      {% for pkg in pricing.annual %}
+      <div class="card package{% if pkg.recommended %} package-recommended{% endif %}">
+        {% if pkg.recommended %}<p class="badge">Recommended</p>{% endif %}
+        <h3>{{ pkg.name }}</h3>
+        <p class="package-price tnum">{{ pkg.price }}</p>
+        {% if pkg.note %}<p class="caption">{{ pkg.note }}</p>{% endif %}
+        <ul>
+          {% for item in pkg.includes %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container-tight">
+    <h2>Add-on: Student Wellbeing Policy Review</h2>
+    <p class="price-note tnum">$1,400 &middot; with annual check-in $1,900</p>
+    <p>Independent schools rarely have a current wellbeing policy, and many are running on a document adapted from a public board a decade ago. We review what you have, identify the gaps, and give you a written set of recommendations. Includes a two-hour working session with your leadership team.</p>
+
+    <h2>Multi-school pricing</h2>
+    <p>Schools that contract together &mdash; faith-based networks, Montessori associations, small independent groups &mdash; pay less.</p>
+    <ul>
+      <li>2 schools: 10% off</li>
+      <li>3&ndash;4 schools: 15% off</li>
+      <li>5+ schools: 20% off plus one shared full-day PD included</li>
+    </ul>
+    <p>A shared regional PD day typically works out to $700&ndash;800 per school.</p>
+
+    <h2>Community rate</h2>
+    <p>Schools under 200 students may be eligible for a 25% community rate. Ask when you get in touch.</p>
+
+    <p><a class="btn btn-primary" href="/contact?audience=school" aria-label="Request a proposal for your school">Request a proposal</a></p>
+  </div>
+</section>
+{% endblock %}
