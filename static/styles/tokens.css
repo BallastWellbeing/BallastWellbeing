@@ -50,7 +50,7 @@
   --font-body: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Fluid scale, 320px to 1240px viewport. */
-  --fs-hero:    clamp(2.50rem, 1.60rem + 4.50vw, 4.75rem);
+  --fs-hero:    clamp(2.35rem, 1.55rem + 3.30vw, 4.00rem);
   --fs-h1:      clamp(2.00rem, 1.45rem + 2.75vw, 3.25rem);
   --fs-h2:      clamp(1.55rem, 1.25rem + 1.50vw, 2.25rem);
   --fs-h3:      clamp(1.25rem, 1.10rem + 0.75vw, 1.55rem);

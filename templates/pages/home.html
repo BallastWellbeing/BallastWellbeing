@@ -5,26 +5,66 @@
 {% block title %}Ballast Wellbeing &mdash; {{ page_title }}{% endblock %}
 
 {% block content %}
-{# 3.1 Hero. No carousel, no video, no stock imagery. Whitespace and type only. #}
-<section class="hero">
-  <div class="container">
-    <h1 class="hero-title">Steady people. Under real conditions.</h1>
-    <p class="lead">Mental health training for Ontario schools and workplaces. Practical, evidence-based workshops built and delivered by a counselling psychology practitioner.</p>
-    {# The split path. Equal weight by spec: same size, same prominence. The
-       visual difference is fill vs outline only, and both carry a text label,
-       so nothing is conveyed by colour alone. #}
-    <div class="route-buttons">
-      <a class="btn btn-primary" href="/schools">For Schools</a>
-      <a class="btn btn-secondary" href="/workplaces">For Workplaces</a>
+{# 3.1 Hero. Still no carousel, no video, no stock imagery — the only figure is
+   the brand mark itself, at size. It earns its place: the hull tilts and the
+   ballast stays level, which is the argument the headline is making. It rocks
+   once on load, settles, then answers the pointer within a few degrees.
+   Everything here is legible and complete with JavaScript off. #}
+<section class="hero hero-home">
+  <div class="container hero-split">
+
+    <div class="hero-copy">
+      <h1 class="hero-title">
+        <span class="line-mask"><span style="--line-delay:120ms">Steady people.</span></span>
+        <span class="line-mask"><span style="--line-delay:240ms">Under real conditions.</span></span>
+      </h1>
+
+      <hr class="hero-rule">
+
+      <p class="lead" data-reveal>Mental health training for Ontario schools and workplaces. Practical, evidence-based workshops built and delivered by a counselling psychology practitioner.</p>
+
+      {# The split path. Equal weight by spec: same size, same prominence. The
+         visual difference is fill vs outline only, and both carry a text label,
+         so nothing is conveyed by colour alone. #}
+      <div class="route-buttons" data-reveal>
+        <a class="btn btn-primary" href="/schools">For Schools</a>
+        <a class="btn btn-secondary" href="/workplaces">For Workplaces</a>
+      </div>
     </div>
+
+    <div class="hero-figure">
+      <button type="button" class="hero-mark-button"
+              aria-label="Replay the Ballast mark animation">
+        <svg class="hero-mark" viewBox="0 0 100 108" role="img"
+             aria-label="The Ballast mark: a ship's hull tilting while the ballast weight beneath it stays level">
+          <title>Ballast</title>
+
+          {# Waterline. Sits still; the hull moves against it. #}
+          <line class="waterline" x1="0" y1="80" x2="100" y2="80"
+                stroke="var(--fog)" stroke-width="3" stroke-linecap="round"/>
+
+          <g class="hull">
+            <path d="M 18,50 V 28 A 10,10 0 0 1 28,18 H 72 A 10,10 0 0 1 82,28 V 50 A 32,32 0 0 1 18,50 Z"
+                  fill="none" stroke="var(--slate-ink)" stroke-width="7"
+                  stroke-linejoin="round" stroke-linecap="round"/>
+          </g>
+
+          {# The weight. Never rotates, at any point, by design. #}
+          <rect class="ballast" x="35" y="59.5" width="30" height="13.5" rx="6.75"
+                fill="var(--deep-sea)"/>
+        </svg>
+      </button>
+      <p class="hero-caption" data-reveal>Ballast sits low and stays level. The vessel moves; it doesn't.</p>
+    </div>
+
   </div>
 </section>
 
 <section class="section-lg on-fog">
   <div class="container-tight idea">
-    <img src="/static/logos/ballast-mark.svg" alt="" width="56" height="56">
-    <h2>Why Ballast</h2>
-    <div class="narrow">
+    <img src="/static/logos/ballast-mark.svg" alt="" width="56" height="56" data-reveal>
+    <h2 data-reveal>Why Ballast</h2>
+    <div class="narrow" data-reveal>
       <p>Ballast is the weight carried low in a ship's hull. It isn't cargo. It does nothing useful on its own. Its only job is to keep the vessel upright when the water turns.</p>
       <p>That's the work. We don't hand people more to carry. We build what sits underneath &mdash; so a teacher facing a dysregulated classroom, a manager hearing a hard disclosure, or a student in the middle of exam season stays steady under load.</p>
     </div>
@@ -35,15 +75,15 @@
   <div class="container">
     <h2 class="visually-hidden">Credentials</h2>
     <div class="credibility">
-      <div>
+      <div data-reveal>
         <h3>M.A. Counselling Psychology</h3>
         <p>Graduate training in counselling psychology, Yorkville University</p>
       </div>
-      <div>
+      <div data-reveal>
         <h3>Ontario classroom experience</h3>
         <p>Two years teaching in Ontario schools before this work</p>
       </div>
-      <div>
+      <div data-reveal>
         <h3>Professional membership</h3>
         <p>Member, Ontario Association of Mental Health Professionals</p>
       </div>
@@ -53,14 +93,14 @@
 
 <section class="section">
   <div class="container">
-    <h2>What we teach</h2>
+    <h2 data-reveal>What we teach</h2>
     <div class="track-cards">
-      <div class="track-card">
+      <div class="track-card" data-reveal>
         <h3>Schools</h3>
         <p>Independent schools sit outside the publicly funded mental health support system. No board mental health lead, no ministry-funded programming, no implementation coach. We build that layer for you &mdash; student sessions, staff PD, and parent evenings, priced for schools that don't have a district budget behind them.</p>
         <p><a href="/schools">See school programs<span aria-hidden="true"> &rarr;</span></a></p>
       </div>
-      <div class="track-card">
+      <div class="track-card" data-reveal>
         <h3>Workplaces</h3>
         <p>Mental health is now the leading driver of disability claims in Canada, and Ontario employers carry a legal duty of care for psychological safety. We train the people who determine whether that duty is met: the managers having the conversation.</p>
         <p><a href="/workplaces">See workplace programs<span aria-hidden="true"> &rarr;</span></a></p>
@@ -71,9 +111,9 @@
 
 <section class="section-lg on-fog">
   <div class="container-tight">
-    <h2>Not sure what you need?</h2>
-    <p>Most engagements start with a twenty-minute call. No proposal, no pressure &mdash; just a conversation about what's actually happening in your school or organization.</p>
-    <p><a class="btn btn-primary" href="/contact">Book a call</a></p>
+    <h2 data-reveal>Not sure what you need?</h2>
+    <p data-reveal>Most engagements start with a twenty-minute call. No proposal, no pressure &mdash; just a conversation about what's actually happening in your school or organization.</p>
+    <p data-reveal><a class="btn btn-primary" href="/contact">Book a call</a></p>
   </div>
 </section>
 {% endblock %}

@@ -1,0 +1,221 @@
+/* ==========================================================================
+   Motion
+   ==========================================================================
+
+   Rules this file follows, in order of importance:
+
+   1. Nothing is ever hidden by default. Every animated element is fully
+      visible in plain CSS; the hidden-then-revealed state is applied only
+      under `html.motion`, a class JS adds after confirming both that it ran
+      and that the visitor has not asked for reduced motion. With JS off, or
+      with reduced motion on, the page is simply static and complete.
+   2. Nothing loops indefinitely. WCAG 2.2.2 requires a pause control for
+      motion running longer than five seconds; everything here settles, so
+      there is nothing to pause.
+   3. Motion is short and small. 200-500ms, a few pixels or degrees. It should
+      register as responsiveness, not as decoration.
+   4. No libraries. This is CSS plus about 90 lines of vanilla JS, so the
+      counselling section keeps making zero third-party requests.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Scroll reveal
+   -------------------------------------------------------------------------- */
+.motion [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+}
+.motion [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity 520ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 520ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+/* --------------------------------------------------------------------------
+   Hero
+   The mark carries the idea: the hull tilts, the ballast stays level. It rocks
+   once on load and settles, then responds to the pointer within a few degrees.
+   -------------------------------------------------------------------------- */
+.hero-split {
+  display: grid;
+  gap: var(--sp-6);
+  align-items: center;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 56rem) {
+  .hero-split { grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr); gap: var(--sp-7); }
+}
+
+.hero-mark {
+  width: min(100%, 22rem);
+  justify-self: center;
+  aspect-ratio: 1;
+  overflow: visible;
+}
+@media (min-width: 56rem) {
+  .hero-mark { width: min(100%, 26rem); justify-self: end; }
+}
+
+/* The hull. Its resting angle is the logo's own -12deg. */
+.hull { transform-origin: 50% 62%; transform: rotate(-12deg); }
+.motion .hull { animation: hull-settle 2600ms cubic-bezier(0.33, 1, 0.68, 1) 260ms both; }
+
+/* Damped oscillation coming to rest at the logo's angle. */
+@keyframes hull-settle {
+  0%   { transform: rotate(2deg); }
+  18%  { transform: rotate(-21deg); }
+  38%  { transform: rotate(-5deg); }
+  57%  { transform: rotate(-16deg); }
+  74%  { transform: rotate(-9.5deg); }
+  88%  { transform: rotate(-13.5deg); }
+  100% { transform: rotate(-12deg); }
+}
+
+/* Pointer response, layered on after the settle finishes. Small on purpose. */
+.hull.is-live {
+  animation: none;
+  transform: rotate(calc(-12deg + var(--tilt, 0deg)));
+  transition: transform 900ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* Re-rock on click or keyboard activation. */
+.hull.is-rocking { animation: hull-settle 2200ms cubic-bezier(0.33, 1, 0.68, 1) both; }
+
+/* The waterline sits still while the hull moves against it. */
+.waterline { transform-origin: 50% 50%; }
+.motion .waterline {
+  animation: waterline-in 900ms cubic-bezier(0.22, 0.61, 0.36, 1) 200ms both;
+}
+@keyframes waterline-in {
+  from { opacity: 0; transform: scaleX(0.2); }
+  to   { opacity: 1; transform: scaleX(1); }
+}
+
+/* The ballast weight never moves. That is the entire point, so it only fades,
+   and it fades in early: it is the constant the hull rocks around, so having
+   it arrive last left the mark reading as an empty hull for most of a second. */
+.motion .ballast { animation: fade-in 400ms ease 120ms both; }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* Headline reveal: lines rise out of a clip rather than just fading.
+   The padding matters. The hero line-height is 1.12, tighter than the font's
+   ink box, so descenders sit outside the line box and overflow:hidden sliced
+   the bottom off "conditions." getBoundingClientRect measures the line box,
+   not the ink, so this looked fine to a script and wrong to a person. The
+   negative margins cancel the padding so layout is unchanged. */
+.line-mask {
+  display: block;
+  overflow: hidden;
+  padding-block: 0.18em 0.30em;
+  margin-block: -0.18em -0.30em;
+}
+.motion .line-mask > span {
+  display: block;
+  transform: translateY(105%);
+  animation: line-rise 900ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--line-delay, 0ms);
+}
+@keyframes line-rise { to { transform: none; } }
+
+/* The brass rule draws in beneath the headline. */
+.hero-rule {
+  height: 2px; width: 4.5rem; background: var(--rule-accent);
+  border: 0; margin: var(--sp-5) 0; transform-origin: left center;
+}
+.motion .hero-rule { animation: rule-draw 700ms cubic-bezier(0.22, 0.61, 0.36, 1) 620ms both; }
+@keyframes rule-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* --------------------------------------------------------------------------
+   Interaction polish
+   -------------------------------------------------------------------------- */
+.card, .track-card, .rate-card {
+  transition: transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1),
+              border-color 220ms ease,
+              box-shadow 220ms ease;
+}
+@media (hover: hover) {
+  .card:hover, .track-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--harbour-grey);
+    box-shadow: 0 6px 20px -12px rgba(23, 36, 46, 0.45);
+  }
+}
+
+.btn { transition: background-color 180ms ease, border-color 180ms ease,
+                   color 180ms ease, transform 120ms ease; }
+.btn:active { transform: translateY(1px); }
+
+/* Route buttons get a directional cue, since they are the split path. */
+.route-buttons .btn { position: relative; overflow: hidden; }
+.route-buttons .btn::after {
+  content: "";
+  position: absolute; right: 1.1rem; top: 50%;
+  width: 0.5rem; height: 0.5rem;
+  border-right: 2px solid currentColor; border-top: 2px solid currentColor;
+  transform: translateY(-50%) rotate(45deg) translateX(-0.35rem);
+  opacity: 0;
+  transition: opacity 200ms ease, transform 260ms cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@media (hover: hover) {
+  .route-buttons .btn:hover::after,
+  .route-buttons .btn:focus-visible::after {
+    opacity: 1;
+    transform: translateY(-50%) rotate(45deg) translateX(0);
+  }
+  .route-buttons .btn { padding-right: 2.6rem; }
+}
+
+/* Header settles into a thin shadow once the page has scrolled. */
+.site-header {
+  position: sticky; top: 0; z-index: 40;
+  transition: box-shadow 240ms ease, background-color 240ms ease;
+}
+.site-header.is-stuck { box-shadow: 0 1px 16px -6px rgba(23, 36, 46, 0.35); }
+
+/* Mobile menu opens rather than appearing. */
+.motion .js .nav.is-open > ul,
+.motion .nav.is-open > ul {
+  animation: menu-open 260ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+@keyframes menu-open {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Stat figures count up; the rule above each draws in with them. */
+.motion .stat[data-reveal] { --reveal-delay: calc(var(--i, 0) * 90ms); }
+
+/* Underline that grows from the left on nav links. */
+@media (hover: hover) {
+  .nav a:not(.btn) { position: relative; }
+  .nav a:not(.btn)::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0.55rem;
+    height: 1px; background: currentColor;
+    transform: scaleX(0); transform-origin: left center;
+    transition: transform 220ms cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .nav a:not(.btn):hover::after { transform: scaleX(1); }
+  .nav a:not(.btn):hover { text-decoration: none; }
+}
+
+/* --------------------------------------------------------------------------
+   The override that outranks all of the above.
+   `html.motion` is only ever added when the visitor has not asked for reduced
+   motion, but this block is kept as a hard backstop in case the class is set
+   some other way, and to catch the transitions declared outside .motion.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .motion [data-reveal],
+  .motion [data-reveal].is-in { opacity: 1; transform: none; transition: none; }
+  .motion .hull, .motion .waterline, .motion .ballast,
+  .motion .line-mask > span, .motion .hero-rule,
+  .hull.is-rocking, .hull.is-live { animation: none; transition: none; }
+  .hull { transform: rotate(-12deg); }
+  .line-mask > span { transform: none; }
+  .hero-rule { transform: none; }
+  .card:hover, .track-card:hover { transform: none; box-shadow: none; }
+  .btn:active { transform: none; }
+  .site-header { transition: none; }
+}
