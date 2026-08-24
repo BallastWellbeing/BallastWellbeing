@@ -49,15 +49,18 @@
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-body: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Fluid scale, 320px to 1240px viewport. Body never below 17px. */
+  /* Fluid scale, 320px to 1240px viewport. */
   --fs-hero:    clamp(2.50rem, 1.60rem + 4.50vw, 4.75rem);
   --fs-h1:      clamp(2.00rem, 1.45rem + 2.75vw, 3.25rem);
   --fs-h2:      clamp(1.55rem, 1.25rem + 1.50vw, 2.25rem);
   --fs-h3:      clamp(1.25rem, 1.10rem + 0.75vw, 1.55rem);
   --fs-lead:    clamp(1.15rem, 1.05rem + 0.50vw, 1.35rem);
-  --fs-body:    1.0625rem;  /* 17px */
-  --fs-small:   0.9375rem;  /* 15px */
-  --fs-caption: 0.875rem;   /* 14px — secondary colour only, never Brass */
+  /* 18px, not 17px. Inter Tight is a condensed face: at a given pixel size it
+     reads smaller than a normal-width sans, and this is a site institutional
+     buyers read carefully rather than skim. Set after the real fonts landed. */
+  --fs-body:    1.125rem;   /* 18px */
+  --fs-small:   1rem;       /* 16px */
+  --fs-caption: 0.9375rem;  /* 15px — secondary colour only, never Brass */
 
   --lh-tight: 1.12;
   --lh-heading: 1.20;

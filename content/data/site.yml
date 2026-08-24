@@ -6,7 +6,7 @@ site:
   practitioner_name: Norman Rehman
   # Set true once the two .woff2 files are in static/fonts/. Until then the
   # preload hints are omitted so a font-less deploy doesn't 404 twice per page.
-  fonts_installed: false
+  fonts_installed: true
   # The counselling section is regulated advertising under CRPO Standard 6.2.
   # While false, its 5 pages are not built at all and its nav and footer links
   # are removed, so v1 can ship the training side without publishing a

@@ -38,7 +38,7 @@
 
   // Reset state when the layout crosses back to the desktop breakpoint,
   // otherwise the menu can be left hidden with aria-expanded stale.
-  var mq = window.matchMedia("(min-width: 75rem)");
+  var mq = window.matchMedia("(min-width: 62rem)");
   (mq.addEventListener ? mq.addEventListener.bind(mq, "change") : mq.addListener.bind(mq))(function () {
     if (mq.matches) setOpen(false);
   });
