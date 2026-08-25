@@ -45,6 +45,11 @@
   --focus-ring: var(--slate-ink);
   --focus-ring-offset: var(--paper);
 
+  /* Brand mark, as tokens so it can be flipped for a dark surface. */
+  --mark-hull: var(--slate-ink);
+  --mark-weight: var(--deep-sea);
+  --mark-water: var(--fog);
+
   /* ---- Typography ---- */
   --font-display: "Source Serif 4", Georgia, "Times New Roman", serif;
   --font-body: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -98,8 +103,25 @@
   --text-accent-lg: var(--brass);        /* 5.10:1 on Slate Ink — safe at any size */
   --focus-ring: var(--paper);
   --focus-ring-offset: var(--slate-ink);
-  --btn-bg: var(--paper);
-  --btn-text: var(--slate-ink);
+  /* Deep Sea Light, not Paper. The spec requires the two route buttons to
+     carry equal weight so neither track is favoured. A pure white fill against
+     Slate Ink is far louder than Deep Sea was against Paper, and it made "For
+     Schools" read as the recommended option. This keeps the fill-vs-outline
+     relationship at the same strength as the light version.
+     Slate Ink on Deep Sea Light is 5.02:1. */
+  --btn-bg: var(--deep-sea-light);
+  --btn-text: var(--slate-ink);              /* 5.02:1 */
+  --btn-bg-hover: #57B09D;
+  /* Without these the outline button kept Slate Ink text and a pale border,
+     which on Slate Ink is invisible. Exposed by the dark hero. */
+  --btn-secondary-text: var(--paper);        /* 15.38:1 */
+  /* 3.46:1 against Slate Ink. The border is the only thing defining this
+     button, so WCAG 1.4.11 applies to it; the previous value sat at 2.86. */
+  --btn-secondary-border: #5E798C;
+
+  --mark-hull: var(--paper);
+  --mark-weight: var(--deep-sea-light);      /* 5.02:1 — plain Deep Sea is 2.55:1 */
+  --mark-water: #3D4E5A;
 }
 
 /* ---- Fog sections ---- */

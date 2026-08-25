@@ -728,8 +728,10 @@ mark.placeholder {
 .table-scroll > table { margin-bottom: 0; min-width: 22rem; }
 .table-scroll:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 2px; }
 
-/* ---- Home hero ---- */
-.hero-home { padding-block: var(--sp-8) var(--sp-9); }
+/* ---- Home hero ----
+   A full-bleed dark band. .on-dark (tokens.css) flips text, links, buttons and
+   the brand mark to their reversed values, so nothing here hard-codes a colour. */
+.hero-home { padding-block: var(--sp-9) var(--sp-9); }
 .hero-copy .lead { margin-bottom: 0; }
 .hero-figure { display: flex; flex-direction: column; align-items: center; gap: 0; }
 
@@ -741,15 +743,10 @@ mark.placeholder {
   border-radius: var(--radius); color: inherit;
 }
 .hero-mark-button:focus-visible { outline: 3px solid var(--focus-ring); outline-offset: 6px; }
-.hero-caption {
-  font-size: var(--fs-caption); color: var(--text-secondary);
-  text-align: center; max-width: 30ch; margin: 0;
-}
 @media (max-width: 55.999rem) {
   /* Copy first on a phone. The mark above the headline pushed the two route
      buttons below the fold, and those buttons are the single job this page
      has. The mark follows them instead. */
   .hero-mark-button { width: min(60%, 12rem); }
-  .hero-caption { display: none; }
   .hero-figure { margin-top: var(--sp-6); }
 }
