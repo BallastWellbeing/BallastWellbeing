@@ -9,7 +9,7 @@ static HTML that Netlify serves directly.
     python3 build.py          build into dist/
     python3 build.py --serve  build, then serve dist/ on :8000
 """
-import re, shutil, sys, datetime
+import re, shutil, sys, datetime, hashlib
 from pathlib import Path
 
 import yaml, markdown, markupsafe
@@ -125,6 +125,75 @@ def write(path, html):
     return "/" + path if path else "/"
 
 
+
+# ---------------------------------------------------------------------------
+# Asset fingerprinting
+#
+# netlify.toml serves /static/* with `immutable, max-age=31536000`. That is
+# only safe if a changed file gets a changed URL. Without it, a returning
+# visitor keeps a year-old stylesheet against new markup — which is exactly
+# what happened: a dark hero rendered with the old light-surface tokens, so
+# the buttons and the brand mark fell back to defaults and broke.
+#
+# So every referenced asset gets a content hash in its filename. Leaf assets
+# (fonts, images) are hashed first and their references rewritten inside CSS;
+# only then are the stylesheets hashed, since their content just changed.
+# ---------------------------------------------------------------------------
+def _hash(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()[:10]
+
+
+def fingerprint_assets():
+    """Rename static assets to include a content hash. Returns {old_url: new_url}."""
+    static = DIST / "static"
+    if not static.exists():
+        return {}
+
+    mapping = {}
+
+    def stamp(paths):
+        out = {}
+        for f in paths:
+            if not f.is_file():
+                continue
+            new_name = f"{f.stem}.{_hash(f)}{f.suffix}"
+            new_path = f.with_name(new_name)
+            f.rename(new_path)
+            old_url = "/" + str(f.relative_to(DIST)).replace("\\", "/")
+            new_url = "/" + str(new_path.relative_to(DIST)).replace("\\", "/")
+            out[old_url] = new_url
+        return out
+
+    def rewrite(paths, table):
+        for f in paths:
+            if not f.is_file():
+                continue
+            text = f.read_text(encoding="utf-8")
+            original = text
+            for old, new in table.items():
+                text = text.replace(old, new)
+            if text != original:
+                f.write_text(text, encoding="utf-8")
+
+    # 1. Leaf assets: nothing inside them points at anything else.
+    leaves = [f for f in static.rglob("*")
+              if f.suffix.lower() in {".woff2", ".woff", ".svg", ".png", ".jpg", ".webp", ".pdf"}]
+    leaf_map = stamp(leaves)
+    mapping.update(leaf_map)
+
+    # 2. Stylesheets reference the leaves, so rewrite before hashing them.
+    sheets = [f for f in static.rglob("*.css")]
+    rewrite(sheets, leaf_map)
+
+    # 3. Now hash the stylesheets and scripts.
+    code_map = stamp([f for f in static.rglob("*") if f.suffix.lower() in {".css", ".js"}])
+    mapping.update(code_map)
+
+    # 4. Point every built page at the new names.
+    rewrite(list(DIST.rglob("*.html")), mapping)
+    return mapping
+
+
 def main():
     if DIST.exists():
         shutil.rmtree(DIST)
@@ -203,6 +272,9 @@ def main():
         if src.exists():
             shutil.copy(src, DIST / extra)
 
+    # --- Fingerprint assets, then repoint the pages at them -----------------
+    fingerprinted = fingerprint_assets()
+
     # --- sitemap.xml + robots.txt ------------------------------------------
     today = datetime.date.today().isoformat()
     entries = "\n".join(
@@ -215,7 +287,7 @@ def main():
     (DIST / "robots.txt").write_text(
         f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
 
-    print(f"built {len(urls)} pages -> {DIST}")
+    print(f"built {len(urls)} pages -> {DIST}  ({len(fingerprinted)} assets fingerprinted)")
     if PLACEHOLDERS:
         unique = sorted(set(PLACEHOLDERS))
         print(f"\n{len(unique)} unfilled placeholder(s) — not launch ready:")

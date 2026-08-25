@@ -13,6 +13,9 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "geolocation=(), microphone=(), camera=(), interest-cohort=()"
+    # HTML must never be cached hard: it is what points at the hashed assets.
+    # The /static/* rule below overrides this for those files.
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 # The counselling section carries personal health information context.
 # No third-party origins are permitted here except the practice management
@@ -30,7 +33,12 @@
     Referrer-Policy = "no-referrer"
     Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; frame-src https://*.janeapp.com; connect-src 'self'; form-action 'self' https://*.janeapp.com; base-uri 'self'; object-src 'none'"
 
+# Safe only because build.py puts a content hash in every filename under
+# /static/, so a changed file gets a changed URL. Without that, `immutable`
+# strands returning visitors on a year-old stylesheet. test_integrity.py fails
+# the build if any /static/ reference is missing its hash.
 [[headers]]
   for = "/static/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
