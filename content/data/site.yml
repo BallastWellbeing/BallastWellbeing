@@ -12,7 +12,7 @@ site:
   # are removed, so v1 can ship the training side without publishing a
   # psychotherapy page full of visible [placeholders]. Flip to true only when
   # every placeholder below is filled.
-  counselling_enabled: false
+  counselling_enabled: true
   # Set to /static/og/default.png once that image exists. Omitted rather than
   # pointing at a missing file, which social platforms cache as broken.
   og_image:
@@ -53,12 +53,16 @@ site:
 # across the counselling section disappear. `python3 build.py --check` fails
 # while any are still blank, so the section cannot ship half-finished.
 placeholders:
-  crpo_number:
-  supervisor:
-  practice_address:
-  accepting_new_clients:
-  clinical_email:
-  documentation_rate:
-  payment_methods:
-  availability:
-  community_spaces:
+  crpo_number: "14804"
+  # supervisor: removed deliberately. The name is not published; the pages
+  # disclose that supervision happens and offer the name on request. Norman
+  # puts the supervisor on receipts in Jane, which is where CRPO requires it.
+  # practice_address: removed. The practice is virtual only — telephone and
+  # secure video. If an office is added later, restore this key and put the
+  # in-person option back on /counselling and /counselling/schedule.
+  accepting_new_clients: "Yes"
+  clinical_email: "info@ballastwellbeing.com"
+  documentation_rate: "$175"
+  payment_methods: "E-transfer, or credit card processed through Jane."
+  availability: "Monday to Sunday, 9am to 7pm"
+  community_spaces: "2"

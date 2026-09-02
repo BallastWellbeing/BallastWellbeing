@@ -1,19 +1,19 @@
 {% extends "counselling_base.html" %}
 {% set route = "/counselling" %}
 {% set page_title = "Individual counselling" %}
-{% set page_description = "Psychotherapy for adults and older adolescents in Ontario, by telephone, video, or in person. Registered Psychotherapist (Qualifying), CRPO." %}
+{% set page_description = "Psychotherapy for adults and older adolescents in Ontario, by telephone or secure video. Registered Psychotherapist (Qualifying), CRPO." %}
 
 {% block content %}
 <section class="hero">
   <div class="container-tight">
     <h1 class="hero-title">Individual counselling.</h1>
-    <p class="lead">Psychotherapy for adults and older adolescents in Ontario. Telephone, video, or in person.</p>
+    <p class="lead">Psychotherapy for adults and older adolescents in Ontario. Telephone or secure video.</p>
 
     <div class="practitioner">
       <p class="practitioner-name"><strong>{{ site.practitioner_name }}, M.A.</strong><br>
         Registered Psychotherapist (Qualifying)<br>
         College of Registered Psychotherapists of Ontario &mdash; Registration No. {{ ph('crpo_number', 'CRPO registration number') }}</p>
-      <p>Practising under the clinical supervision of {{ ph('supervisor', 'supervisor name and credentials') }}.</p>
+      <p>Practising under the clinical supervision of a psychotherapist registered with the College of Registered Psychotherapists of Ontario.</p>
       <p class="caption">Registration can be verified on the
         <a href="https://www.crpo.ca/public-register/" rel="noopener">CRPO public register</a>.</p>
     </div>
@@ -48,7 +48,7 @@
     <h2>Practical details</h2>
     <dl class="practical">
       <div><dt>Session length</dt><dd>50 minutes</dd></div>
-      <div><dt>Format</dt><dd>Telephone, secure video, or in person at {{ ph('practice_address', 'practice address') }}</dd></div>
+      <div><dt>Format</dt><dd>Telephone or secure video</dd></div>
       <div><dt>Frequency</dt><dd>Usually weekly to start, adjusted as we go</dd></div>
       <div><dt>Location requirement</dt><dd>You must be physically located in Ontario during sessions</dd></div>
       <div><dt>Currently accepting new clients</dt><dd>{{ ph('accepting_new_clients', 'Yes / Waitlist') }}</dd></div>
