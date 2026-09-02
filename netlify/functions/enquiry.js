@@ -17,7 +17,8 @@ const supabase = createClient(
 );
 
 const SITE = process.env.URL || "https://ballastwellbeing.com";
-const INBOX = "hello@ballastwellbeing.com";
+// Keep in step with site.email in content/data/site.yml.
+const INBOX = "info@ballastwellbeing.com";
 
 const REQUIRED = {
   school: ["name", "role", "organization", "email", "school_type", "enrolment", "timeframe"],

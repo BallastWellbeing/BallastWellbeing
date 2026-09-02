@@ -344,10 +344,19 @@ a { overflow-wrap: break-word; }
 .nav-toggle-bars::before { position: absolute; top: -6px; }
 .nav-toggle-bars::after  { position: absolute; top: 6px; }
 
-/* Collapse point measured against the real font: logo 188px + nav 609px +
-   gutters = ~853px. The previous 1200px was sized for the fallback stack,
-   which is much wider, and put a hamburger on screens with room to spare. */
-@media (max-width: 61.999rem) {
+/* Collapse point, measured against the real font with the FULL nav — that is,
+   with the counselling link present. Measured: logo 188px + gap 16px + nav
+   908px = 1112px of content, which needs a 1152px viewport once the 40px
+   gutters are counted. 1152px is exactly 72rem, i.e. a two-pixel margin, so
+   the horizontal nav starts at 76rem (1216px) instead and keeps ~64px of
+   slack for font fallback and minor copy changes.
+   This was 61.999rem, sized when the counselling section was not built. The
+   moment counselling_enabled flipped to true the extra nav item pushed the
+   header 106px past its container at 1024px — on every page, not just the
+   clinical ones. test_design.py now measures the fit at the boundary and
+   fails the build, so adding a nav item cannot reintroduce this silently.
+   Keep in step with the matchMedia query in static/nav.js. */
+@media (max-width: 75.999rem) {
   .site-header .container { flex-wrap: wrap; }
   .js .nav-toggle { display: inline-flex; }
   .js .nav { display: none; width: 100%; margin-left: 0; }

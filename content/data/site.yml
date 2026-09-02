@@ -1,6 +1,6 @@
 site:
   name: Ballast Wellbeing
-  email: hello@ballastwellbeing.com
+  email: info@ballastwellbeing.com
   # PLACEHOLDER — confirmed as Rehman, kept as a variable so the clinical
   # pages can be rebranded with one edit if the practice structure changes.
   practitioner_name: Norman Rehman
@@ -17,8 +17,19 @@ site:
   # pointing at a missing file, which social platforms cache as broken.
   og_image:
   # Set to the practice management system's booking URL to switch
-  # /counselling/schedule from the email fallback to the embed.
+  # /counselling/schedule from the email fallback to the embed. For Jane this
+  # is the clinic subdomain, e.g. https://ballastwellbeing.janeapp.com
+  # netlify.toml already allows exactly this one frame origin (*.janeapp.com)
+  # on /counselling/* and nothing else. Changing vendor means changing that CSP.
   scheduler_url:
+  # Appended to scheduler_url for each of the two booking paths, so the
+  # consultation and the session land on their own discipline/treatment in
+  # Jane rather than both opening the generic calendar. Jane shows these in
+  # Settings > Online Booking as the direct link for a treatment, e.g.
+  #   /#/staff_member/1/treatment/3
+  # Leave blank to embed the top-level calendar for both.
+  scheduler_consult_path:
+  scheduler_session_path:
   nav:
     - {label: For Schools,    url: /schools}
     - {label: For Workplaces, url: /workplaces}

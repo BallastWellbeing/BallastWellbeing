@@ -35,12 +35,12 @@
 <link rel="stylesheet" href="/static/styles/base.css">
 <link rel="stylesheet" href="/static/styles/motion.css">
 {% block head %}{% endblock %}
-{% if section != 'counselling' %}
-{# Analytics loads on the training site only. It is physically absent from
-   every /counselling/* page: that data is personal health information and
-   does not go through this pipeline. Do not move this into a shared partial. #}
-<script defer data-domain="ballastwellbeing.com" src="https://plausible.io/js/script.js"></script>
-{% endif %}
+{# No analytics. There is no third-party script on any page of this site.
+   This was previously a Plausible tag gated to the training section; it was
+   removed outright, which is a stronger guarantee than gating it. If analytics
+   is ever added back, it must be wrapped in {% if section != 'counselling' %}
+   so it stays physically absent from every /counselling/* page: that data is
+   personal health information and does not go through this pipeline. #}
 <script type="application/ld+json">
 {{ {
   "@context": "https://schema.org",

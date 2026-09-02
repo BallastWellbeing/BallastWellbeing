@@ -29,14 +29,14 @@
 
   <noscript>
     <p class="verify-noscript">Certificate lookup needs JavaScript enabled. If you can't
-    enable it, email <a href="mailto:hello@ballastwellbeing.com">hello@ballastwellbeing.com</a>
+    enable it, email <a href="mailto:{{ site.email }}">{{ site.email }}</a>
     with the serial number and we'll confirm it by reply.</p>
   </noscript>
 
   <section class="verify-about">
     <h2>What this checks</h2>
     <p>A Ballast Wellbeing certificate of completion records that a named participant attended a specific program and how many contact hours it ran to. It is not a professional designation, and it does not certify the holder in anything.</p>
-    <p>If a record needs correcting or removing, email <a href="mailto:hello@ballastwellbeing.com">hello@ballastwellbeing.com</a>. Our <a href="/privacy">privacy policy</a> explains what this database holds and how to request removal.</p>
+    <p>If a record needs correcting or removing, email <a href="mailto:{{ site.email }}">{{ site.email }}</a>. Our <a href="/privacy">privacy policy</a> explains what this database holds and how to request removal.</p>
   </section>
 </div>
 {% endblock %}
@@ -110,7 +110,7 @@
         button.disabled = false;
         result.className = 'verify-result verify-invalid';
         result.innerHTML = '<p>Verification is temporarily unavailable. Email ' +
-          '<a href="mailto:hello@ballastwellbeing.com">hello@ballastwellbeing.com</a> and we’ll confirm it by reply.</p>';
+          '<a href="mailto:{{ site.email }}">{{ site.email }}</a> and we’ll confirm it by reply.</p>';
       });
   });
 })();

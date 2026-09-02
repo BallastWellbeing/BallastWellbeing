@@ -8,6 +8,10 @@
 import { createClient } from "@supabase/supabase-js";
 import { createHash } from "node:crypto";
 
+// Keep in step with site.email in content/data/site.yml. test_email_consistency.py
+// fails the build if a stray address appears anywhere in the site or the functions.
+const INBOX = "info@ballastwellbeing.com";
+
 const SERIAL_RE = /^BW-\d{4}-\d{4}-[A-HJ-NP-Z2-9]{4}$/;
 const WINDOW_MINUTES = 10;
 const MAX_ATTEMPTS = 12;
@@ -34,7 +38,7 @@ const NOT_FOUND = {
   found: false,
   message:
     "No certificate found for that serial number. Check the number and try again. " +
-    "If it still doesn't verify, email hello@ballastwellbeing.com.",
+    `If it still doesn't verify, email ${INBOX}.`,
 };
 
 export default async (request, context) => {
@@ -72,7 +76,7 @@ export default async (request, context) => {
       found: false,
       message:
         "Too many lookups from this connection. Wait a few minutes and try again, " +
-        "or email hello@ballastwellbeing.com.",
+        `or email ${INBOX}.`,
     });
   }
 

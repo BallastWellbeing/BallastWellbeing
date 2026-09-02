@@ -7,7 +7,7 @@
 <section class="hero">
   <div class="container-tight">
     <h1 class="hero-title">Privacy policy</h1>
-    <p class="lead">This policy covers the training and education side of Ballast Wellbeing: enquiry forms, the certificate database, email, and analytics.</p>
+    <p class="lead">This policy covers the training and education side of Ballast Wellbeing: enquiry forms, the certificate database, and email.</p>
     {% if site.counselling_enabled %}
     <div class="callout">
       <p><strong>Looking for the counselling practice?</strong> Personal health information in the psychotherapy practice is governed differently, under Ontario's Personal Health Information Protection Act. That is covered by a <a href="/counselling/privacy">separate clinical privacy notice</a>.</p>
@@ -40,9 +40,9 @@
     <p><strong>If you are a participant and you want your record removed</strong>, email <a href="mailto:{{ site.email }}">{{ site.email }}</a> and we will delete it. You do not need to give a reason. Your certificate will then no longer verify, so tell us if you may need it for professional development records first.</p>
 
     <h3>Analytics</h3>
-    <p>We use Plausible Analytics on the training pages of this site. It is cookieless, collects no personal information, does not track you across sites, and does not build a profile of you. We see aggregate page views and referrers, not individuals.</p>
+    <p>We do not use analytics. There is no page-view tracking, no cookies, and no third-party script of any kind on any page of this site.</p>
     {% if site.counselling_enabled %}
-    <p><strong>No analytics or tracking of any kind runs on the counselling pages</strong> under <code>/counselling/</code>, including inside the booking tool.{% endif %} Fonts on this site are served from our own server rather than a third-party provider, so browsing does not disclose your visit to anyone else.</p>
+    <p><strong>That includes the counselling pages</strong> under <code>/counselling/</code>, and the booking tool embedded on them.{% endif %} Fonts on this site are served from our own server rather than a third-party provider, so browsing does not disclose your visit to anyone else.</p>
   </section>
 
   <section>
@@ -65,7 +65,6 @@
         <tr><th scope="row">Supabase</th><td>Enquiry and certificate database</td><td>Canada</td></tr>
         <tr><th scope="row">Netlify</th><td>Website hosting and form processing</td><td>Global content delivery</td></tr>
         <tr><th scope="row">Resend</th><td>Sending notification and autoresponder email</td><td>United States</td></tr>
-        <tr><th scope="row">Plausible Analytics</th><td>Aggregate, cookieless site statistics</td><td>European Union</td></tr>
         <tr><th scope="row">Google Workspace</th><td>Our email inbox</td><td>Global</td></tr>
       </tbody>
     </table>
