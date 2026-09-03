@@ -32,13 +32,19 @@ const OVERVIEW_PDF = {
 
 const redirect = (path) => new Response(null, { status: 303, headers: { location: path } });
 
-function autoresponderText(form) {
+// hasPdf, because the overview is fetched at send time and may not be there.
+// Without this the first email a new enquirer receives promises an attachment
+// that isn't attached, which reads as either broken or careless — worse than
+// not mentioning it. Say it only when it is true.
+function autoresponderText(form, hasPdf) {
   const which = form === "school" ? "schools" : "workplace";
   return [
     "Thanks — we've got it. You'll hear back within one business day, usually sooner.",
     "If it's urgent, reply to this email directly.",
     "",
-    `In the meantime, here's the ${which} program overview as a PDF — useful if you need to forward it to someone else.`,
+    hasPdf
+      ? `In the meantime, here's the ${which} program overview as a PDF — useful if you need to forward it to someone else.`
+      : `In the meantime, you can read through the ${which} programs at ${SITE}/${form === "school" ? "schools" : "workplaces"}.`,
     "",
     "— Ballast Wellbeing",
     "",
@@ -148,7 +154,7 @@ export default async (request) => {
     from: `Ballast Wellbeing <${INBOX}>`,
     to: [record.email],
     subject: "Thanks — we've got your enquiry",
-    text: autoresponderText(form),
+    text: autoresponderText(form, attachments.length > 0),
     attachments,
   });
 

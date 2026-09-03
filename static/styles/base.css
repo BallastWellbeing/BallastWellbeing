@@ -481,13 +481,14 @@ table.outline th[scope="row"] { white-space: nowrap; width: 8rem; font-weight: 5
 .about-layout { display: grid; gap: var(--sp-7); grid-template-columns: minmax(0,1fr); padding-bottom: var(--sp-8); }
 @media (min-width: 56rem) { .about-layout { grid-template-columns: 20rem minmax(0,1fr); gap: var(--sp-8); } }
 .about-portrait { max-width: 20rem; }
-.portrait-placeholder {
-  position: relative; display: flex; align-items: center; justify-content: center;
-  aspect-ratio: 4 / 5; background: var(--fog);
-  border: 1px dashed var(--border-strong); border-radius: var(--radius);
-  color: var(--text-secondary); font-size: var(--fs-small); text-align: center;
+/* The portrait is a real photograph now; the dashed placeholder that used to
+   live here is gone. aspect-ratio matches the file so the reserved box is
+   right even before it decodes. */
+.about-portrait img {
+  display: block; width: 100%; height: auto; aspect-ratio: 4 / 5;
+  object-fit: cover; border-radius: var(--radius);
+  background: var(--bg-alt);
 }
-.portrait-placeholder svg { position: absolute; inset: 0; width: 100%; height: 100%; }
 .about-name { font-size: var(--fs-lead); margin-bottom: var(--sp-6); }
 .about-copy h2 { margin-top: var(--sp-7); }
 .credentials { padding-left: 0; list-style: none; }
@@ -759,3 +760,49 @@ mark.placeholder {
   .hero-mark-button { width: min(60%, 12rem); }
   .hero-figure { margin-top: var(--sp-6); }
 }
+
+/* ---- /admin ----
+   Norman's back office. Not linked from the site, noindex, and out of the
+   sitemap; the styling exists so writing a piece is comfortable rather than to
+   make a page anyone will admire. Wider than the public measure on purpose —
+   an article body typed into a 34rem box is miserable. */
+.admin { padding-block: var(--sp-7) var(--sp-9); }
+.admin .field { max-width: 44rem; }
+.admin .field .hint { margin-top: var(--sp-2); margin-bottom: 0; }
+.admin textarea#body {
+  min-height: 26rem; font-family: var(--font-body); font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+.admin fieldset { max-width: 44rem; }
+.admin .radio-row { display: flex; flex-wrap: wrap; gap: var(--sp-3) var(--sp-6); }
+.admin .radio-row label,
+.admin .checkbox-field label {
+  display: flex; align-items: center; gap: var(--sp-2);
+  font-weight: 400; min-height: 44px; margin: 0;
+}
+/* The label is 44px tall and clicking it works, but the control itself renders
+   at 13px, and WCAG 2.5.8 measures the control. Sized to the 24px floor. */
+.admin input[type="radio"],
+.admin input[type="checkbox"] {
+  inline-size: 1.5rem; block-size: 1.5rem; margin: 0; flex: none;
+  accent-color: var(--link);
+}
+.admin .slug-row { display: flex; align-items: stretch; }
+.admin .slug-row span {
+  display: flex; align-items: center; padding-inline: var(--sp-3);
+  background: var(--bg-alt); border: 1px solid var(--border-strong);
+  border-right: 0; border-radius: var(--radius) 0 0 var(--radius);
+  color: var(--text-secondary); font-size: var(--fs-small); white-space: nowrap;
+}
+.admin .slug-row input { border-radius: 0 var(--radius) var(--radius) 0; }
+.admin-extra { max-width: 44rem; margin-bottom: var(--sp-5);
+  border: 1px solid var(--border-strong); border-radius: var(--radius); }
+.admin-extra summary { padding: var(--sp-3) var(--sp-4); cursor: pointer;
+  font-weight: 600; min-height: 44px; display: flex; align-items: center; }
+.admin-extra[open] summary { border-bottom: 1px solid var(--border); }
+.admin-extra > .field { margin: var(--sp-4) var(--sp-4) var(--sp-5); }
+.admin-status { max-width: 44rem; min-height: 1.5rem; font-weight: 500; }
+.admin-status.is-ok { color: var(--link); }
+/* 5.9:1 on Paper. The palette has no red, and an error the writer cannot read
+   is not an error message. */
+.admin-status.is-error { color: #9B2C1F; }

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set page_title = "Publish an article" %}
+{% set page_description = "Write and publish an insight." %}
+{% block head %}<meta name="robots" content="noindex, nofollow">{% endblock %}
+
+{% block content %}
+{# Norman's back office. Not linked from anywhere, excluded from the sitemap and
+   robots.txt, and noindex — findable only if you know the address, and useless
+   without the publishing password. The page itself holds no secret: everything
+   is checked in the function. #}
+<div class="container-tight admin">
+  <h1 class="hero-title">Publish an article</h1>
+  <p class="lead">Write it here and it goes live in about a minute. Nothing is
+    published until you press the button, and you can edit anything afterwards.</p>
+
+  <form id="admin-form" novalidate>
+    <div class="field">
+      <label for="token">Publishing password</label>
+      <input type="password" id="token" autocomplete="current-password" required>
+      <p class="hint">Kept only until you close this tab.</p>
+    </div>
+
+    <fieldset>
+      <legend>Start from</legend>
+      <div class="radio-row">
+        <label><input type="radio" name="mode" value="new" checked> A new article</label>
+        <label><input type="radio" name="mode" value="edit"> One I've already written</label>
+      </div>
+      <div class="field" id="existing-wrap" hidden>
+        <label for="existing">Which one</label>
+        <select id="existing"><option value="">Loading…</option></select>
+        <p class="hint">Loads the article so you can change it and publish again.</p>
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="title">Headline</label>
+      <input type="text" id="title" maxlength="140" required>
+    </div>
+
+    <div class="field">
+      <label for="slug">Web address</label>
+      <div class="slug-row"><span>/insights/</span><input type="text" id="slug" required></div>
+      <p class="hint">Filled in from the headline. Change it before publishing if
+        you want, but not afterwards &mdash; the old address stops working.</p>
+    </div>
+
+    <div class="field">
+      <label for="category">Category</label>
+      <select id="category" required>
+        <option value="Schools">Schools</option>
+        <option value="Workplaces">Workplaces</option>
+        <option value="Research">Research</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="date">Date</label>
+      <input type="date" id="date" required>
+    </div>
+
+    <div class="field">
+      <label for="standfirst">Standfirst</label>
+      <textarea id="standfirst" rows="3" maxlength="400" required></textarea>
+      <p class="hint">The sentence under the headline. Two lines at most.</p>
+    </div>
+
+    <div class="field">
+      <label for="body">The article</label>
+      <textarea id="body" rows="20" required spellcheck="true"></textarea>
+      <p class="hint"><span id="wordcount">0 words</span> &middot; blank line between
+        paragraphs. <code>## </code> starts a subheading, <code>**bold**</code>,
+        <code>*italic*</code>, and <code>[text](/link)</code> work as you'd expect.</p>
+    </div>
+
+    <details class="admin-extra">
+      <summary>Search wording and the closing link (optional)</summary>
+      <div class="field">
+        <label for="seo_title">Search headline</label>
+        <input type="text" id="seo_title" maxlength="140">
+        <p class="hint">Defaults to the headline.</p>
+      </div>
+      <div class="field">
+        <label for="seo_description">Search description</label>
+        <textarea id="seo_description" rows="2" maxlength="300"></textarea>
+        <p class="hint">Defaults to the standfirst.</p>
+      </div>
+      <div class="field">
+        <label for="cta_text">Closing note</label>
+        <textarea id="cta_text" rows="2" maxlength="300"></textarea>
+      </div>
+      <div class="field">
+        <label for="cta_label">Link wording</label>
+        <input type="text" id="cta_label" maxlength="60">
+      </div>
+      <div class="field">
+        <label for="cta_url">Link address</label>
+        <input type="text" id="cta_url" placeholder="/schools/staff" maxlength="120">
+      </div>
+    </details>
+
+    <div class="field checkbox-field">
+      <label><input type="checkbox" id="overwrite"> Replace the article at this address if one exists</label>
+    </div>
+
+    <p><button type="submit" class="btn btn-primary" id="publish">Publish</button></p>
+    <div id="admin-status" class="admin-status" role="status" aria-live="polite"></div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="/static/admin.js" defer></script>{% endblock %}

@@ -243,6 +243,11 @@ def main():
         route = "/" if tpl.stem == "home" else "/" + tpl.stem.replace("--", "/")
         urls.append(write(route, t.render(**ctx, route=route)))
 
+    # /admin is Norman's back office: no inbound links, noindex on the page,
+    # and kept out of both the sitemap and robots.txt. Listing it would be
+    # advertising the door.
+    NOINDEX = {"/admin", "/404", "/contact/thanks"}
+
     # --- Collections --------------------------------------------------------
     prog_t = env.get_template("program.html") if programs else None
     for p in programs:
@@ -279,13 +284,14 @@ def main():
     today = datetime.date.today().isoformat()
     entries = "\n".join(
         f"  <url><loc>{SITE_URL}{u}</loc><lastmod>{today}</lastmod></url>"
-        for u in sorted(set(urls)))
+        for u in sorted(set(urls) - NOINDEX))
     (DIST / "sitemap.xml").write_text(
         f'<?xml version="1.0" encoding="UTF-8"?>\n'
         f'<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n{entries}\n</urlset>\n',
         encoding="utf-8")
     (DIST / "robots.txt").write_text(
-        f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
+        "User-agent: *\nAllow: /\nDisallow: /admin\n"
+        f"Sitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
 
     print(f"built {len(urls)} pages -> {DIST}  ({len(fingerprinted)} assets fingerprinted)")
     if PLACEHOLDERS:

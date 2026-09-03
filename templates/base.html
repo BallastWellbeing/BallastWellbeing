@@ -14,7 +14,10 @@
 <meta property="og:locale" content="en_CA">
 {% if site.og_image %}
 <meta property="og:image" content="{{ site_url }}{{ site.og_image }}">
-<meta property="og:image:alt" content="Ballast Wellbeing">
+<meta property="og:image:alt" content="Ballast Wellbeing — mental health training for Ontario schools and workplaces">
+{# Declared dimensions let a platform lay the card out before the image downloads, which is the difference between a card and a blank box in a preview. Keep in step with tools/make_og.py. #}
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 {% endif %}
 <link rel="icon" href="/static/logos/ballast-mark.svg" type="image/svg+xml">
