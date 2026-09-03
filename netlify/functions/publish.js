@@ -10,8 +10,15 @@
 // multi-user permission system and does not pretend to be.
 //
 // Env: GITHUB_TOKEN (fine-grained PAT, Contents: read+write, this repo only)
-//      GITHUB_REPO  ("BallastWellbeing/BallastWellbeing")
-//      ADMIN_TOKEN  (long random string)
+//      GITHUB_REPO  (owner/name of this repository — see DEPLOYMENT.md)
+//      ADMIN_TOKEN  (long random string, 24 characters or more)
+//
+// The repository name is not written out here on purpose. Netlify scans the
+// build for the literal value of every environment variable, and this comment
+// used to spell GITHUB_REPO out, which failed the deploy with "secrets
+// scanning detected the value of GITHUB_REPO". The scanner was right: it
+// cannot tell a repo name from a password, and a build that leaks one could
+// leak the other. Keep every env value out of the source, comments included.
 
 import { createClient } from "@supabase/supabase-js";
 import { createHash, timingSafeEqual } from "node:crypto";
