@@ -17,6 +17,15 @@
     # The /static/* rule below overrides this for those files.
     Cache-Control = "public, max-age=0, must-revalidate"
 
+# The sha256 in script-src is the one inline script base.html sets in <head>:
+#   document.documentElement.className += " js";
+# It runs before paint so the mobile nav never renders expanded and then
+# collapses. script-src 'self' blocked it on these five pages only, so the
+# clinical pages had that flash and logged a CSP error on every load, while the
+# training pages did not. Found on the live site; a local build cannot show it,
+# because the header only exists at the edge. Hashing the script is narrower
+# than 'unsafe-inline': change the script and the hash stops matching, which
+# test_csp_hashes.py turns into a failed check rather than a silent regression.
 # The counselling section carries personal health information context.
 # No third-party origins are permitted here except the practice management
 # system that hosts the scheduler. Referrer is stripped entirely so the URL of
@@ -25,13 +34,13 @@
   for = "/counselling/*"
   [headers.values]
     Referrer-Policy = "no-referrer"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; frame-src https://*.janeapp.com; connect-src 'self'; form-action 'self' https://*.janeapp.com; base-uri 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self' 'sha256-riitXBKGtl5y5ccA7GF6ccqJuwEVP5tm8j0ff/fbw9U='; font-src 'self'; frame-src https://*.janeapp.com; connect-src 'self'; form-action 'self' https://*.janeapp.com; base-uri 'self'; object-src 'none'"
 
 [[headers]]
   for = "/counselling"
   [headers.values]
     Referrer-Policy = "no-referrer"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'; font-src 'self'; frame-src https://*.janeapp.com; connect-src 'self'; form-action 'self' https://*.janeapp.com; base-uri 'self'; object-src 'none'"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self' 'sha256-riitXBKGtl5y5ccA7GF6ccqJuwEVP5tm8j0ff/fbw9U='; font-src 'self'; frame-src https://*.janeapp.com; connect-src 'self'; form-action 'self' https://*.janeapp.com; base-uri 'self'; object-src 'none'"
 
 # Safe only because build.py puts a content hash in every filename under
 # /static/, so a changed file gets a changed URL. Without that, `immutable`

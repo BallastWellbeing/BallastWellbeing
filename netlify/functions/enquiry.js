@@ -59,10 +59,24 @@ async function sendEmail(payload) {
   return res.ok;
 }
 
+// The page's own form always posts form-encoded data. Anything else — a
+// scanner, a bot probing with JSON — used to throw inside request.formData(),
+// which Netlify surfaced as a 502 carrying a Node stack trace. Found by
+// posting JSON at the live endpoint. Answer those plainly instead: nothing
+// here owes an explanation to a caller that isn't the form.
+async function readForm(request) {
+  try {
+    return await request.formData();
+  } catch {
+    return null;
+  }
+}
+
 export default async (request) => {
   if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
 
-  const body = await request.formData();
+  const body = await readForm(request);
+  if (!body) return new Response("Expected form data", { status: 400 });
   const form = String(body.get("form") || "");
   if (!REQUIRED[form]) return redirect("/contact?error=1");
 

@@ -19,10 +19,24 @@ const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 const redirect = (path) => new Response(null, { status: 303, headers: { location: path } });
 
+// The page's own form always posts form-encoded data. Anything else — a
+// scanner, a bot probing with JSON — used to throw inside request.formData(),
+// which Netlify surfaced as a 502 carrying a Node stack trace. Found by
+// posting JSON at the live endpoint. Answer those plainly instead: nothing
+// here owes an explanation to a caller that isn't the form.
+async function readForm(request) {
+  try {
+    return await request.formData();
+  } catch {
+    return null;
+  }
+}
+
 export default async (request) => {
   if (request.method !== "POST") return new Response("Method not allowed", { status: 405 });
 
-  const body = await request.formData();
+  const body = await readForm(request);
+  if (!body) return new Response("Expected form data", { status: 400 });
 
   // Send the visitor back to the article they were reading. Must be a
   // same-site absolute path: anything else is an open-redirect vector.
