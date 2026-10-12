@@ -1,0 +1,25 @@
+{# The eight concerns, shared by the home page and the counselling page.
+   Caller sets `concern_style` to "cards" or "inline".
+   Labels only, no descriptions. Built link-ready: when the individual concern
+   pages exist each becomes an anchor and nothing else here changes. #}
+{% set concerns = [
+  "Anxiety",
+  "Trauma and post-traumatic stress",
+  "School and academic stress",
+  "Life transitions",
+  "Relationship difficulties",
+  "Work stress and burnout",
+  "Self-esteem and confidence",
+  "Feeling stuck"
+] %}
+{% if concern_style == "inline" %}
+<p class="concern-inline">
+  {% for c in concerns %}{{ c }}{% if not loop.last %} <span aria-hidden="true">&middot;</span> {% endif %}{% endfor %}
+</p>
+{% else %}
+<ul class="concern-grid">
+  {% for c in concerns %}
+  <li class="concern">{{ c }}</li>
+  {% endfor %}
+</ul>
+{% endif %}

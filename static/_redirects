@@ -1,0 +1,33 @@
+# Site rewrite, October 2026.
+#
+# 301 rather than 302 throughout: these moves are permanent, and saved links,
+# printed proposals and search results all need to follow them.
+
+# Counselling. Booking runs through Jane now and there is no booking page on
+# the site, so the schedule page goes with the fees and what-to-expect pages.
+/counselling/fees                      /counselling              301
+/counselling/what-to-expect            /counselling              301
+/counselling/schedule                  /counselling              301
+
+# There is no About page in the new design. The credentials it carried now live
+# in the Our team card on the counselling page, which is where this lands.
+/about                                 /counselling              301
+
+# The old schools audience split, and the pricing page. Prices sit on the
+# course cards now.
+/schools/students                      /schools                  301
+/schools/staff                         /schools                  301
+/schools/parents                       /schools                  301
+/schools/pricing                       /schools                  301
+
+# The old schools programs. De-escalation is the same course under a new name,
+# so it maps to its replacement. The other six have no successor: student
+# sessions and parent evenings are no longer offered, so they land on the
+# section rather than on a course that is not the one they asked for.
+/programs/de-escalation-schools        /schools/de-escalation    301
+/programs/trauma-informed-classroom    /schools                  301
+/programs/steady-anxiety-coping        /schools                  301
+/programs/the-jump                     /schools                  301
+/programs/friendship-conflict-repair   /schools                  301
+/programs/supporting-an-anxious-child  /schools                  301
+/programs/staff-wellbeing-burnout      /schools                  301

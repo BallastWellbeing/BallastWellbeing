@@ -1,78 +1,97 @@
 {% extends "base.html" %}
 {% set section = "training" %}
-{% set page_title = "Mental health programs for private schools in Ontario" %}
-{% set page_description = "Student sessions, staff training, and parent evenings for Ontario independent schools. Published prices, no procurement process." %}
+{% set route = "/schools" %}
+{% set contact_query = "?audience=school" %}
+{% set page_title = "Mental health training for Ontario school staff" %}
+{% set page_description = "Three mental health training courses for Ontario school staff. Ninety minutes or half a day, on site or virtual, with a certificate for every participant." %}
+{% block title %}Mental health training for Ontario school staff | Ballast Wellbeing{% endblock %}
 
 {% block content %}
+{# Rewritten in full from Part Three of the Site Rewrite document. The old
+   students / staff / parents split and the separate pricing page are gone;
+   prices now sit on the course cards. No em dashes, first person plural. #}
 <section class="hero">
-  <div class="container">
-    <p class="eyebrow"><a href="/">Ballast Wellbeing</a> <span aria-hidden="true">/</span> For Schools</p>
-    <h1 class="hero-title">The support your school doesn't get funded for.</h1>
-    <p class="lead">Ontario's publicly funded boards have mental health leads, ministry funding, and provincial programming. Independent schools have none of it. Ballast fills that gap &mdash; for students, staff, and parents &mdash; at prices built for schools your size.</p>
-    <div class="button-row">
-      <a class="btn btn-primary" href="/contact?audience=school" aria-label="Request a proposal for your school">Request a proposal</a>
-      <a class="btn btn-secondary" href="/schools/pricing">See pricing</a>
-    </div>
-  </div>
-</section>
-
-<section class="section-lg on-fog">
   <div class="container-tight">
-    <h2>What independent schools are working without</h2>
-    <p>Publicly funded boards are required to run a three-year mental health strategy, and the province funds a dedicated mental health lead in every district plus a provincial implementation team.</p>
-    <p>Independent schools carry the same student need with none of that infrastructure. The same rise in anxiety. The same staff burnout. The same parent expectations. Usually with one part-time guidance role and a head of school absorbing everything else.</p>
+    <h1 class="hero-title">Mental health training for Ontario school staff.</h1>
+    <p class="lead">Three courses on student mental health, school absence, and de-escalation. On site or virtual, with a certificate for every participant.</p>
+    <p><a class="btn btn-primary" href="/contact?audience=school">Request a proposal</a></p>
   </div>
 </section>
 
 <section class="section">
   <div class="container">
-    <h2>Three ways in</h2>
-    <div class="card-grid">
-      <div class="card">
-        <h3><a href="/schools/students">Students</a></h3>
-        <p>Grade-banded sessions on anxiety, transitions, and conflict. 60&ndash;75 minutes.</p>
-        <p class="price-note">From $400</p>
-      </div>
-      <div class="card">
-        <h3><a href="/schools/staff">Staff</a></h3>
-        <p>Half-day and PD-slot training on trauma-informed practice, de-escalation, and burnout.</p>
-        <p class="price-note">From $650</p>
-      </div>
-      <div class="card">
-        <h3><a href="/schools/parents">Parents</a></h3>
-        <p>Evening sessions that give families something practical to do at home. Often funded by the parent association rather than the school budget.</p>
-        <p class="price-note">From $550</p>
-      </div>
+    <h2>Courses</h2>
+    <div class="course-cards">
+      {% for course in courses %}
+      <article class="course-card">
+        <h3><a href="/schools/{{ course.slug }}">{{ course.title }}</a></h3>
+        <p class="course-meta">{{ course.duration }} <span aria-hidden="true">&middot;</span> {{ course.audience_short }} <span aria-hidden="true">&middot;</span> <span class="tnum">{{ course.price }}</span></p>
+        <p>{{ course.card_summary }}</p>
+        <p class="course-link"><a href="/schools/{{ course.slug }}" aria-label="Course details for {{ course.title }}">Course details<span aria-hidden="true"> &rarr;</span></a></p>
+      </article>
+      {% endfor %}
     </div>
+  </div>
+</section>
+
+{# Single line beneath the cards. Deliberately not its own band. #}
+<div class="container">
+  <p class="who-delivers"><strong>Who delivers your training</strong> Every course is delivered by a trained clinician or mental health professional.</p>
+</div>
+
+<section class="section on-fog">
+  <div class="container-tight">
+    <h2>Built around the school schedule</h2>
+    <p>Courses are designed to fit within after-school staff meetings or PA days, so you can book training without arranging cover or losing instructional time.</p>
+    <p>Every participant leaves with a certificate of completion they can verify online.</p>
   </div>
 </section>
 
 <section class="section">
   <div class="container-tight">
-    <h2>Why schools book Ballast</h2>
-    <dl class="reasons">
-      <dt>Someone who has actually taught.</dt>
-      <dd>Two years in Ontario classrooms before this work. Staff can tell within ten minutes whether a presenter has managed a room of children, and they stop listening if the answer is no.</dd>
-      <dt>Built on real training, not a slide deck.</dt>
-      <dd>Programs draw on graduate training in counselling psychology, Trauma-Focused CBT, Gottman Method Levels 1 and 2, and Mental Health First Aid.</dd>
-      <dt>Priced for schools without a district budget.</dt>
-      <dd>Published prices. No procurement process. A head of school can say yes in one email.</dd>
-      <dt>One person, every time.</dt>
-      <dd>You get the same facilitator at every session. No rotating roster, no subcontractors.</dd>
+    <h2>How it works</h2>
+    <ol class="steps">
+      <li><strong>Get in touch.</strong> Tell us your school, roughly how many staff, and which course you're interested in.</li>
+      <li><strong>We confirm the details.</strong> Course, date, format, group size.</li>
+      <li><strong>Proposal.</strong> A written outline with a fixed price.</li>
+      <li><strong>Delivery.</strong> On site or virtual, with materials and a certificate of completion for every participant.</li>
+    </ol>
+  </div>
+</section>
+
+<section class="section on-fog">
+  <div class="container-tight">
+    <h2>Common questions</h2>
+    <dl class="faq">
+      <div>
+        <dt>How long are the courses?</dt>
+        <dd>Ninety minutes or half a day, depending on the course. Both fit an after-school staff meeting or a PA day.</dd>
+      </div>
+      <div>
+        <dt>How many staff can attend?</dt>
+        <dd>Up to 40 for the ninety-minute courses and up to 30 for the half-day, so most schools can train all staff in one session.</dd>
+      </div>
+      <div>
+        <dt>Can it be delivered virtually?</dt>
+        <dd>Yes, at a lower rate. On site works better for the half-day course because of the practice work.</dd>
+      </div>
+      <div>
+        <dt>What do participants get?</dt>
+        <dd>A workbook they use during the session, a one-page reference card, and a certificate of completion they can verify online.</dd>
+      </div>
+      <div>
+        <dt>Is this clinical training?</dt>
+        <dd>No. These are training courses for school staff, not clinical qualifications. They teach you to notice earlier, respond better, and hand over to the right person.</dd>
+      </div>
     </dl>
   </div>
 </section>
 
-<section class="section-lg on-fog">
+<section class="section-lg">
   <div class="container-tight">
-    <h2>How it works</h2>
-    <ol class="steps">
-      <li><strong>Get in touch.</strong> Tell us your school, roughly how many students, and what's prompting the enquiry.</li>
-      <li><strong>Twenty-minute call.</strong> We work out what would actually help. Sometimes that's less than you expected.</li>
-      <li><strong>Proposal.</strong> A written outline with dates, format, and a fixed price. No surprises.</li>
-      <li><strong>Delivery.</strong> On-site or virtual. Participants receive materials and a certificate of completion where applicable.</li>
-    </ol>
-    <p><a class="btn btn-primary" href="/contact?audience=school" aria-label="Request a proposal for your school">Request a proposal</a></p>
+    <h2>Book a course</h2>
+    <p>Tell us which course and roughly when. We'll send a written outline with a fixed price, usually within two working days.</p>
+    <p><a class="btn btn-primary" href="/contact?audience=school">Request a proposal</a></p>
   </div>
 </section>
 {% endblock %}

@@ -80,6 +80,19 @@ def check_charset(text, label):
 # ---------------------------------------------------------------------------
 PLACEHOLDERS = []
 
+# Assets and settings that are commissioned rather than typed: a photograph, a
+# booking URL from a vendor. They cannot be filled in by editing site.yml alone,
+# so they do not belong in PLACEHOLDERS and must not fail --check the way an
+# unfilled fee would. They are reported loudly on every build instead.
+PENDING = []
+
+
+def pending(label, present):
+    """Record an outstanding item. Returns `present` so it reads as a test."""
+    if not present:
+        PENDING.append(label)
+    return present
+
 
 def ph(key, hint=""):
     value = PLACEHOLDER_VALUES.get(key)
@@ -210,14 +223,32 @@ def main():
     data = load_data()
     global PLACEHOLDER_VALUES
     PLACEHOLDER_VALUES = data.get("placeholders", {}) or {}
+    ctx_site = data.get("site", {}) or {}
+
+    pending("counselling and home hero photograph (site.counselling_photo)",
+            ctx_site.get("counselling_photo"))
+    pending("Jane booking URL (site.jane_url) - booking buttons fall back to email",
+            ctx_site.get("jane_url"))
 
     programs = load_collection("programs")
     insights = load_collection("insights")
+    # Courses are the schools offer and live at /schools/<slug>. /programs/ is
+    # the workplaces catalogue now. Ordered by an explicit `order` key, not by
+    # date, because the three cards have a deliberate sequence.
+    courses = sorted(load_collection("courses"), key=lambda c: c.get("order", 99))
 
     ctx = {
         "site": data.get("site", {}),
+        # One place decides where every "Book a free consultation" goes. All
+        # booking runs through Jane now; until that URL exists there is nowhere
+        # on the internet to book, so the buttons fall back to email and the
+        # gap is printed on every build.
+        "book_url": (ctx_site.get("jane_url")
+                     or "mailto:" + ctx_site.get("email", "")
+                        + "?subject=Free%2015-minute%20consultation"),
         "pricing": data.get("pricing", {}),
         "programs": programs,
+        "courses": courses,
         "insights": insights,
         "year": datetime.date.today().year,
         "site_url": SITE_URL,
@@ -225,6 +256,10 @@ def main():
         # Used by /contact to resolve ?program=[slug] into a readable title
         # and to preselect the right form for the program's track.
         "program_titles": {p["slug"]: p["title"] for p in programs},
+        # /contact resolves both ?course= (schools) and ?program= (workplaces)
+        # against one map, so a deep link names the right thing either way.
+        "enquiry_titles": {**{p["slug"]: p["title"] for p in programs},
+                           **{c["slug"]: c["title"] for c in courses}},
         "workplace_slugs": [p["slug"] for p in programs if p.get("track") == "workplaces"],
         # Categories present in the article set, in a fixed display order.
         "categories": [c for c in ("Schools", "Workplaces", "Research")
@@ -253,6 +288,11 @@ def main():
     for p in programs:
         route = f"/programs/{p['slug']}"
         urls.append(write(route, prog_t.render(**ctx, program=p, route=route)))
+
+    course_t = env.get_template("course.html") if courses else None
+    for c in courses:
+        route = f"/schools/{c['slug']}"
+        urls.append(write(route, course_t.render(**ctx, course=c, route=route)))
 
     art_t = env.get_template("article.html") if insights else None
     for a in insights:
@@ -294,6 +334,10 @@ def main():
         f"Sitemap: {SITE_URL}/sitemap.xml\n", encoding="utf-8")
 
     print(f"built {len(urls)} pages -> {DIST}  ({len(fingerprinted)} assets fingerprinted)")
+    if PENDING:
+        print(f"\n{len(PENDING)} outstanding item(s). The site still builds:")
+        for k in PENDING:
+            print(f"   - {k}")
     if PLACEHOLDERS:
         unique = sorted(set(PLACEHOLDERS))
         print(f"\n{len(unique)} unfilled placeholder(s) — not launch ready:")

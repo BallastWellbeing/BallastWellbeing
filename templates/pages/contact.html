@@ -203,9 +203,12 @@
   if (audience === 'workplace') document.getElementById('aud-work').checked = true;
   if (audience === 'school') document.getElementById('aud-school').checked = true;
 
-  var slug = params.get('program');
+  // ?course= is what the three schools course pages pass. ?program= is kept
+  // because the workplaces catalogue still uses it and older links are out in
+  // the world. Both resolve against the same title map.
+  var slug = params.get('course') || params.get('program');
   if (slug && /^[a-z0-9-]{1,64}$/.test(slug)) {
-    var titles = {{ program_titles | tojson }};
+    var titles = {{ enquiry_titles | tojson }};
     var title = titles[slug];
     if (title) {
       var banner = document.getElementById('program-banner');

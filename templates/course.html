@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% set section = "training" %}
+{% set contact_query = "?course=" ~ course.slug %}
+{% set page_title = course.seo_title or course.title %}
+{% set page_description = course.seo_description or course.summary %}
+{% block title %}{{ course.seo_title or (course.title ~ " | Ballast Wellbeing") }}{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{{ {
+  "@context": "https://schema.org",
+  "@type": "Course",
+  "name": course.title,
+  "description": course.summary,
+  "url": site_url ~ "/schools/" ~ course.slug,
+  "provider": {"@type": "Organization", "name": "Ballast Wellbeing", "url": site_url},
+  "audience": {"@type": "Audience", "audienceType": course.audience_short},
+  "inLanguage": "en-CA",
+  "hasCourseInstance": {
+    "@type": "CourseInstance",
+    "courseMode": "Blended",
+    "courseWorkload": course.duration,
+    "location": {"@type": "Place", "address": "Ontario, Canada"}
+  }
+} | tojson }}
+</script>
+{% endblock %}
+
+{% block content %}
+{# One template, three courses. Section order is fixed by Part Four of the Site
+   Rewrite document: title, summary, details, about, objectives, covers, who
+   should attend, testimonial, receives, certificate, closing CTA.
+
+   The testimonial slot is built and left empty on purpose. Quotes arrive after
+   the first few deliveries and adding one should be a few lines of front
+   matter, not a template change. #}
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <div class="container">
+    <ol>
+      <li><a href="/schools">Schools training</a></li>
+      <li aria-current="page">{{ course.title }}</li>
+    </ol>
+  </div>
+</nav>
+
+<section class="hero course-hero">
+  <div class="container-tight">
+    <h1 class="hero-title">{{ course.title }}</h1>
+    <p class="lead">{{ course.summary }}</p>
+
+    {# Details box, above the fold by design. #}
+    <div class="course-details">
+      <dl>
+        <div><dt>Length</dt><dd>{{ course.duration }}</dd></div>
+        <div><dt>Group size</dt><dd>{{ course.capacity }}</dd></div>
+        <div><dt>Format</dt><dd>{{ course.format }}</dd></div>
+        <div><dt>Price</dt><dd class="tnum">{{ course.price }}</dd></div>
+      </dl>
+      <a class="btn btn-primary" href="/contact?course={{ course.slug }}">Request a proposal</a>
+    </div>
+  </div>
+</section>
+
+<div class="container-tight course-body">
+
+  <section>
+    <h2>About this course</h2>
+    {% for para in course.about %}
+    <p>{{ para }}</p>
+    {% endfor %}
+  </section>
+
+  <section>
+    <h2>Learning objectives</h2>
+    <p>By the end of this course, participants will be able to:</p>
+    <ul class="outcomes">
+      {% for item in course.objectives %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>What the session covers</h2>
+    <dl class="covers">
+      {% for item in course.covers %}
+      <div>
+        <dt>{{ item.label }}</dt>
+        <dd>{{ item.text }}</dd>
+      </div>
+      {% endfor %}
+    </dl>
+  </section>
+
+  <section>
+    <h2>Who should attend</h2>
+    {% for para in course.attend %}
+    <p>{{ para }}</p>
+    {% endfor %}
+  </section>
+
+  {% if course.testimonial %}
+  <section class="testimonial-slot">
+    <blockquote class="testimonial">
+      <p>{{ course.testimonial.quote }}</p>
+      <footer>
+        <cite>{{ course.testimonial.attribution }}</cite>
+        {% if course.testimonial.school %}<span class="testimonial-school">{{ course.testimonial.school }}</span>{% endif %}
+      </footer>
+    </blockquote>
+  </section>
+  {% endif %}
+
+  <section>
+    <h2>What participants receive</h2>
+    <ul class="receives">
+      {% for item in course.receives %}
+      <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section>
+    <h2>Certificate</h2>
+    <p>Each participant receives a Certificate of Completion recording the course title, contact hours, and date. Every certificate carries a unique serial number and can be verified at <a href="/verify">ballastwellbeing.com/verify</a>, so a school or employer can confirm it independently.</p>
+  </section>
+
+</div>
+
+<section class="section-lg on-fog">
+  <div class="container-tight">
+    <h2>Book this course</h2>
+    <p>Tell us roughly when and how many staff. We'll send a written outline with a fixed price, usually within two working days.</p>
+    <p><a class="btn btn-primary" href="/contact?course={{ course.slug }}">Request a proposal</a></p>
+  </div>
+</section>
+{% endblock %}

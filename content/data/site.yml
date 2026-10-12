@@ -18,38 +18,39 @@ site:
   # what we want: social platforms cache share images hard, and a new hash is
   # the only reliable way to make them refetch.
   og_image: /static/og/default.png
-  # Set to the practice management system's booking URL to switch
-  # /counselling/schedule from the email fallback to the embed. For Jane this
-  # is the clinic subdomain, e.g. https://ballastwellbeing.janeapp.com
-  # netlify.toml already allows exactly this one frame origin (*.janeapp.com)
-  # on /counselling/* and nothing else. Changing vendor means changing that CSP.
-  scheduler_url:
-  # Appended to scheduler_url for each of the two booking paths, so the
-  # consultation and the session land on their own discipline/treatment in
-  # Jane rather than both opening the generic calendar. Jane shows these in
-  # Settings > Online Booking as the direct link for a treatment, e.g.
-  #   /#/staff_member/1/treatment/3
-  # Leave blank to embed the top-level calendar for both.
-  scheduler_consult_path:
-  scheduler_session_path:
+  # Every "Book a free consultation" button on the site links straight out to
+  # Jane. There is no booking page here any more, so until this is set the
+  # buttons fall back to an email link and the build prints the gap on every
+  # run. Set it to the clinic booking URL, e.g.
+  #   https://ballastwellbeing.janeapp.com
+  jane_url:
+  # The counselling and home hero photograph. One image serves both, and the
+  # share card for both pages comes from it too. Until it exists the heroes
+  # render as a single centred column, which reads as deliberate.
+  counselling_photo:
+  # Counselling first, then Training as one entry with two items beneath it.
+  # An item with `children` renders as a disclosure rather than a link, because
+  # there is no /training page for it to point at.
   nav:
-    - {label: For Schools,    url: /schools}
-    - {label: For Workplaces, url: /workplaces}
-    - {label: About,          url: /about}
-    - {label: Approach,       url: /approach}
-    - {label: Insights,       url: /insights}
+    - {label: Counselling, url: /counselling}
+    - label: Training
+      children:
+        - {label: Schools,    url: /schools}
+        - {label: Workplaces, url: /workplaces}
+  # /about is gone with this rewrite, so the Practice column leads with the
+  # counselling page, which now carries the credentials.
   footer_columns:
     - heading: Training
       links:
-        - {label: For Schools,        url: /schools}
-        - {label: For Workplaces,     url: /workplaces}
-        - {label: Approach,           url: /approach}
+        - {label: Schools,              url: /schools}
+        - {label: Workplaces,           url: /workplaces}
+        - {label: Approach,             url: /approach}
         - {label: Verify a certificate, url: /verify}
     - heading: Practice
       links:
-        - {label: About,    url: /about}
-        - {label: Insights, url: /insights}
-        - {label: Contact,  url: /contact}
+        - {label: Counselling, url: /counselling}
+        - {label: Insights,    url: /insights}
+        - {label: Contact,     url: /contact}
 
 # Values only Norman can supply. Fill these in and the visible [markers]
 # across the counselling section disappear. `python3 build.py --check` fails

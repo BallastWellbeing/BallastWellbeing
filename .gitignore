@@ -6,3 +6,7 @@ __pycache__/
 .env.*
 .netlify/
 .DS_Store
+
+# Superseded templates parked here during the October rewrite.
+# Burhan to delete the folder; it must never reach the repo.
+_to_delete/

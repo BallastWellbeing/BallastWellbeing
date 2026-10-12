@@ -8,9 +8,9 @@ reading_time: 6
 standfirst: "The same behaviour has two possible causes, and the response that works for one reliably makes the other worse. Telling them apart takes about thirty seconds and almost no teacher has been taught how."
 seo_title: "Dysregulated or defiant: reading student behaviour in the classroom"
 seo_description: "A dysregulated nervous system produces behaviour that looks like defiance. What separates them observably, and why the standard response escalates one of the two."
-cta_text: "The Regulated Classroom is a half or full day on reading the difference and changing the first response accordingly."
-cta_label: "See staff training"
-cta_url: "/schools/staff"
+cta_text: "Verbal De-escalation and Behavioural Crisis Response is a half day on reading escalation early and changing the first response accordingly."
+cta_label: "See the course"
+cta_url: "/schools/de-escalation"
 ---
 
 A student refuses an instruction, pushes a chair, and walks out. Standing in the room, you have to decide what that was, and you have to decide now.

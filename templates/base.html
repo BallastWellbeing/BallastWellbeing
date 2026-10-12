@@ -72,17 +72,40 @@
     <nav class="nav" id="primary-nav" aria-label="Main">
       <ul>
         {% for item in site.nav %}
+        {% if item.children %}
+        {# Training groups two destinations and has no page of its own, so it is
+           a disclosure button rather than a link. Without JavaScript the submenu
+           is simply always open: the `.js` class gates the collapsed state, the
+           same way the mobile menu does, so nothing is unreachable. #}
+        <li class="nav-group{% if item.children | selectattr('url', 'in', [route]) | list %} is-current{% endif %}">
+          <button type="button" class="nav-group-toggle" aria-expanded="false"
+                  aria-controls="nav-group-{{ loop.index }}">
+            {{ item.label }}<span class="nav-caret" aria-hidden="true"></span>
+          </button>
+          <ul class="nav-submenu" id="nav-group-{{ loop.index }}">
+            {% for child in item.children %}
+            {# aria-label because the insights archive also has links reading
+               "Schools" and "Workplaces" that go somewhere else, and two links
+               with the same name and different destinations are ambiguous.
+               The visible word is contained in the accessible name, so
+               Label in Name still holds. #}
+            <li><a href="{{ child.url }}" aria-label="{{ item.label }} for {{ child.label | lower }}"{% if route.startswith(child.url) %} aria-current="page"{% endif %}>{{ child.label }}</a></li>
+            {% endfor %}
+          </ul>
+        </li>
+        {% else %}
         <li><a href="{{ item.url }}"{% if route.startswith(item.url) %} aria-current="page"{% endif %}>{{ item.label }}</a></li>
-        {% endfor %}
-        {% if site.counselling_enabled %}
-        <li class="nav-divider" aria-hidden="true"></li>
-        <li class="nav-counselling"><a href="/counselling"{% if section == 'counselling' %} aria-current="page"{% endif %}>Individual Counselling</a></li>
         {% endif %}
+        {% endfor %}
         <li>
-          {% if section == 'counselling' %}
-          <a class="btn btn-primary" href="/counselling/schedule">Book a consultation</a>
+          {% if section == 'counselling' or route == '/' %}
+          <a class="btn btn-primary" href="{{ book_url }}">Book a consultation</a>
           {% else %}
-          <a class="btn btn-primary" href="/contact">Request a proposal</a>
+          {# Carries the page's own contact query so the header button and the
+             page's own "Request a proposal" are the same link. Two links with
+             identical text and different destinations are ambiguous, and it
+             prefills the form with the course they were reading. #}
+          <a class="btn btn-primary" href="/contact{{ contact_query | default('') }}">Request a proposal</a>
           {% endif %}
         </li>
       </ul>
@@ -90,14 +113,12 @@
   </div>
 </header>
 
-{% if section == 'counselling' %}
-{# Required on every /counselling/* page. Persistent, not dismissible. #}
-<div class="counselling-band on-fog">
-  <div class="container">
-    <p>Psychotherapy services &mdash; separate from Ballast Wellbeing training and consulting.</p>
-  </div>
-</div>
-{% endif %}
+{# The persistent separation band that used to sit above the H1 is gone. The
+   rewrite removes it from the counselling page, and the same reasoning applies
+   to the other clinical pages, so it is gone from all of them rather than
+   leaving one page inconsistent. Nothing replaces it: the footer note was
+   removed in the same pass, with the instruction not to reinstate it.
+   test_counselling_isolation.py checks it stays removed. #}
 
 {# tabindex="-1" so the skip link actually moves focus. Without it several
    browsers scroll to the target but leave focus in the header, and the next
@@ -115,13 +136,13 @@
       <div>
         <h2>{{ col.heading }}</h2>
         <ul>
-          {# The counselling link is conditional, not a data entry, so it
-             disappears with the section rather than 404ing. #}
-          {% if site.counselling_enabled and col.heading == 'Practice' %}
-          <li><a href="/counselling">Individual Counselling</a></li>
-          {% endif %}
+          {# aria-label prefixed with the column heading for the same reason as
+             the nav submenu: the insights archive has its own "Schools" and
+             "Workplaces" links pointing somewhere else, and two links sharing a
+             name with different destinations are ambiguous. The visible word
+             stays inside the accessible name. #}
           {% for link in col.links %}
-          <li><a href="{{ link.url }}">{{ link.label }}</a></li>
+          <li><a href="{{ link.url }}" aria-label="{{ col.heading }}: {{ link.label }}">{{ link.label }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -133,12 +154,16 @@
     </div>
 
     <div class="footer-disclaimer">
-      {% if section == 'counselling' %}
-      {# The training disclaimer says "we do not provide counselling", which is
-         false on these pages. The counselling section carries the separation
-         notice from the Individual Counselling spec instead. #}
-      <p>Psychotherapy services are provided by {{ site.practitioner_name }}, Registered Psychotherapist (Qualifying), and are separate from the training, workshops, and consulting delivered under Ballast Wellbeing. Attending a Ballast Wellbeing workshop does not establish a therapeutic relationship.</p>
-      {% else %}
+      {# The rewrite removes the separation note from the counselling page in
+         full and says not to reinstate it, so it is gone.
+
+         The training disclaimer stays, but only where it is true. It reads
+         "we do not provide counselling", which was fine when the home page
+         sold training alone. The home page now leads with counselling, so the
+         disclaimer would contradict the headline directly above it. It is
+         shown on the training pages, where a participant might otherwise take
+         a workshop for therapy, and nowhere else. #}
+      {% if section != 'counselling' and route != '/' %}
       <p>Ballast Wellbeing delivers training and education. We do not provide counselling, assessment, or treatment.</p>
       {% endif %}
       <p class="caption">

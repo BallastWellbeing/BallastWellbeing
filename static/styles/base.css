@@ -324,7 +324,8 @@ a { overflow-wrap: break-word; }
 .nav a:not(.btn):hover { color: var(--link); text-decoration: underline; }
 .nav a[aria-current="page"]:not(.btn) { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
 .nav .nav-divider { width: 1px; align-self: stretch; background: var(--border-strong); margin-inline: var(--sp-2); }
-.nav .nav-counselling a { color: var(--text-secondary); font-weight: 400; }
+/* Counselling is the first nav item now and carries ordinary weight. The rule
+   that used to mute it has gone with the old nav order. */
 
 /* Toggle is hidden until the narrow breakpoint, and only exists when JS ran. */
 .nav-toggle { display: none; }
@@ -348,15 +349,17 @@ a { overflow-wrap: break-word; }
    with the counselling link present. Measured: logo 188px + gap 16px + nav
    908px = 1112px of content, which needs a 1152px viewport once the 40px
    gutters are counted. 1152px is exactly 72rem, i.e. a two-pixel margin, so
-   the horizontal nav starts at 76rem (1216px) instead and keeps ~64px of
-   slack for font fallback and minor copy changes.
+   the horizontal nav used to start at 76rem (1216px) to fit a seven item
+   bar. The rewrite cuts the nav to Counselling, Training and one button,
+   which measures 618px, so it now starts at 60rem (960px) and still keeps
+   over 300px of slack. test_design.py measures the fit at the boundary.
    This was 61.999rem, sized when the counselling section was not built. The
    moment counselling_enabled flipped to true the extra nav item pushed the
    header 106px past its container at 1024px — on every page, not just the
    clinical ones. test_design.py now measures the fit at the boundary and
    fails the build, so adding a nav item cannot reintroduce this silently.
    Keep in step with the matchMedia query in static/nav.js. */
-@media (max-width: 75.999rem) {
+@media (max-width: 59.999rem) {
   .site-header .container { flex-wrap: wrap; }
   .js .nav-toggle { display: inline-flex; }
   .js .nav { display: none; width: 100%; margin-left: 0; }
@@ -369,12 +372,13 @@ a { overflow-wrap: break-word; }
 }
 
 /* ---- Counselling separation band. Persistent, every /counselling/* page. ---- */
-.counselling-band { border-bottom: 1px solid var(--border-strong); }
-.counselling-band p { margin: 0; padding-block: var(--sp-3); font-size: var(--fs-small); font-weight: 500; max-width: none; }
 
 /* ---- Page patterns ---- */
 .hero { padding-block: var(--sp-9) var(--sp-8); }
 .hero .lead { margin-bottom: 0; }
+/* .lead zeroes its bottom margin, and a button in the next paragraph then sits
+   flush against it. Give the pair a gap without touching the rest. */
+.hero .lead + p { margin-top: var(--sp-6); }
 .eyebrow { font-size: var(--fs-small); color: var(--text-secondary); margin-bottom: var(--sp-4); }
 .button-row { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-top: var(--sp-6); }
 
@@ -563,12 +567,16 @@ table.outline th[scope="row"] { white-space: nowrap; width: 8rem; font-weight: 5
    Same brand, quieter register. Fog rather than Paper as the page ground, so
    the visitor registers they have moved between two different services.
    ========================================================================== */
-.section-counselling { background: var(--fog); }
-.section-counselling .hero,
-.section-counselling .clinical-body { background: transparent; }
+/* The whole clinical section used to sit on Fog so a visitor registered they
+   had moved between two services. The rewrite merges the two sides: counselling
+   leads the home page and the separation notices are gone. The landing page now
+   alternates Paper and Fog bands like every other page, and a Fog band on a Fog
+   ground is invisible, so the ground is Paper. The inner clinical pages keep
+   the Fog ground, since they are still one continuous document. */
+.section-counselling .clinical-body {
+  background: var(--fog); padding-inline: var(--sp-5); border-radius: var(--radius);
+}
 
-.counselling-band { border-bottom: 1px solid #CFD8D6; }
-.counselling-band p { margin: 0; padding-block: var(--sp-3); font-size: var(--fs-small); color: var(--harbour-grey); max-width: none; }
 
 .clinical-body { padding-block: var(--sp-6) var(--sp-8); }
 .clinical-body > section + section { margin-top: var(--sp-7); }
@@ -806,3 +814,283 @@ mark.placeholder {
 /* 5.9:1 on Paper. The palette has no red, and an error the writer cannot read
    is not an error message. */
 .admin-status.is-error { color: #9B2C1F; }
+
+
+/* ---- Training disclosure in the nav ----
+   "Training" has no page of its own, so it is a button that reveals Schools and
+   Workplaces. Without JavaScript the submenu is simply always open, which is
+   why the collapsed state is gated on .js. */
+.nav-group { position: relative; }
+.nav-group-toggle {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  min-height: 44px; padding: 0; border: 0; background: none;
+  font: inherit; font-weight: 500; color: var(--text); cursor: pointer;
+}
+.nav-group-toggle:hover { color: var(--link); }
+.nav-caret {
+  width: 0.45rem; height: 0.45rem; flex: none;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor;
+  transform: translateY(-0.12em) rotate(45deg);
+  transition: transform var(--transition);
+}
+.nav-group.is-open .nav-caret { transform: translateY(0.08em) rotate(-135deg); }
+.nav-submenu { list-style: none; margin: 0; padding: 0; max-width: none; }
+
+@media (min-width: 60rem) {
+  /* Desktop: a panel under the button. Hidden only once JS has confirmed it
+     can be opened again. */
+  .js .nav-group .nav-submenu {
+    display: none; position: absolute; top: 100%; left: 0; z-index: 50;
+    min-width: 11rem; padding: var(--sp-2) 0;
+    background: var(--paper); border: 1px solid var(--border-strong);
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px -14px rgba(23, 36, 46, 0.5);
+  }
+  .js .nav-group.is-open .nav-submenu { display: block; }
+  .nav-submenu a {
+    display: flex; align-items: center; min-height: 44px;
+    padding-inline: var(--sp-4); white-space: nowrap;
+  }
+  .nav-submenu a:hover { background: var(--bg-alt); text-decoration: none; }
+  /* The nav row is a flex line of list items; without this the submenu
+     inherits the row direction and lays its links out side by side. */
+  .nav-group .nav-submenu { flex-direction: column; }
+}
+
+@media (max-width: 59.999rem) {
+  /* Mobile: the whole nav is already a stacked panel, so the submenu is just
+     an indented list. Collapsing a list inside a collapsed menu is two taps to
+     reach Schools, for no benefit. */
+  .nav-group-toggle { display: none; }
+  .nav-submenu { padding-bottom: var(--sp-2); }
+  .nav-submenu li + li { border-top: 1px solid var(--border); }
+  .nav-submenu a { padding-block: var(--sp-2); padding-left: var(--sp-4); width: 100%; }
+  .nav-submenu::before {
+    content: "Training";
+    display: block; padding-block: var(--sp-2);
+    font-weight: 600; color: var(--text-secondary);
+    font-size: var(--fs-small);
+  }
+}
+
+
+/* ==========================================================================
+   Home and counselling, rewritten October 2026
+   Section names below match the Site Rewrite document so the two can be read
+   side by side.
+   ========================================================================== */
+
+/* Hero. One centred column until the photograph exists, two columns after.
+   Both states have to look deliberate, because the one without the photograph
+   is what ships first. The brief requires the photo and the primary button to
+   be visible without scrolling on a phone, so the copy stays short and the
+   padding is tighter than the old marketing hero. */
+.c-hero { padding-block: var(--sp-7) var(--sp-7); }
+/* Without a photograph there is no second column, so the container narrows to
+   match the rest of the page. Left-aligned copy in a 74rem container reads as
+   a missing element rather than a choice. */
+.c-hero:not(.c-hero-split) .container { width: min(100% - 2.5rem, var(--container-tight)); }
+.c-hero .container { display: grid; gap: var(--sp-6); align-items: center; }
+.c-hero-copy { max-width: 34rem; }
+.c-hero .hero-title { font-size: var(--fs-h1); }
+.c-hero-actions {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--sp-4) var(--sp-5); margin-top: var(--sp-6);
+}
+.c-hero-secondary { font-weight: 500; min-height: 44px; display: inline-flex; align-items: center; }
+.c-hero-figure img {
+  display: block; width: 100%; height: auto; aspect-ratio: 4 / 5;
+  object-fit: cover; border-radius: var(--radius); background: var(--bg-alt);
+}
+@media (min-width: 56rem) {
+  .c-hero-split .container { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); gap: var(--sp-8); }
+  .c-hero-figure { justify-self: end; max-width: 24rem; }
+}
+@media (max-width: 55.999rem) {
+  /* The brief requires the photograph and the primary button to both be visible
+     without scrolling on a phone. A 4:5 portrait at full width is about 480px
+     tall on a 390px screen, which pushes the button off. On a phone it becomes
+     a shallow banner above the copy and is capped against the viewport. */
+  .c-hero-split .c-hero-figure { order: -1; }
+  .c-hero-split .c-hero-figure img { aspect-ratio: 3 / 2; max-height: 30vh; }
+}
+
+/* Common concerns. Cards on the home page, a single inline line on the
+   counselling page, same eight labels either way. */
+.concern-grid {
+  display: grid; gap: var(--sp-3); list-style: none; padding: 0;
+  max-width: none; margin-top: var(--sp-5);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 56rem) { .concern-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.concern {
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  padding: var(--sp-4); font-weight: 500; background: var(--bg);
+  display: flex; align-items: center; min-height: 4.5rem;
+}
+.concern-inline {
+  max-width: var(--measure); font-size: var(--fs-lead); line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+/* Credentials, small and directly beneath the copy. Never a feature. */
+.credentials-line {
+  margin-top: var(--sp-6); padding-top: var(--sp-4);
+  border-top: 1px solid var(--border-strong);
+  font-size: var(--fs-caption); color: var(--text-secondary); line-height: 1.6;
+}
+.credentials-line strong { color: var(--text); }
+
+/* Our team. One card now, built to repeat without a redesign. */
+.team-card {
+  display: grid; gap: var(--sp-5); align-items: start;
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  padding: var(--sp-5); background: var(--bg);
+}
+@media (min-width: 46rem) {
+  .team-card { grid-template-columns: 12rem minmax(0, 1fr); gap: var(--sp-6); }
+  /* Without a photograph the first column would be an empty 12rem of page. */
+  .team-card-nophoto { grid-template-columns: minmax(0, 1fr); }
+}
+.team-photo img {
+  display: block; width: 100%; height: auto; aspect-ratio: 4 / 5;
+  object-fit: cover; border-radius: var(--radius); background: var(--bg-alt);
+}
+.team-card h3 { margin-top: 0; margin-bottom: var(--sp-2); }
+.team-role {
+  font-size: var(--fs-small); color: var(--text-secondary);
+  margin-bottom: var(--sp-4);
+}
+.team-copy p:last-child { margin-bottom: 0; }
+
+/* Sessions. A list, deliberately not a table. */
+.session-facts { list-style: none; padding: 0; max-width: var(--measure); }
+.session-facts li {
+  padding-block: var(--sp-3); border-bottom: 1px solid var(--border-strong);
+}
+.session-facts li:last-child { border-bottom: 0; }
+
+/* Training band on the home page. A different ground so it reads as the other
+   half of the business rather than more clinical copy. */
+.training-band {
+  background: var(--slate-ink); color: var(--paper);
+  padding-block: var(--sp-8);
+  --bg: var(--slate-ink);
+  --text: var(--paper);
+  --text-secondary: var(--fog);
+  --link: var(--deep-sea-light);
+  --border-strong: #5E798C;
+  --btn-bg: var(--deep-sea-light);
+  --btn-text: var(--slate-ink);
+  --btn-bg-hover: #57B09D;
+  --btn-secondary-text: var(--paper);
+  --btn-secondary-border: #5E798C;
+  --focus-ring: var(--paper);
+  --focus-ring-offset: var(--slate-ink);
+}
+.training-band h2 { margin-top: 0; }
+
+/* Emergency panel. Compact and smaller than the body copy above it. */
+.crisis-compact {
+  border: 1px solid var(--border-strong); border-left: 3px solid var(--rule-accent);
+  border-radius: var(--radius); padding: var(--sp-4) var(--sp-5);
+  margin-block: var(--sp-7); font-size: var(--fs-small);
+  color: var(--text-secondary);
+}
+.crisis-compact h2 { font-size: var(--fs-h3); margin: 0 0 var(--sp-2); color: var(--text); }
+.crisis-compact p { margin-bottom: var(--sp-2); max-width: none; }
+.crisis-compact p:last-child { margin-bottom: 0; }
+.crisis-compact strong { color: var(--text); }
+
+/* Closing band. Paper on Deep Sea is 6.04:1; the button inverts to Paper with
+   dark green text rather than sitting Deep Sea on Deep Sea. */
+.closing-band {
+  background: var(--deep-sea); color: var(--paper);
+  padding-block: var(--sp-8); text-align: center;
+  --text: var(--paper);
+  --text-secondary: var(--fog);
+  --link: var(--paper);
+  --btn-bg: var(--paper);
+  --btn-text: #23564B;
+  --btn-bg-hover: var(--fog);
+  --focus-ring: var(--paper);
+  --focus-ring-offset: var(--deep-sea);
+}
+.closing-band h2 { margin-top: 0; }
+.closing-band p { margin-left: auto; margin-right: auto; }
+
+
+/* ==========================================================================
+   Schools section
+   Three course cards, three course pages, one template.
+   ========================================================================== */
+.course-cards {
+  display: grid; gap: var(--sp-5); margin-top: var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(20rem, 100%), 1fr));
+}
+.course-card {
+  background: var(--paper); border: 1px solid var(--border-strong);
+  border-radius: var(--radius); padding: var(--sp-5);
+  display: flex; flex-direction: column;
+}
+.course-card h3 { margin-top: 0; margin-bottom: var(--sp-2); font-size: var(--fs-h3); }
+.course-card h3 a { color: inherit; text-decoration: none; }
+.course-card h3 a:hover { color: var(--link); text-decoration: underline; }
+.course-meta { font-size: var(--fs-small); color: var(--text-secondary); margin-bottom: var(--sp-3); }
+.course-card p { max-width: none; }
+.course-link { margin-top: auto; margin-bottom: 0; padding-top: var(--sp-4); }
+
+.who-delivers { max-width: var(--measure); margin-block: var(--sp-5) 0; color: var(--text-secondary); }
+.who-delivers strong { color: var(--text); }
+
+.course-hero { padding-block: var(--sp-6); }
+.course-details {
+  margin-top: var(--sp-6); padding: var(--sp-5);
+  background: var(--bg-alt); border-radius: var(--radius);
+  border-left: 3px solid var(--rule-accent);
+}
+.course-details dl {
+  display: grid; gap: var(--sp-4); margin: 0 0 var(--sp-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(9rem, 100%), 1fr));
+}
+.course-details dt {
+  font-size: var(--fs-caption); color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: var(--sp-1);
+}
+.course-details dd { margin: 0; font-weight: 600; }
+
+.course-body { padding-block: var(--sp-7) var(--sp-8); }
+.course-body > section + section { margin-top: var(--sp-8); }
+.course-body h2 { margin-top: 0; }
+
+.covers { margin: 0; max-width: var(--measure); }
+.covers > div { padding-block: var(--sp-4); border-bottom: 1px solid var(--border); }
+.covers > div:last-child { border-bottom: 0; }
+.covers dt { font-weight: 600; margin-bottom: var(--sp-1); }
+.covers dd { margin: 0; color: var(--text-secondary); }
+
+.receives { padding-left: 0; list-style: none; max-width: var(--measure); }
+.receives li { position: relative; padding-left: 1.5rem; margin-bottom: var(--sp-3); }
+.receives li::before {
+  content: ""; position: absolute; left: 0; top: 0.62em;
+  width: 0.7rem; height: 2px; background: var(--rule-accent);
+}
+
+/* Testimonial slot. Built now, empty until quotes arrive after the first few
+   deliveries, so adding one is front matter rather than a rebuild. */
+.testimonial-slot { max-width: var(--measure); }
+.testimonial {
+  margin: 0; padding: var(--sp-5) var(--sp-6);
+  background: var(--bg-alt); border-left: 3px solid var(--rule-accent);
+  border-radius: var(--radius);
+}
+.testimonial p { font-size: var(--fs-lead); margin-bottom: var(--sp-4); }
+.testimonial footer { font-size: var(--fs-small); color: var(--text-secondary); }
+.testimonial cite { font-style: normal; font-weight: 600; color: var(--text); }
+.testimonial-school { display: block; }
+
+.faq { margin: 0; max-width: var(--measure); }
+.faq > div { padding-block: var(--sp-4); border-bottom: 1px solid var(--border-strong); }
+.faq > div:last-child { border-bottom: 0; }
+.faq dt { font-weight: 600; margin-bottom: var(--sp-2); }
+.faq dd { margin: 0; color: var(--text-secondary); }
