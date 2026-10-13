@@ -13,10 +13,22 @@
    workplaces above the fold are gone. No em dashes anywhere in this file, and
    first person plural throughout. #}
 
-{# 1 - HERO. Photograph alongside the copy. Both the photograph and the primary
-   button have to be visible without scrolling on a phone, which is why the copy
-   is short and the figure sits second in the source order. #}
-<section class="hero c-hero{% if site.counselling_photo %} c-hero-split{% endif %}">
+{# 1 - HERO. Two states, because the photograph the rewrite calls for does not
+   exist yet.
+
+   With a photograph, this is the light split hero from Part One of the Site
+   Rewrite document: copy left, portrait right, both the portrait and the
+   primary button visible without scrolling on a phone.
+
+   Without one, the dark band and the animated brand mark come back. That is the
+   hero the site launched with and the figure column has to hold something: a
+   single centred column of text with the right half empty reads as a page that
+   failed to load. The mark also makes the argument the headline is making, the
+   hull tilts and the ballast stays level, which a placeholder box would not.
+   Drop the photograph into site.counselling_photo and this reverts to Norman's
+   layout on the next build, with no edit here. #}
+{% if site.counselling_photo %}
+<section class="hero c-hero c-hero-split">
   <div class="container">
     <div class="c-hero-copy">
       <h1 class="hero-title">Counselling and mental health training.</h1>
@@ -26,14 +38,64 @@
         <a class="c-hero-secondary" href="/schools">See training courses</a>
       </div>
     </div>
-    {% if site.counselling_photo %}
     <div class="c-hero-figure">
       <img src="{{ site.counselling_photo }}" width="720" height="900"
            alt="Norman Rehman, Lead Psychotherapist at Ballast Wellbeing" decoding="async">
     </div>
-    {% endif %}
   </div>
 </section>
+{% else %}
+<section class="hero hero-home on-dark">
+  <div class="container hero-split">
+
+    <div class="hero-copy">
+      {# Split across two lines so the mask animation has lines to reveal. The
+         break is where the sentence breaks anyway. #}
+      <h1 class="hero-title">
+        <span class="line-mask"><span style="--line-delay:120ms">Counselling</span></span>
+        <span class="line-mask"><span style="--line-delay:240ms">and mental health training.</span></span>
+      </h1>
+
+      <hr class="hero-rule">
+
+      <p class="lead" data-reveal>Psychotherapy for individuals, and mental health training for schools and workplaces.</p>
+
+      {# Not equal weight any more. Counselling leads the page, so booking is
+         the filled button and training is the outline one. Both carry a text
+         label, so nothing is conveyed by colour alone. #}
+      <div class="route-buttons" data-reveal>
+        <a class="btn btn-primary" href="{{ book_url }}"{% if site.jane_url %} rel="noopener"{% endif %}>Book a free consultation</a>
+        <a class="btn btn-secondary" href="/schools">See training courses</a>
+      </div>
+    </div>
+
+    <div class="hero-figure">
+      <button type="button" class="hero-mark-button"
+              aria-label="Replay the Ballast mark animation">
+        <svg class="hero-mark" viewBox="0 0 100 108" role="img"
+             aria-label="The Ballast mark: a ship's hull tilting while the ballast weight beneath it stays level">
+          <title>Ballast</title>
+
+          {# Waterline. Sits still; the hull moves against it. #}
+          <line class="waterline" x1="0" y1="80" x2="100" y2="80"
+                stroke="var(--mark-water)" stroke-width="3" stroke-linecap="round"/>
+
+          <g class="hull">
+            <path d="M 18,50 V 28 A 10,10 0 0 1 28,18 H 72 A 10,10 0 0 1 82,28 V 50 A 32,32 0 0 1 18,50 Z"
+                  fill="none" stroke="var(--mark-hull)" stroke-width="7"
+                  stroke-linejoin="round" stroke-linecap="round"/>
+          </g>
+
+          {# The weight. Never rotates, at any point, by design. #}
+          <rect class="ballast" x="35" y="59.5" width="30" height="13.5" rx="6.75"
+                fill="var(--mark-weight)"/>
+        </svg>
+      </button>
+    </div>
+
+  </div>
+</section>
+{% endif %}
 
 {# 2 - COMMON CONCERNS WE TREAT #}
 <section class="section">

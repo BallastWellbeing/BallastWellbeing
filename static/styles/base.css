@@ -140,15 +140,23 @@ a:hover { color: var(--link-hover); text-decoration-thickness: 2px; }
 }
 .btn-secondary:hover { border-color: var(--text); color: var(--text); }
 
-/* The split-path route buttons. Equal weight, per Build Guide 3.1. */
+/* The hero button row. Build Guide 3.1 required the two route buttons to carry
+   equal weight so neither audience read as the afterthought. That split is gone:
+   the rewrite puts counselling first, so booking is filled and training is
+   outlined. What survives from the rule is the size, both are large targets.
+   Sized to their content now rather than to equal grid tracks, which wrapped
+   "Book a free consultation" onto two lines. */
 .route-buttons {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: var(--sp-4);
-  max-width: 34rem;
   margin-top: var(--sp-6);
 }
 .route-buttons .btn { min-height: 56px; font-size: var(--fs-lead); }
+@media (max-width: 29.999rem) {
+  /* Full width on a narrow phone, where side by side leaves both cramped. */
+  .route-buttons { display: grid; grid-template-columns: 1fr; }
+}
 
 /* --------------------------------------------------------------------------
    Cards
