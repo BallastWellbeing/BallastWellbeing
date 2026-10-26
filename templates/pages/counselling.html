@@ -1,7 +1,9 @@
 {% extends "counselling_base.html" %}
 {% set route = "/counselling" %}
 {% set page_title = "Psychotherapy and counselling" %}
-{% set page_description = "Virtual psychotherapy and counselling for anxiety, trauma, work and school stress, and life transitions. $100 per session, sliding scale available." %}
+{# Description replaced verbatim from Norman's October 26 email. Title unchanged
+   on his instruction. #}
+{% set page_description = "Virtual psychotherapy and counselling for anxiety, panic attacks, post-traumatic stress, motor vehicle accident trauma, workplace stress and burnout, and life transitions. $100 per session, sliding scale available." %}
 {% set og_image_override = site.counselling_photo %}
 {% set og_image_alt = "Norman Rehman, Lead Psychotherapist at Ballast Wellbeing" %}
 {% block title %}Psychotherapy and counselling | Ballast Wellbeing{% endblock %}
@@ -35,11 +37,15 @@
   </div>
 </section>
 
-{# 2 - COMMON CONCERNS WE TREAT. Same eight as the home page, labels only. #}
+{# 2 - COMMON CONCERNS WE TREAT. The same ten cards as the home page, in the
+   same order, which the October 26 email requires. This was the inline list
+   until then. It needs the full-width container, not the tight one the rest of
+   this page uses: five cards across 46rem leaves 135px each, and the longer
+   labels break into four lines at that width. #}
 <section class="section">
-  <div class="container-tight">
+  <div class="container">
     <h2>Common concerns we treat</h2>
-    {% with concern_style = "inline" %}{% include "partials/concerns.html" %}{% endwith %}
+    {% with concern_style = "cards" %}{% include "partials/concerns.html" %}{% endwith %}
   </div>
 </section>
 
@@ -65,11 +71,18 @@
       {% endif %}
       <div class="team-copy">
         <h3>{{ site.practitioner_name }}, M.A.</h3>
+        {# Registration number removed on Norman's instruction, October 26. See
+           the note on the home page: the registration stays, the number goes,
+           and it is still on the PHIPA notice. #}
         <p class="team-role">Lead Psychotherapist<br>
-          Registered Psychotherapist (Qualifying), CRPO Reg. No. {{ ph('crpo_number', 'CRPO registration number') }}</p>
+          Registered Psychotherapist (Qualifying), College of Registered Psychotherapists of Ontario</p>
         <p>Norman holds a Master of Arts in Counselling Psychology and is certified in Trauma-Focused Cognitive Behavioural Therapy and Gottman Method Couples Therapy, Levels 1 and 2, with graduate training in Solution-Focused Brief Therapy.</p>
       </div>
     </article>
+    {# Small text link, directly beneath the card, per the October 26 email.
+       That page speaks to professionals and is kept out of the navigation, so
+       this is the only route to it from inside the site. #}
+    <p class="referral-link"><a href="/counselling/referrals">Information for referring professionals<span aria-hidden="true"> &rarr;</span></a></p>
   </div>
 </section>
 

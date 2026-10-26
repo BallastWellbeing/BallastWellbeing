@@ -1,14 +1,21 @@
-{# The eight concerns, shared by the home page and the counselling page.
-   Caller sets `concern_style` to "cards" or "inline".
+{# The ten concerns, shared by the home page and the counselling page. Order
+   and wording are Norman's, from the October 26 email, and the two pages are
+   required to match. Change the list here and both pages follow.
+
    Labels only, no descriptions. Built link-ready: when the individual concern
-   pages exist each becomes an anchor and nothing else here changes. #}
+   pages exist each becomes an anchor and nothing else here changes.
+
+   `concern_style` is still accepted for the inline variant, which nothing uses
+   at the moment. Both pages now carry the card grid. #}
 {% set concerns = [
   "Anxiety",
+  "Panic attacks",
   "Trauma and post-traumatic stress",
+  "Car accident trauma",
   "School and academic stress",
+  "Work stress and burnout",
   "Life transitions",
   "Relationship difficulties",
-  "Work stress and burnout",
   "Self-esteem and confidence",
   "Feeling stuck"
 ] %}

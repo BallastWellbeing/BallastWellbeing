@@ -1,0 +1,43 @@
+{% extends "counselling_base.html" %}
+{% set route = "/counselling/referrals" %}
+{% set page_title = "Information for referring professionals" %}
+{% set page_description = "Referral information for physicians, legal and insurance professionals, employers, and employee assistance providers. Virtual psychotherapy across trauma, anxiety, occupational stress, and adjustment difficulties." %}
+{% block title %}Information for referring professionals | Ballast Wellbeing{% endblock %}
+
+{% block content %}
+{# Added October 26 from Norman's email. Written in clinical language on
+   purpose, because the readers are professionals, and his instruction is
+   explicit that it must not be harmonised with the plain language on the
+   counselling page. So the wording here is his, unedited.
+
+   Extends counselling_base, so it inherits the analytics exclusion and the
+   clinical footer like every other page under /counselling/. Deliberately not
+   in the main navigation; it is reached from the counselling page and by
+   anyone given the address directly. Indexed, not hidden. #}
+<section class="hero">
+  <div class="container-tight">
+    <h1 class="hero-title">Information for referring professionals</h1>
+    <p class="lead">Ballast Wellbeing accepts referrals from physicians, legal and insurance professionals, employers, and employee assistance providers. All sessions are virtual, by secure video or telephone.</p>
+  </div>
+</section>
+
+<div class="container-tight clinical-body">
+
+  <section>
+    <h2>Areas of clinical focus</h2>
+    <ul class="session-facts">
+      <li><strong>Trauma and post-traumatic stress.</strong> Developmental trauma, single-incident trauma, and critical incident exposure.</li>
+      <li><strong>Motor vehicle accident trauma.</strong> Driving and passenger anxiety, collision-related avoidance, and somatic distress following a collision.</li>
+      <li><strong>Panic and anxiety disorders.</strong> Panic attacks, agoraphobic avoidance, and generalized anxiety.</li>
+      <li><strong>Occupational stress and burnout.</strong> Chronic workplace stress, burnout, and workplace-related trauma.</li>
+      <li><strong>Grief, adjustment, and relational difficulties.</strong> Complex grief, major life transitions, and relationship distress.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Making a referral</h2>
+    <p>Referrals and enquiries may be sent to <a href="mailto:{{ site.email }}">{{ site.email }}</a>. We will confirm receipt and arrange an initial appointment directly with the client.</p>
+  </section>
+
+</div>
+{% endblock %}

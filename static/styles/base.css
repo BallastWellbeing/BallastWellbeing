@@ -666,6 +666,9 @@ mark.placeholder {
 .callout { background: var(--fog); border-left: 3px solid var(--deep-sea); border-radius: var(--radius); padding: var(--sp-4) var(--sp-5); margin-block: var(--sp-5); }
 .callout p:last-child { margin-bottom: 0; }
 .legal-body h3 { font-size: var(--fs-body); font-family: var(--font-body); font-weight: 700; margin-top: var(--sp-5); }
+/* The dated line at the foot of a policy. Quiet, but it has to be findable:
+   it is the first thing anyone checking a policy looks for. */
+.legal-updated { font-size: var(--fs-caption); color: var(--text-secondary); margin-top: var(--sp-4); }
 
 /* ---- Insights ---- */
 .archive { padding-block: var(--sp-6) var(--sp-8); }
@@ -925,12 +928,22 @@ mark.placeholder {
 
 /* Common concerns. Cards on the home page, a single inline line on the
    counselling page, same eight labels either way. */
+/* Ten concerns, two across on a phone and five across on desktop, per Norman's
+   October 26 email. It goes straight from two to five with nothing in between:
+   ten items divide evenly by both, where three or four would leave a row with
+   one card stranded in it. Two columns carry the whole tablet range, which is
+   roomier than five would be there anyway.
+
+   Five only once there is room for it. The widest label, "Trauma and
+   post-traumatic stress", needs about 180px to sit on two lines, so the switch
+   waits for the 74rem container rather than the 56rem the rest of the site
+   uses. */
 .concern-grid {
   display: grid; gap: var(--sp-3); list-style: none; padding: 0;
   max-width: none; margin-top: var(--sp-5);
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-@media (min-width: 56rem) { .concern-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 64rem) { .concern-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 .concern {
   border: 1px solid var(--border-strong); border-radius: var(--radius);
   padding: var(--sp-4); font-weight: 500; background: var(--bg);
@@ -948,6 +961,11 @@ mark.placeholder {
   font-size: var(--fs-caption); color: var(--text-secondary); line-height: 1.6;
 }
 .credentials-line strong { color: var(--text); }
+
+/* The referring-professionals link under the team card. Small on purpose: the
+   people it is for will be looking for it, and everyone else on this page is
+   looking for the booking button. */
+.referral-link { margin-top: var(--sp-5); font-size: var(--fs-caption); }
 
 /* Our team. One card now, built to repeat without a redesign. */
 .team-card {
